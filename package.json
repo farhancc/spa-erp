@@ -4,7 +4,7 @@
   "description": "Careva — Multi-tenant Salon SaaS Backend",
   "private": true,
   "scripts": {
-    "build": "cd web && npm install && npm run build",
+    "build": "cd web && npm install --include=dev && npm run build",
     "build:backend": "nest build",
     "start": "cd web && npm run start",
     "start:backend": "node dist/main",
