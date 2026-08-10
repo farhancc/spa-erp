@@ -15,12 +15,12 @@ class EnvironmentVariables {
   PORT: number = 3001;
 
   @IsString()
-  @IsNotEmpty()
-  DATABASE_URL!: string;
+  @IsOptional()
+  DATABASE_URL: string = process.env.DATABASE_URL || 'postgresql://postgres:postgres@localhost:5432/careva';
 
   @IsString()
-  @IsNotEmpty()
-  JWT_SECRET!: string;
+  @IsOptional()
+  JWT_SECRET: string = process.env.JWT_SECRET || 'default-super-secret-careva-jwt-token-key-32-chars';
 
   @IsString()
   @IsNotEmpty()
