@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.env
+.env.local
+*.log
+scripts/
+
+# Sensitive runtime data — never commit these
+superadmin-credentials.json
+web/superadmin-credentials.json
+web/tenants-db.json

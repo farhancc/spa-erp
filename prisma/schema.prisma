@@ -1,0 +1,1034 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Plan {
+  id               String         @id @default(cuid())
+  name             String         @unique
+  description      String?
+  priceMonthly     Decimal
+  priceYearly      Decimal
+  maxOutlets       Int            @default(1)
+  maxStaff         Int            @default(5)
+  maxCustomers     Int            @default(500)
+  whatsappEnabled  Boolean        @default(false)
+  cmsEnabled       Boolean        @default(false)
+  loyaltyEnabled   Boolean        @default(false)
+  couponsEnabled   Boolean        @default(false)
+  reportsEnabled   Boolean        @default(false)
+  analyticsEnabled Boolean        @default(false)
+  isActive         Boolean        @default(true)
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  subscriptions    Subscription[]
+}
+
+model Tenant {
+  id                String              @id @default(cuid())
+  name              String
+  slug              String              @unique
+  logoUrl           String?
+  phone             String?
+  email             String?
+  address           String?
+  city              String?
+  state             String?
+  country           String              @default("IN")
+  timezone          String              @default("Asia/Kolkata")
+  currency          String              @default("INR")
+  gstNumber         String?
+  isActive          Boolean             @default(true)
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  auditLogs         AuditLog[]
+  bookings          Booking[]
+  ConsentTemplate   ConsentTemplate[]
+  coupons           Coupon[]
+  customers         Customer[]
+  CustomerConsent   CustomerConsent[]
+  CustomerSegment   CustomerSegment[]
+  Expense           Expense[]
+  GiftCard          GiftCard[]
+  invoices          Invoice[]
+  loyaltyProgram    LoyaltyProgram?
+  mediaAssets       MediaAsset[]
+  notifications     Notification[]
+  outlets           Outlet[]
+  OutletBlockedDate OutletBlockedDate[]
+  payrollPeriods    PayrollPeriod[]
+  products          Product[]
+  productCategories ProductCategory[]
+  PurchaseOrder     PurchaseOrder[]
+  services          Service[]
+  serviceCategories ServiceCategory[]
+  staffAttendances  StaffAttendance[]
+  StaffBlockSlot    StaffBlockSlot[]
+  staffCommissions  StaffCommission[]
+  StaffLeave        StaffLeave[]
+  subscription      Subscription?
+  Supplier          Supplier[]
+  tips              Tip[]
+  users             User[]
+  website           Website?
+  whatsappSession   WhatsAppSession?
+  whatsAppAutoReplyRules WhatsAppAutoReplyRule[]
+  membershipPlans   MembershipPlan[]
+  membershipEnrollments MembershipEnrollment[]
+  birthdayWishTemplate String?             @default("Happy Birthday {{name}}! 🎉 Here is a special treat for you: Use code {{coupon}} to get 20% off on your next visit!")
+  birthdayCouponCode   String?             @default("BDAY20")
+
+  @@index([slug])
+}
+
+model MembershipPlan {
+  id          String   @id @default(cuid())
+  tenantId    String
+  name        String
+  description String?
+  price       Decimal
+  duration    String   @default("Monthly") // Monthly, Quarterly, Half-Yearly, Annual
+  services    String?  // comma-separated service IDs or free text
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  tenant      Tenant   @relation(fields: [tenantId], references: [id])
+  enrollments MembershipEnrollment[]
+
+  @@index([tenantId])
+}
+
+model MembershipEnrollment {
+  id           String        @id @default(cuid())
+  tenantId     String
+  planId       String
+  customerId   String
+  status       String        @default("ACTIVE") // ACTIVE, EXPIRED, CANCELLED
+  startDate    DateTime      @default(now())
+  endDate      DateTime
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  plan         MembershipPlan @relation(fields: [planId], references: [id])
+  customer     Customer       @relation(fields: [customerId], references: [id])
+  tenant       Tenant         @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId])
+  @@index([customerId])
+  @@index([planId])
+}
+
+model Subscription {
+  id                 String    @id @default(cuid())
+  tenantId           String    @unique
+  planId             String
+  status             String    @default("TRIALING")
+  trialEndsAt        DateTime?
+  currentPeriodStart DateTime
+  currentPeriodEnd   DateTime
+  cancelledAt        DateTime?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  plan               Plan      @relation(fields: [planId], references: [id])
+  tenant             Tenant    @relation(fields: [tenantId], references: [id])
+}
+
+model Outlet {
+  id                String              @id @default(cuid())
+  tenantId          String
+  name              String
+  slug              String
+  phone             String?
+  email             String?
+  address           String
+  city              String
+  state             String?
+  pincode           String?
+  latitude          Float?
+  longitude         Float?
+  isActive          Boolean             @default(true)
+  isDefault         Boolean             @default(false)
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  bookings          Booking[]
+  coupons           Coupon[]            @relation("OutletCoupons")
+  customers         Customer[]
+  Expense           Expense[]
+  invoices          Invoice[]
+  mediaAssets       MediaAsset[]
+  tenant            Tenant              @relation(fields: [tenantId], references: [id])
+  OutletBlockedDate OutletBlockedDate[]
+  timings           OutletTiming[]
+  products          Product[]
+  services          Service[]
+  attendances       StaffAttendance[]
+  StaffBlockSlot    StaffBlockSlot[]
+  staff             User[]              @relation("OutletStaff")
+  websitePage       WebsitePage?
+
+  @@unique([tenantId, slug])
+  @@index([tenantId])
+}
+
+model OutletTiming {
+  id        String   @id @default(cuid())
+  outletId  String
+  dayOfWeek Int
+  openTime  String
+  closeTime String
+  isClosed  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  outlet    Outlet   @relation(fields: [outletId], references: [id])
+
+  @@unique([outletId, dayOfWeek])
+}
+
+model User {
+  id              String            @id @default(cuid())
+  tenantId        String
+  outletId        String?
+  name            String
+  email           String?
+  phone           String
+  passwordHash    String
+  role            String
+  isActive        Boolean           @default(true)
+  avatarUrl       String?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  deletedAt       DateTime?
+  bookingsAsStaff Booking[]         @relation("BookingStaff")
+  invoicesCreated Invoice[]         @relation("InvoiceCreatedBy")
+  payrollPeriods  PayrollPeriod[]
+  attendances     StaffAttendance[]
+  StaffBlockSlot  StaffBlockSlot[]
+  commissions     StaffCommission[]
+  StaffLeave      StaffLeave[]
+  staffProfile    StaffProfile?
+  primaryOutlet   Outlet?           @relation("OutletStaff", fields: [outletId], references: [id])
+  tenant          Tenant            @relation(fields: [tenantId], references: [id])
+
+  @@unique([tenantId, phone])
+  @@unique([tenantId, email])
+  @@index([tenantId])
+}
+
+model StaffProfile {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  specializations String
+  bio             String?
+  rating          Float?
+  totalRatings    Int      @default(0)
+  workingDays     Int[]
+  breakStart      String?
+  breakEnd        String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  user            User     @relation(fields: [userId], references: [id])
+}
+
+model Customer {
+  id                String            @id @default(cuid())
+  tenantId          String
+  outletId          String?
+  name              String
+  phone             String
+  email             String?
+  passwordHash      String?
+  gender            String?
+  dob               DateTime?
+  avatarUrl         String?
+  notes             String?
+  preferredOutletId String?
+  gstin             String?
+  referralCode      String?           @unique
+  referredById      String?
+  tags              String?
+  totalVisits       Int               @default(0)
+  totalSpend        Decimal           @default(0)
+  lastVisitAt       DateTime?
+  isBlocked         Boolean           @default(false)
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  bookings          Booking[]
+  couponUsages      CouponUsage[]
+  crmNotes          CrmNote[]
+  outlet            Outlet?           @relation(fields: [outletId], references: [id])
+  referredBy        Customer?         @relation("CustomerReferrals", fields: [referredById], references: [id])
+  referrals         Customer[]        @relation("CustomerReferrals")
+  tenant            Tenant            @relation(fields: [tenantId], references: [id])
+  CustomerConsent   CustomerConsent[]
+  GiftCard          GiftCard[]
+  invoices          Invoice[]
+  loyaltyAccount    LoyaltyAccount?
+  whatsappMessages  WhatsAppMessage[]
+  membershipEnrollments MembershipEnrollment[]
+
+  @@unique([tenantId, phone])
+  @@index([tenantId])
+  @@index([tenantId, phone])
+  @@index([tenantId, outletId])
+}
+
+model CrmNote {
+  id         String   @id @default(cuid())
+  tenantId   String
+  customerId String
+  addedById  String
+  content    String
+  createdAt  DateTime @default(now())
+  customer   Customer @relation(fields: [customerId], references: [id])
+
+  @@index([customerId])
+}
+
+model ServiceCategory {
+  id              String            @id @default(cuid())
+  tenantId        String
+  name            String
+  description     String?
+  iconUrl         String?
+  sortOrder       Int               @default(0)
+  isActive        Boolean           @default(true)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  ConsentTemplate ConsentTemplate[]
+  services        Service[]
+  tenant          Tenant            @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId])
+}
+
+model Service {
+  id              String            @id @default(cuid())
+  tenantId        String
+  outletId        String?
+  categoryId      String
+  name            String
+  description     String?
+  duration        Int
+  price           Decimal
+  offerPrice      Decimal?
+  isCombo         Boolean           @default(false)
+  comboServiceIds String[]
+  gstType         String            @default("NONE")
+  gstRate         Float?
+  hsnSacCode      String?
+  gender          String            @default("UNISEX")
+  bodyPart        String?
+  loyaltyPoints   Int               @default(0)
+  images          String[]
+  tags            String[]
+  imageUrl        String?
+  isActive        Boolean           @default(true)
+  sortOrder       Int               @default(0)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  deletedAt       DateTime?
+  bookingItems    BookingItem[]
+  invoiceItems    InvoiceItem[]
+  category        ServiceCategory   @relation(fields: [categoryId], references: [id])
+  outlet          Outlet?           @relation(fields: [outletId], references: [id])
+  tenant          Tenant            @relation(fields: [tenantId], references: [id])
+  commissions     StaffCommission[]
+
+  @@index([tenantId])
+  @@index([tenantId, categoryId])
+  @@index([tenantId, outletId])
+}
+
+model ProductCategory {
+  id        String    @id @default(cuid())
+  tenantId  String
+  name      String
+  isActive  Boolean   @default(true)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  products  Product[]
+  tenant    Tenant    @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId])
+}
+
+model Product {
+  id                 String              @id @default(cuid())
+  tenantId           String
+  outletId           String?
+  categoryId         String
+  name               String
+  description        String?
+  sku                String?
+  price              Decimal
+  gstType            String              @default("NONE")
+  gstRate            Float?
+  hsnSacCode         String?
+  stockQty           Int                 @default(0)
+  trackStock         Boolean             @default(true)
+  imageUrl           String?
+  isActive           Boolean             @default(true)
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  deletedAt          DateTime?
+  costPrice          Decimal             @default(0)
+  lowStockThreshold  Int                 @default(5)
+  supplierId         String?
+  invoiceItems       InvoiceItem[]
+  category           ProductCategory     @relation(fields: [categoryId], references: [id])
+  outlet             Outlet?             @relation(fields: [outletId], references: [id])
+  supplier           Supplier?           @relation(fields: [supplierId], references: [id])
+  tenant             Tenant              @relation(fields: [tenantId], references: [id])
+  purchaseOrderItems PurchaseOrderItem[]
+
+  @@index([tenantId])
+  @@index([tenantId, outletId])
+}
+
+model Booking {
+  id                 String            @id @default(cuid())
+  tenantId           String
+  outletId           String
+  customerId         String
+  staffId            String?
+  status             String            @default("PENDING")
+  scheduledAt        DateTime
+  endsAt             DateTime
+  totalDuration      Int
+  totalPrice         Decimal
+  notes              String?
+  cancellationReason String?
+  reminderSentAt     DateTime?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+  customer           Customer          @relation(fields: [customerId], references: [id])
+  outlet             Outlet            @relation(fields: [outletId], references: [id])
+  staff              User?             @relation("BookingStaff", fields: [staffId], references: [id])
+  tenant             Tenant            @relation(fields: [tenantId], references: [id])
+  items              BookingItem[]
+  CustomerConsent    CustomerConsent[]
+  invoice            Invoice?
+
+  @@index([tenantId])
+  @@index([outletId])
+  @@index([tenantId, scheduledAt])
+  @@index([tenantId, customerId])
+}
+
+model BookingItem {
+  id          String    @id @default(cuid())
+  bookingId   String
+  serviceId   String
+  staffId     String?
+  scheduledAt DateTime?
+  endsAt      DateTime?
+  duration    Int
+  price       Decimal
+  createdAt   DateTime  @default(now())
+  booking     Booking   @relation(fields: [bookingId], references: [id])
+  service     Service   @relation(fields: [serviceId], references: [id])
+}
+
+model Invoice {
+  id              String        @id @default(cuid())
+  tenantId        String
+  outletId        String
+  customerId      String
+  bookingId       String?       @unique
+  invoiceNumber   String
+  status          String        @default("DRAFT")
+  subtotal        Decimal
+  discountAmount  Decimal       @default(0)
+  gstAmount       Decimal       @default(0)
+  loyaltyDiscount Decimal       @default(0)
+  totalAmount     Decimal
+  paidAmount      Decimal       @default(0)
+  notes           String?
+  createdById     String?
+  irn             String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  couponUsages    CouponUsage[]
+  booking         Booking?      @relation(fields: [bookingId], references: [id])
+  createdBy       User?         @relation("InvoiceCreatedBy", fields: [createdById], references: [id])
+  customer        Customer      @relation(fields: [customerId], references: [id])
+  outlet          Outlet        @relation(fields: [outletId], references: [id])
+  tenant          Tenant        @relation(fields: [tenantId], references: [id])
+  items           InvoiceItem[]
+  payments        Payment[]
+  tips            Tip[]
+
+  @@unique([tenantId, invoiceNumber])
+  @@index([tenantId])
+  @@index([outletId])
+  @@index([tenantId, customerId])
+}
+
+model InvoiceItem {
+  id         String   @id @default(cuid())
+  invoiceId  String
+  serviceId  String?
+  productId  String?
+  name       String
+  quantity   Int      @default(1)
+  unitPrice  Decimal
+  discount   Decimal  @default(0)
+  gstRate    Float    @default(0)
+  gstAmount  Decimal  @default(0)
+  hsnSacCode String?
+  total      Decimal
+  createdAt  DateTime @default(now())
+  invoice    Invoice  @relation(fields: [invoiceId], references: [id])
+  product    Product? @relation(fields: [productId], references: [id])
+  service    Service? @relation(fields: [serviceId], references: [id])
+}
+
+model Payment {
+  id        String   @id @default(cuid())
+  tenantId  String
+  invoiceId String
+  method    String
+  amount    Decimal
+  reference String?
+  paidAt    DateTime @default(now())
+  createdAt DateTime @default(now())
+  invoice   Invoice  @relation(fields: [invoiceId], references: [id])
+
+  @@index([invoiceId])
+}
+
+model LoyaltyProgram {
+  id              String           @id @default(cuid())
+  tenantId        String           @unique
+  name            String           @default("Loyalty Points")
+  pointsPerRupee  Float            @default(1)
+  rupeePerPoint   Float            @default(0.5)
+  minRedeemPoints Int              @default(100)
+  maxRedeemPct    Float            @default(0.2)
+  pointExpiryDays Int?
+  signupPoints    Int              @default(0)
+  bookingPoints   Int              @default(0)
+  isActive        Boolean          @default(true)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  accounts        LoyaltyAccount[]
+  tenant          Tenant           @relation(fields: [tenantId], references: [id])
+}
+
+model LoyaltyAccount {
+  id               String               @id @default(cuid())
+  tenantId         String
+  customerId       String               @unique
+  programId        String
+  totalPoints      Int                  @default(0)
+  lifetimeEarned   Int                  @default(0)
+  lifetimeRedeemed Int                  @default(0)
+  createdAt        DateTime             @default(now())
+  updatedAt        DateTime             @updatedAt
+  customer         Customer             @relation(fields: [customerId], references: [id])
+  program          LoyaltyProgram       @relation(fields: [programId], references: [id])
+  transactions     LoyaltyTransaction[]
+
+  @@index([tenantId])
+}
+
+model LoyaltyTransaction {
+  id          String         @id @default(cuid())
+  accountId   String
+  tenantId    String
+  type        String
+  points      Int
+  invoiceId   String?
+  description String?
+  expiresAt   DateTime?
+  createdAt   DateTime       @default(now())
+  account     LoyaltyAccount @relation(fields: [accountId], references: [id])
+
+  @@index([accountId])
+  @@index([tenantId])
+}
+
+model Coupon {
+  id               String        @id @default(cuid())
+  tenantId         String
+  outletId         String?
+  code             String
+  type             String
+  trigger          String        @default("MANUAL")
+  value            Decimal
+  minOrderValue    Decimal?
+  maxDiscount      Decimal?
+  usageLimit       Int?
+  perCustomerLimit Int           @default(1)
+  usedCount        Int           @default(0)
+  validFrom        DateTime
+  validUntil       DateTime?
+  isActive         Boolean       @default(true)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  outlet           Outlet?       @relation("OutletCoupons", fields: [outletId], references: [id])
+  tenant           Tenant        @relation(fields: [tenantId], references: [id])
+  usages           CouponUsage[]
+
+  @@unique([tenantId, code])
+  @@index([tenantId])
+}
+
+model CouponUsage {
+  id         String   @id @default(cuid())
+  couponId   String
+  customerId String
+  invoiceId  String
+  discount   Decimal
+  usedAt     DateTime @default(now())
+  coupon     Coupon   @relation(fields: [couponId], references: [id])
+  customer   Customer @relation(fields: [customerId], references: [id])
+  invoice    Invoice  @relation(fields: [invoiceId], references: [id])
+
+  @@index([couponId])
+  @@index([customerId])
+}
+
+model Website {
+  id             String        @id @default(cuid())
+  tenantId       String        @unique
+  template       String        @default("LUXURY")
+  primaryColor   String        @default("#1a1a2e")
+  secondaryColor String        @default("#e94560")
+  fontFamily     String        @default("Inter")
+  customDomain   String?       @unique
+  faviconUrl     String?
+  seoTitle       String?
+  seoDesc        String?
+  isPublished    Boolean       @default(false)
+  // Custom Code Storefront
+  useCustomCode  Boolean       @default(false)
+  customHtml     String?       @db.Text
+  customCss      String?       @db.Text
+  customJs       String?       @db.Text
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  tenant         Tenant        @relation(fields: [tenantId], references: [id])
+  pages          WebsitePage[]
+}
+
+model WebsitePage {
+  id          String           @id @default(cuid())
+  websiteId   String
+  outletId    String?          @unique
+  title       String
+  slug        String
+  seoTitle    String?
+  seoDesc     String?
+  isPublished Boolean          @default(false)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  outlet      Outlet?          @relation(fields: [outletId], references: [id])
+  website     Website          @relation(fields: [websiteId], references: [id])
+  sections    WebsiteSection[]
+
+  @@unique([websiteId, slug])
+}
+
+model WebsiteSection {
+  id        String      @id @default(cuid())
+  pageId    String
+  type      String
+  data      String
+  sortOrder Int         @default(0)
+  isEnabled Boolean     @default(true)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  page      WebsitePage @relation(fields: [pageId], references: [id])
+
+  @@index([pageId])
+}
+
+model WhatsAppSession {
+  id                    String            @id @default(cuid())
+  tenantId              String            @unique
+  connectionType        String            @default("UNOFFICIAL") // 'UNOFFICIAL' or 'OFFICIAL'
+  phoneNumber           String?
+  sessionData           String?
+  isConnected           Boolean           @default(false)
+  qrCode                String?
+  metaAccessToken       String?
+  metaPhoneNumberId     String?
+  metaBusinessAccountId String?
+  metaVerifyToken       String?
+  lastSeenAt            DateTime?
+  createdAt             DateTime          @default(now())
+  updatedAt             DateTime          @updatedAt
+  messages              WhatsAppMessage[]
+  tenant                Tenant            @relation(fields: [tenantId], references: [id])
+}
+
+model WhatsAppAutoReplyRule {
+  id          String   @id @default(cuid())
+  tenantId    String
+  triggerType String   // 'KEYWORD' | 'WELCOME' | 'OFFICE_HOURS_OUTSIDE'
+  keywords    String?  // comma-separated or JSON list of keywords
+  replyText   String
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  tenant      Tenant   @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId])
+}
+
+model WhatsAppMessage {
+  id          String          @id @default(cuid())
+  tenantId    String
+  sessionId   String
+  customerId  String?
+  direction   String
+  to          String
+  from        String
+  body        String
+  messageId   String?
+  isRead      Boolean         @default(false)
+  sentAt      DateTime        @default(now())
+  deliveredAt DateTime?
+  readAt      DateTime?
+  createdAt   DateTime        @default(now())
+  customer    Customer?       @relation(fields: [customerId], references: [id])
+  session     WhatsAppSession @relation(fields: [sessionId], references: [id])
+
+  @@index([tenantId])
+  @@index([sessionId])
+  @@index([customerId])
+}
+
+model Notification {
+  id          String    @id @default(cuid())
+  tenantId    String
+  customerId  String?
+  channel     String
+  status      String    @default("PENDING")
+  to          String
+  subject     String?
+  body        String
+  templateKey String?
+  metadata    String?
+  scheduledAt DateTime?
+  sentAt      DateTime?
+  failedAt    DateTime?
+  errorMsg    String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  tenant      Tenant    @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId])
+  @@index([status, scheduledAt])
+}
+
+model MediaAsset {
+  id           String   @id @default(cuid())
+  tenantId     String
+  outletId     String?
+  url          String
+  publicId     String
+  type         String
+  folder       String?
+  altText      String?
+  sizeBytes    Int?
+  width        Int?
+  height       Int?
+  uploadedById String?
+  createdAt    DateTime @default(now())
+  outlet       Outlet?  @relation(fields: [outletId], references: [id])
+  tenant       Tenant   @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId])
+  @@index([tenantId, folder])
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  tenantId   String
+  userId     String?
+  action     String
+  entityName String
+  entityId   String
+  oldValues  String?
+  newValues  String?
+  ipAddress  String?
+  userAgent  String?
+  createdAt  DateTime @default(now())
+  tenant     Tenant   @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId])
+  @@index([entityName, entityId])
+}
+
+model StaffCommission {
+  id        String   @id @default(cuid())
+  tenantId  String
+  staffId   String
+  serviceId String?
+  type      String   @default("PERCENTAGE")
+  rate      Decimal
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  service   Service? @relation(fields: [serviceId], references: [id])
+  staff     User     @relation(fields: [staffId], references: [id])
+  tenant    Tenant   @relation(fields: [tenantId], references: [id])
+
+  @@unique([staffId, serviceId])
+  @@index([tenantId])
+  @@index([staffId])
+}
+
+model Tip {
+  id        String   @id @default(cuid())
+  tenantId  String
+  invoiceId String
+  staffId   String?
+  amount    Decimal
+  method    String   @default("CASH")
+  notes     String?
+  createdAt DateTime @default(now())
+  invoice   Invoice  @relation(fields: [invoiceId], references: [id])
+  tenant    Tenant   @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId])
+  @@index([invoiceId])
+}
+
+model StaffAttendance {
+  id          String    @id @default(cuid())
+  tenantId    String
+  staffId     String
+  outletId    String
+  clockIn     DateTime
+  clockOut    DateTime?
+  durationMin Int?
+  notes       String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  outlet      Outlet    @relation(fields: [outletId], references: [id])
+  staff       User      @relation(fields: [staffId], references: [id])
+  tenant      Tenant    @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId])
+  @@index([staffId])
+  @@index([tenantId, clockIn])
+}
+
+model PayrollPeriod {
+  id               String   @id @default(cuid())
+  tenantId         String
+  staffId          String
+  outletId         String?
+  periodStart      DateTime
+  periodEnd        DateTime
+  totalServices    Int      @default(0)
+  serviceRevenue   Decimal  @default(0)
+  commissionEarned Decimal  @default(0)
+  tipsEarned       Decimal  @default(0)
+  hoursWorked      Decimal  @default(0)
+  status           String   @default("DRAFT")
+  notes            String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  staff            User     @relation(fields: [staffId], references: [id])
+  tenant           Tenant   @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId])
+  @@index([staffId])
+  @@index([tenantId, periodStart, periodEnd])
+}
+
+model StaffLeave {
+  id        String   @id @default(cuid())
+  tenantId  String
+  staffId   String
+  startDate DateTime
+  endDate   DateTime
+  status    String   @default("PENDING")
+  reason    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  staff     User     @relation(fields: [staffId], references: [id])
+  tenant    Tenant   @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId])
+  @@index([staffId])
+}
+
+model OutletBlockedDate {
+  id        String   @id @default(cuid())
+  tenantId  String
+  outletId  String
+  date      DateTime
+  reason    String?
+  createdAt DateTime @default(now())
+  outlet    Outlet   @relation(fields: [outletId], references: [id])
+  tenant    Tenant   @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId])
+  @@index([outletId])
+}
+
+model StaffBlockSlot {
+  id          String   @id @default(cuid())
+  tenantId    String
+  staffId     String
+  outletId    String
+  scheduledAt DateTime
+  endsAt      DateTime
+  reason      String?
+  createdAt   DateTime @default(now())
+  outlet      Outlet   @relation(fields: [outletId], references: [id])
+  staff       User     @relation(fields: [staffId], references: [id])
+  tenant      Tenant   @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId])
+  @@index([staffId])
+}
+
+model ConsentTemplate {
+  id                String            @id @default(cuid())
+  tenantId          String
+  serviceCategoryId String?
+  title             String
+  content           String
+  isActive          Boolean           @default(true)
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  serviceCategory   ServiceCategory?  @relation(fields: [serviceCategoryId], references: [id])
+  tenant            Tenant            @relation(fields: [tenantId], references: [id])
+  consents          CustomerConsent[]
+
+  @@index([tenantId])
+}
+
+model CustomerConsent {
+  id            String          @id @default(cuid())
+  tenantId      String
+  customerId    String
+  templateId    String
+  bookingId     String?
+  signatureUrl  String?
+  signatureText String?
+  signedAt      DateTime        @default(now())
+  ipAddress     String?
+  booking       Booking?        @relation(fields: [bookingId], references: [id])
+  customer      Customer        @relation(fields: [customerId], references: [id])
+  template      ConsentTemplate @relation(fields: [templateId], references: [id])
+  tenant        Tenant          @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId])
+  @@index([customerId])
+}
+
+model GiftCard {
+  id             String    @id @default(cuid())
+  tenantId       String
+  code           String    @unique
+  initialValue   Decimal
+  balance        Decimal
+  customerId     String?
+  recipientEmail String?
+  recipientPhone String?
+  status         String    @default("ACTIVE")
+  validUntil     DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  customer       Customer? @relation(fields: [customerId], references: [id])
+  tenant         Tenant    @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId])
+  @@index([customerId])
+}
+
+model Expense {
+  id          String   @id @default(cuid())
+  tenantId    String
+  outletId    String?
+  category    String
+  amount      Decimal
+  description String?
+  spentAt     DateTime
+  receiptUrl  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  outlet      Outlet?  @relation(fields: [outletId], references: [id])
+  tenant      Tenant   @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId])
+  @@index([outletId])
+}
+
+model Supplier {
+  id          String          @id @default(cuid())
+  tenantId    String
+  name        String
+  contactName String?
+  email       String?
+  phone       String?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  products    Product[]
+  orders      PurchaseOrder[]
+  tenant      Tenant          @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId])
+}
+
+model PurchaseOrder {
+  id          String              @id @default(cuid())
+  tenantId    String
+  supplierId  String
+  status      String              @default("DRAFT")
+  totalAmount Decimal             @default(0)
+  notes       String?
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+  supplier    Supplier            @relation(fields: [supplierId], references: [id])
+  tenant      Tenant              @relation(fields: [tenantId], references: [id])
+  items       PurchaseOrderItem[]
+
+  @@index([tenantId])
+}
+
+model PurchaseOrderItem {
+  id              String        @id @default(cuid())
+  purchaseOrderId String
+  productId       String
+  quantity        Int
+  costPrice       Decimal
+  product         Product       @relation(fields: [productId], references: [id])
+  purchaseOrder   PurchaseOrder @relation(fields: [purchaseOrderId], references: [id], onDelete: Cascade)
+
+  @@index([purchaseOrderId])
+}
+
+model CustomerSegment {
+  id            String   @id @default(cuid())
+  tenantId      String
+  name          String
+  description   String?
+  criteriaType  String
+  criteriaValue String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId])
+}
+
+model DemoBooking {
+  id           String   @id @default(cuid())
+  name         String
+  businessName String
+  email        String
+  phone        String
+  city         String
+  plan         String
+  createdAt    DateTime @default(now())
+}

@@ -1,0 +1,197 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700&display=swap');
+
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-sans);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+
+  /* Custom Color Tokens to Support UI Templates & Contrast Accessibility */
+  --color-slate-750: #253248;
+  --color-slate-850: #121b2e;
+  --color-slate-350: #b2c1d3;
+  --color-slate-650: #3d4b5f;
+  
+  --color-stone-850: #201d1b;
+  --color-stone-205: #e2e0df;
+  
+  --color-teal-750: #106b64;
+  --color-teal-850: #125651;
+  --color-teal-350: #26dfca;
+  
+  --color-zinc-750: #303035;
+  --color-zinc-850: #1f1f22;
+  
+  --color-rose-750: #ac123b;
+  --color-rose-850: #931238;
+  --color-rose-455: #f65d75;
+  --color-rose-450: #f98394;
+  --color-rose-350: #fb3150;
+  --color-rose-350: #fb3150;
+}
+
+:root {
+  --background: #fbfaf7;
+  --foreground: #2b2724;
+  --card: #ffffff;
+  --card-foreground: #2b2724;
+  --popover: #ffffff;
+  --popover-foreground: #2b2724;
+  --primary: #1c1917;
+  --primary-foreground: #faf9f6;
+  --secondary: #f4f1ea;
+  --secondary-foreground: #2b2724;
+  --muted: #f4f1ea;
+  --muted-foreground: #716d68;
+  --accent: #f4f1ea;
+  --accent-foreground: #2b2724;
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: #e6e2da;
+  --input: #e6e2da;
+  --ring: #1c1917;
+  --chart-1: #8f8576;
+  --chart-2: #716d68;
+  --chart-3: #524f4b;
+  --chart-4: #c9c3b8;
+  --chart-5: #e6e2da;
+  --radius: 0.75rem;
+  --sidebar: #fbfaf7;
+  --sidebar-foreground: #2b2724;
+  --sidebar-primary: #1c1917;
+  --sidebar-primary-foreground: #faf9f6;
+  --sidebar-accent: #f4f1ea;
+  --sidebar-accent-foreground: #2b2724;
+  --sidebar-border: #e6e2da;
+  --sidebar-ring: #1c1917;
+}
+
+.dark {
+  --background: #141312;
+  --foreground: #f4f1ea;
+  --card: #1c1917;
+  --card-foreground: #f4f1ea;
+  --popover: #1c1917;
+  --popover-foreground: #f4f1ea;
+  --primary: #fbfaf7;
+  --primary-foreground: #1c1917;
+  --secondary: #2b2724;
+  --secondary-foreground: #f4f1ea;
+  --muted: #2b2724;
+  --muted-foreground: #a39f98;
+  --accent: #2b2724;
+  --accent-foreground: #f4f1ea;
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: #383431;
+  --input: #383431;
+  --ring: #fbfaf7;
+  --sidebar: #141312;
+  --sidebar-foreground: #f4f1ea;
+  --sidebar-primary: #fbfaf7;
+  --sidebar-primary-foreground: #1c1917;
+  --sidebar-accent: #2b2724;
+  --sidebar-accent-foreground: #f4f1ea;
+  --sidebar-border: #383431;
+  --sidebar-ring: #fbfaf7;
+}
+
+@layer base {
+  * {
+    @apply border-stone-200 outline-stone-800;
+  }
+  body {
+    background-color: #fbfaf7;
+    color: #2b2724;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  }
+}
+
+.font-luxury {
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+.font-minimal {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+}
+
+/* Custom Scrollbar and Glass Effects for Admin Redesign */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(43, 39, 36, 0.08);
+  border-radius: 9999px;
+  transition: background 0.3s ease;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(43, 39, 36, 0.16);
+}
+
+@keyframes animate-slow-glow {
+  0%, 100% {
+    transform: scale(1) translate(0, 0);
+    opacity: 0.12;
+  }
+  50% {
+    transform: scale(1.15) translate(2%, 4%);
+    opacity: 0.18;
+  }
+}
+
+.aurora-glow-slow {
+  animation: animate-slow-glow 20s infinite ease-in-out;
+}
