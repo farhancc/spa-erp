@@ -4,77 +4,76 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   Calendar,
-  Receipt,
   Users,
-  Smartphone,
+  Box,
   BarChart3,
-  Shield,
-  ArrowRight,
-  CheckCircle,
-  Plus,
-  Lock,
-  User,
-  Menu,
-  X,
-  ArrowUpRight,
-  HelpCircle,
-  Percent,
+  ShieldCheck,
   Clock,
-  Briefcase,
+  TrendingUp,
+  Sparkles,
+  CheckCircle2,
+  ArrowRight,
+  ChevronDown,
+  Star,
+  Layers,
+  Search,
+  Bell,
+  User,
+  HeartHandshake,
+  Check,
+  X,
+  Play,
+  Scissors,
+  Receipt,
   Mail,
   Building,
-  Check,
-  TrendingUp,
-  MapPin,
-  FileText,
-  Bell,
-  Package,
-  Layers,
-  ArrowLeftRight,
-  Play,
-  CheckSquare
+  MapPin
 } from "lucide-react";
-import { getSharedTenants, saveSharedTenant, saveDemoBooking } from "../shared/utils/utils";
+import { getSharedTenants, saveDemoBooking } from "../shared/utils/utils";
 
-// Clean inline logo symbol and text
-function CarevaLogo() {
+// Clean Lotus Icon Logo matching reference image
+function CarevaSpaLogo() {
   return (
-    <div className="flex items-center gap-2.5">
-      <img src="/logo-icon.png" alt="Careva Salon ERP" className="w-8 h-8 object-contain rounded-lg shadow-sm" />
-      <span className="font-extrabold text-xl tracking-tight text-[#0F172A]">
-        Careva
-      </span>
-    </div>
+    <Link href="/" className="flex items-center gap-3 group">
+      <div className="w-9 h-9 rounded-full bg-[#1E3A2B] flex items-center justify-center text-white shadow-sm transition-transform group-hover:scale-105">
+        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 3C10.5 6 7 8 4 8C7 11 10.5 13 12 16C13.5 13 17 11 20 8C17 8 13.5 6 12 3Z" fill="currentColor" opacity="0.9" />
+          <path d="M12 8C11 10 8.5 11.5 6 11.5C8.5 13.5 11 15 12 17C13 15 15.5 13.5 18 11.5C15.5 11.5 13 10 12 8Z" fill="#88B04B" />
+          <path d="M12 21V16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+        </svg>
+      </div>
+      <div className="flex flex-col">
+        <span className="font-luxury font-bold text-xl tracking-tight text-[#1F2923] leading-none">
+          Careva
+        </span>
+        <span className="text-[9px] font-sans font-semibold tracking-[0.25em] text-[#6E7A72] uppercase -mt-0.5">
+          SPA ERP
+        </span>
+      </div>
+    </Link>
   );
 }
 
-export default function MarketingLandingPage() {
-  // Navigation & Drawer
+export default function CarevaLandingPage() {
+  // Mobile menu state
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  
-  // Modal & Interactive tour states
-  const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
-  const [isTourOpen, setIsTourOpen] = useState(false);
-  const [tourStep, setTourStep] = useState(0);
 
-  // Demo Booking / Sandbox Creation Form states
+  // Demo Modal state
+  const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
   const [ownerName, setOwnerName] = useState("");
   const [businessName, setBusinessName] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [cityLocation, setCityLocation] = useState("");
-  const [selectedPlan, setSelectedPlan] = useState("Professional");
+  const [selectedPlan, setSelectedPlan] = useState("Growth Spa");
   const [demoSuccess, setDemoSuccess] = useState(false);
-  const [createdSlug, setCreatedSlug] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
 
-  // Tabs for interactive Product Showcase
-  const [activeShowcaseTab, setActiveShowcaseTab] = useState<"appointments" | "billing" | "crm" | "reports">("appointments");
+  // Solutions dropdown state
+  const [isSolutionsOpen, setIsSolutionsOpen] = useState(false);
+  const [isResourcesOpen, setIsResourcesOpen] = useState(false);
 
-  // FAQ Accordion State
-  const [activeFaq, setActiveFaq] = useState<number | null>(null);
-
-  // Active Sandbox Tenant State (to display live link if any exist)
+  // Active Sandbox Tenant State
   const [activeSlug, setActiveSlug] = useState("luxcuts");
 
   useEffect(() => {
@@ -87,11 +86,8 @@ export default function MarketingLandingPage() {
     }
   }, []);
 
-  // Handler to open booking modal with preferred plan selected
   const openDemoModal = (plan?: string) => {
-    if (plan) {
-      setSelectedPlan(plan);
-    }
+    if (plan) setSelectedPlan(plan);
     setDemoSuccess(false);
     setErrorMsg("");
     setOwnerName("");
@@ -102,7 +98,6 @@ export default function MarketingLandingPage() {
     setIsDemoModalOpen(true);
   };
 
-  // Process free demo booking and save to super admin
   const handleBookDemo = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!ownerName || !businessName || !emailAddress || !phoneNumber || !cityLocation) {
@@ -119,1605 +114,817 @@ export default function MarketingLandingPage() {
         city: cityLocation,
         plan: selectedPlan
       });
-      
       if (success) {
         setErrorMsg("");
         setDemoSuccess(true);
       } else {
-        setErrorMsg("Failed to book demo. Please try again later.");
+        setErrorMsg("Failed to book demo. Please try again.");
       }
     } catch (err) {
       setErrorMsg("An error occurred while booking your demo.");
     }
   };
 
-  // Launch pre-configured demo redirects
-  const handleLaunchDemoLink = (path: string) => {
-    setIsDemoModalOpen(false);
-    const disableSubdomainRedirect = process.env.NEXT_PUBLIC_DISABLE_SUBDOMAIN_REDIRECT === 'true';
-    if (disableSubdomainRedirect) {
-      window.location.href = `/tenant/${createdSlug}${path}`;
-    } else {
-      const domain = process.env.NEXT_PUBLIC_APP_DOMAIN || "lvh.me";
-      const port = window.location.port ? `:${window.location.port}` : "";
-      window.location.href = `http://${createdSlug}.${domain}${port}${path}`;
-    }
-  };
-
-  const productTourSteps = [
-    {
-      title: "Interactive Booking Grid",
-      desc: "Assign slots, block timings, select stylists, and visualize rosters in real-time. Avoid overlapping bookings.",
-      mockup: (
-        <div className="bg-white rounded-xl border border-[#E2E8F0] p-4 text-xs font-sans text-[#0F172A] space-y-3">
-          <div className="flex justify-between items-center pb-2 border-b border-[#E2E8F0]">
-            <span className="font-bold text-[#0F172A]">Roster Timeline</span>
-            <span className="text-[10px] bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded font-medium">Live Grid</span>
-          </div>
-          <div className="grid grid-cols-4 gap-2">
-            <div className="text-slate-400 font-mono text-[9px]">Stylist</div>
-            <div className="text-slate-400 font-mono text-[9px]">10:00 AM</div>
-            <div className="text-slate-400 font-mono text-[9px]">11:00 AM</div>
-            <div className="text-slate-400 font-mono text-[9px]">12:00 PM</div>
-            
-            <div className="font-bold py-1">Alex</div>
-            <div className="bg-emerald-50 text-emerald-700 border border-emerald-200 rounded p-1 text-[10px] font-medium truncate">Haircut</div>
-            <div className="bg-slate-50 border border-dashed border-slate-200 rounded p-1 text-[10px] text-slate-400 text-center">-</div>
-            <div className="bg-[#0F8B8D]/5 text-[#0F8B8D] border border-[#0F8B8D]/20 rounded p-1 text-[10px] font-medium truncate">Facial</div>
-
-            <div className="font-bold py-1">Sarah</div>
-            <div className="bg-slate-50 border border-dashed border-slate-200 rounded p-1 text-[10px] text-slate-400 text-center">-</div>
-            <div className="bg-emerald-50 text-emerald-700 border border-emerald-200 rounded p-1 text-[10px] font-medium truncate">Nails</div>
-            <div className="bg-slate-50 border border-dashed border-slate-200 rounded p-1 text-[10px] text-slate-400 text-center">-</div>
-          </div>
-        </div>
-      )
-    },
-    {
-      title: "Fast POS Checkout",
-      desc: "Process billing in seconds. Add tax, apply codes, redeem points, and record multiple payment channels.",
-      mockup: (
-        <div className="bg-white rounded-xl border border-[#E2E8F0] p-4 text-xs font-sans text-[#0F172A] space-y-3">
-          <div className="flex justify-between items-center pb-2 border-b border-[#E2E8F0]">
-            <span className="font-bold text-[#0F172A]">Ticket Summary</span>
-            <span className="font-mono text-[10px] text-slate-500">INV-9201</span>
-          </div>
-          <div className="space-y-1.5 text-[11px]">
-            <div className="flex justify-between">
-              <span>Signature Haircut (Alex)</span>
-              <span className="font-semibold">₹850.00</span>
-            </div>
-            <div className="flex justify-between">
-              <span>Spa Manicure (Sarah)</span>
-              <span className="font-semibold">₹1,200.00</span>
-            </div>
-            <div className="flex justify-between text-emerald-600 font-medium">
-              <span>Coupon Code CAREVA20 (20%)</span>
-              <span>-₹410.00</span>
-            </div>
-            <div className="flex justify-between pt-2 border-t border-slate-100 font-bold text-sm text-[#0f8b8d]">
-              <span>Amount Due</span>
-              <span>₹1,640.00</span>
-            </div>
-          </div>
-        </div>
-      )
-    },
-    {
-      title: "Automated WhatsApp Delivery",
-      desc: "Instantly sends booking confirmations, 24h reminders, and digital bills. Reduce missed slots without lifting a finger.",
-      mockup: (
-        <div className="bg-slate-50 rounded-xl border border-[#E2E8F0] p-4 text-xs font-sans text-[#0F172A] space-y-3 max-w-sm mx-auto">
-          <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">WhatsApp Message Queue</span>
-          </div>
-          <div className="bg-white p-3 rounded-lg border border-[#E2E8F0] text-[11px] text-slate-700 relative">
-            <p className="font-bold text-[#0F172A] mb-1">Careva Auto-Reminder</p>
-            <p>Hello Priyanka! Your appointment for Nail Art at **Lavender Spa** is confirmed for tomorrow at **11:00 AM** with Sarah.</p>
-            <div className="mt-2 flex justify-between items-center text-[9px] text-slate-400">
-              <span>Delivery Status: Sent</span>
-              <span>10:04 AM</span>
-            </div>
-          </div>
-        </div>
-      )
-    },
-    {
-      title: "Real-time Metrics & Insights",
-      desc: "Analyze revenues, staff performances, low stock items, and retention stats across branches seamlessly.",
-      mockup: (
-        <div className="bg-white rounded-xl border border-[#E2E8F0] p-4 text-xs font-sans text-[#0F172A] space-y-3">
-          <div className="flex justify-between items-center pb-2 border-b border-[#E2E8F0]">
-            <span className="font-bold text-[#0F172A]">Real-time Performance</span>
-            <span className="text-[10px] text-slate-500">Live Dashboard</span>
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-lg p-2.5">
-              <span className="text-[9px] font-bold text-slate-400 uppercase block">Daily Gross</span>
-              <span className="text-sm font-extrabold text-[#0F172A]">₹28,450</span>
-            </div>
-            <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-lg p-2.5">
-              <span className="text-[9px] font-bold text-slate-400 uppercase block">No-Shows</span>
-              <span className="text-sm font-extrabold text-emerald-600">1.2%</span>
-            </div>
-          </div>
-        </div>
-      )
-    }
-  ];
-
   return (
-    <div className="bg-[#F8FAFC] text-[#0F172A] min-h-screen font-sans antialiased selection:bg-[#0F8B8D]/20 selection:text-[#0F8B8D]">
+    <div className="bg-[#FAF8F5] text-[#2B352E] font-minimal min-h-screen selection:bg-[#1E3A2B] selection:text-white relative">
       
-      {/* 1. STICKY NAVIGATION */}
-      <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-[#E2E8F0] transition-all">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-          <Link href="/" className="focus:outline-none">
-            <CarevaLogo />
-          </Link>
+      {/* ─── NAVIGATION BAR ─── */}
+      <header className="sticky top-0 z-40 bg-[#FAF8F5]/90 backdrop-blur-md border-b border-[#EDE8E0]">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+          
+          {/* Brand Logo */}
+          <CarevaSpaLogo />
 
-          <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-[#64748B]">
-            <a href="#features" className="hover:text-[#0f8b8d] transition-colors">Features</a>
-            <a href="#pricing" className="hover:text-[#0f8b8d] transition-colors">Pricing</a>
-            <a href="#faq" className="hover:text-[#0f8b8d] transition-colors">FAQ</a>
-            <a href="#contact" className="hover:text-[#0f8b8d] transition-colors">Contact</a>
-          </nav>
-
-          <div className="flex items-center gap-4">
-            <Link
-              href="/login"
-              className="hidden sm:inline-block text-sm font-medium text-[#64748B] hover:text-[#0F172A] transition-colors"
-            >
-              Sign In
-            </Link>
-            <button
-              onClick={() => openDemoModal()}
-              className="hidden sm:inline-block px-4 py-2 text-sm font-bold text-white bg-[#0F8B8D] hover:bg-[#0c7476] rounded-lg transition-colors shadow-sm shadow-[#0F8B8D]/10 cursor-pointer"
-            >
-              Book Demo
-            </button>
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 md:hidden text-[#64748B] hover:text-[#0F172A] transition-colors"
-              aria-label="Toggle Menu"
-            >
-              {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
-          </div>
-        </div>
-      </header>
-
-      {/* MOBILE DRAWER */}
-      {isMobileMenuOpen && (
-        <div className="fixed inset-x-0 top-16 z-30 bg-white border-b border-[#E2E8F0] shadow-lg md:hidden p-6 space-y-6">
-          <nav className="flex flex-col gap-4 text-base font-medium text-[#64748B]">
-            <a 
-              href="#features" 
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="hover:text-[#0f8b8d] transition-colors"
-            >
+          {/* Desktop Navigation Links */}
+          <nav className="hidden md:flex items-center gap-8 text-xs font-semibold text-[#4A574E]">
+            <a href="#features" className="hover:text-[#1E3A2B] transition-colors">
               Features
             </a>
-            <a 
-              href="#pricing" 
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="hover:text-[#0f8b8d] transition-colors"
-            >
+            
+            {/* Solutions Dropdown */}
+            <div className="relative" onMouseEnter={() => setIsSolutionsOpen(true)} onMouseLeave={() => setIsSolutionsOpen(false)}>
+              <button className="flex items-center gap-1 hover:text-[#1E3A2B] transition-colors py-1 cursor-pointer">
+                <span>Solutions</span>
+                <ChevronDown className="w-3.5 h-3.5 opacity-60" />
+              </button>
+              {isSolutionsOpen && (
+                <div className="absolute top-full left-0 w-64 bg-white rounded-2xl shadow-xl border border-[#EDE8E0] p-3 space-y-1 z-50">
+                  <a href={`/tenant/${activeSlug}`} className="block p-2.5 rounded-xl hover:bg-[#FAF8F5] transition-colors">
+                    <p className="font-bold text-[#1F2923] text-xs">Day Spas & Wellness Centers</p>
+                    <p className="text-[10px] text-slate-500">Appointments, treatment consents & billing</p>
+                  </a>
+                  <a href={`/tenant/${activeSlug}`} className="block p-2.5 rounded-xl hover:bg-[#FAF8F5] transition-colors">
+                    <p className="font-bold text-[#1F2923] text-xs">Hair & Beauty Salons</p>
+                    <p className="text-[10px] text-slate-500">Stylist scheduling & POS checkout</p>
+                  </a>
+                  <a href={`/tenant/${activeSlug}`} className="block p-2.5 rounded-xl hover:bg-[#FAF8F5] transition-colors">
+                    <p className="font-bold text-[#1F2923] text-xs">Multi-Chain Outlets</p>
+                    <p className="text-[10px] text-slate-500">Centralized analytics & staff payroll</p>
+                  </a>
+                </div>
+              )}
+            </div>
+
+            <a href="#pricing" className="hover:text-[#1E3A2B] transition-colors">
               Pricing
             </a>
-            <a 
-              href="#faq" 
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="hover:text-[#0f8b8d] transition-colors"
-            >
-              FAQ
+
+            <a href="#about" className="hover:text-[#1E3A2B] transition-colors">
+              About Us
             </a>
-            <a 
-              href="#contact" 
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="hover:text-[#0f8b8d] transition-colors"
-            >
-              Contact
-            </a>
-            <Link 
-              href="/login" 
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="hover:text-[#0f8b8d] transition-colors pt-2 border-t border-slate-100"
-            >
-              Sign In
-            </Link>
+
+            {/* Resources Dropdown */}
+            <div className="relative" onMouseEnter={() => setIsResourcesOpen(true)} onMouseLeave={() => setIsResourcesOpen(false)}>
+              <button className="flex items-center gap-1 hover:text-[#1E3A2B] transition-colors py-1 cursor-pointer">
+                <span>Resources</span>
+                <ChevronDown className="w-3.5 h-3.5 opacity-60" />
+              </button>
+              {isResourcesOpen && (
+                <div className="absolute top-full left-0 w-56 bg-white rounded-2xl shadow-xl border border-[#EDE8E0] p-3 space-y-1 z-50">
+                  <a href={`/tenant/${activeSlug}/booking`} className="block p-2 rounded-xl hover:bg-[#FAF8F5] text-xs font-semibold text-[#1F2923]">
+                    Online Booking Portal
+                  </a>
+                  <a href="/superadmin" className="block p-2 rounded-xl hover:bg-[#FAF8F5] text-xs font-semibold text-[#1F2923]">
+                    Super Admin Console
+                  </a>
+                  <a href={`/tenant/${activeSlug}/admin`} className="block p-2 rounded-xl hover:bg-[#FAF8F5] text-xs font-semibold text-[#1F2923]">
+                    Outlet Manager Desk
+                  </a>
+                </div>
+              )}
+            </div>
           </nav>
+
+          {/* Desktop Right Action Buttons */}
+          <div className="hidden md:flex items-center gap-4">
+            <Link
+              href={`/tenant/${activeSlug}/login`}
+              className="text-xs font-bold text-[#1E3A2B] hover:text-[#15291E] transition-colors px-2 py-1"
+            >
+              Log in
+            </Link>
+
+            <button
+              onClick={() => openDemoModal()}
+              className="bg-[#1E3A2B] hover:bg-[#15291E] text-white px-5 py-2.5 rounded-full text-xs font-semibold transition-all shadow-sm hover:shadow-md cursor-pointer active:scale-98"
+            >
+              Book a Demo
+            </button>
+          </div>
+
+          {/* Mobile Hamburger Toggle */}
           <button
-            onClick={() => { setIsMobileMenuOpen(false); openDemoModal(); }}
-            className="w-full text-center py-3 bg-[#0F8B8D] hover:bg-[#0c7476] text-sm font-bold text-white rounded-xl transition-all cursor-pointer"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="md:hidden p-2 text-[#1E3A2B] focus:outline-none"
           >
-            Book Free Demo
+            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
-      )}
 
-      {/* 2. HERO SECTION */}
-      <section className="relative py-16 md:py-28 px-6 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-          <div className="lg:col-span-6 space-y-8 text-left">
-            <h1 className="text-4xl md:text-6xl font-black tracking-tight text-[#0F172A] leading-[1.1] font-sans">
-              Run Your Salon, <br />
-              <span className="text-[#0F8B8D]">Not Your Spreadsheet.</span>
-            </h1>
+        {/* Mobile Navigation Drawer */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden bg-white border-b border-[#EDE8E0] px-6 py-4 space-y-3">
+            <a href="#features" onClick={() => setIsMobileMenuOpen(false)} className="block py-2 text-sm font-medium text-[#1F2923]">
+              Features
+            </a>
+            <a href="#dashboard" onClick={() => setIsMobileMenuOpen(false)} className="block py-2 text-sm font-medium text-[#1F2923]">
+              Dashboard
+            </a>
+            <a href="#testimonials" onClick={() => setIsMobileMenuOpen(false)} className="block py-2 text-sm font-medium text-[#1F2923]">
+              Testimonials
+            </a>
+            <a href="#pricing" onClick={() => setIsMobileMenuOpen(false)} className="block py-2 text-sm font-medium text-[#1F2923]">
+              Pricing
+            </a>
+            <div className="pt-3 border-t border-[#EDE8E0] flex flex-col gap-2">
+              <Link
+                href={`/tenant/${activeSlug}/login`}
+                className="w-full text-center py-2.5 rounded-xl border border-[#EDE8E0] text-xs font-bold text-[#1E3A2B]"
+              >
+                Log in
+              </Link>
+              <button
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  openDemoModal();
+                }}
+                className="w-full py-2.5 rounded-xl bg-[#1E3A2B] text-white text-xs font-bold"
+              >
+                Book a Demo
+              </button>
+            </div>
+          </div>
+        )}
+      </header>
 
-            <p className="text-[#64748B] text-base md:text-lg max-w-xl leading-relaxed">
-              Manage appointments, staff, customers, billing, inventory, and automated WhatsApp reminders from one clean, unified platform designed for modern outlets.
-            </p>
+      {/* ─── HERO SECTION ─── */}
+      <section className="relative pt-12 pb-20 md:pt-20 md:pb-28 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          
+          {/* Left Column: Text & CTAs */}
+          <div className="lg:col-span-7 space-y-8">
+            
+            {/* Main Headline */}
+            <div className="space-y-4">
+              <h1 className="font-luxury text-4xl sm:text-5xl lg:text-6xl text-[#1F2923] tracking-tight leading-[1.12]">
+                All-in-One <span className="inline-block text-[#88B04B] font-sans text-3xl md:text-4xl align-top">🌿</span>
+                <br />
+                Spa Management
+                <br />
+                Software
+              </h1>
 
-            <div className="flex flex-col sm:flex-row items-center gap-4">
+              <p className="text-[#5A685D] text-base sm:text-lg max-w-xl leading-relaxed font-normal">
+                Careva Spa ERP helps you manage appointments, clients, staff, inventory and more — all in one beautifully simple platform.
+              </p>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex flex-wrap items-center gap-4 pt-2">
               <button
                 onClick={() => openDemoModal()}
-                className="w-full sm:w-auto px-8 py-4 bg-[#0F8B8D] hover:bg-[#0c7476] text-white font-bold text-sm rounded-xl transition-colors shadow-lg shadow-[#0F8B8D]/10 flex items-center justify-center gap-2 cursor-pointer"
+                className="bg-[#1E3A2B] hover:bg-[#15291E] text-white px-7 py-3.5 rounded-2xl text-sm font-semibold transition-all shadow-md hover:shadow-lg flex items-center gap-2.5 group cursor-pointer active:scale-98"
               >
-                Book Free Demo <ArrowRight className="w-4 h-4" />
+                <span>Book a Demo</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
-              <button
-                onClick={() => setIsTourOpen(true)}
-                className="w-full sm:w-auto px-8 py-4 border border-[#E2E8F0] bg-white hover:border-[#64748B]/30 text-[#0F172A] font-semibold text-sm rounded-xl transition-colors flex items-center justify-center gap-2 cursor-pointer"
+
+              <a
+                href="#features"
+                className="bg-[#FAF8F5] hover:bg-white border border-[#DDD7CC] text-[#1E3A2B] px-7 py-3.5 rounded-2xl text-sm font-semibold transition-all shadow-xs hover:shadow-sm"
               >
-                <Play className="w-4 h-4 fill-current text-[#0f8b8d]" /> Watch Product Tour
-              </button>
+                Explore Features
+              </a>
             </div>
 
-            {/* Trust Indicators */}
-            <div className="pt-6 border-t border-[#E2E8F0] grid grid-cols-2 sm:grid-cols-3 gap-y-3 gap-x-6 text-xs font-bold text-[#64748B]">
-              <div className="flex items-center gap-2">
-                <Check className="w-4 h-4 text-[#0F8B8D]" /> Appointment Management
+            {/* Social Proof Rating */}
+            <div className="flex items-center gap-4 pt-4 border-t border-[#EDE8E0]/80">
+              {/* Avatar stack */}
+              <div className="flex -space-x-2.5">
+                <img
+                  src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80"
+                  alt="Spa Manager"
+                  className="w-10 h-10 rounded-full border-2 border-[#FAF8F5] object-cover"
+                />
+                <img
+                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=80"
+                  alt="Spa Owner"
+                  className="w-10 h-10 rounded-full border-2 border-[#FAF8F5] object-cover"
+                />
+                <img
+                  src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=120&q=80"
+                  alt="Wellness Specialist"
+                  className="w-10 h-10 rounded-full border-2 border-[#FAF8F5] object-cover"
+                />
+                <img
+                  src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&q=80"
+                  alt="Salon Owner"
+                  className="w-10 h-10 rounded-full border-2 border-[#FAF8F5] object-cover"
+                />
               </div>
-              <div className="flex items-center gap-2">
-                <Check className="w-4 h-4 text-[#0F8B8D]" /> Billing & POS
-              </div>
-              <div className="flex items-center gap-2">
-                <Check className="w-4 h-4 text-[#0F8B8D]" /> WhatsApp Automation
-              </div>
-              <div className="flex items-center gap-2">
-                <Check className="w-4 h-4 text-[#0F8B8D]" /> Staff Management
-              </div>
-              <div className="flex items-center gap-2">
-                <Check className="w-4 h-4 text-[#0F8B8D]" /> Inventory Tracking
-              </div>
-            </div>
-          </div>
 
-          {/* Right side: Large product dashboard mockup */}
-          <div className="lg:col-span-6">
-            <div className="bg-white rounded-2xl border border-[#E2E8F0] shadow-xl overflow-hidden flex flex-col">
-              {/* Window bar */}
-              <div className="px-4 py-3 bg-[#F8FAFC] border-b border-[#E2E8F0] flex items-center justify-between">
-                <div className="flex gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-red-400" />
-                  <span className="w-2.5 h-2.5 rounded-full bg-yellow-400" />
-                  <span className="w-2.5 h-2.5 rounded-full bg-green-400" />
+              {/* Stars and score */}
+              <div>
+                <div className="flex items-center gap-1 text-[#E5A93C]">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-current" />
+                  ))}
                 </div>
-                <div className="text-[10px] font-mono text-slate-400 bg-white px-6 py-0.5 rounded border border-[#E2E8F0]">
-                  dashboard.careva.in
-                </div>
-                <div className="w-10" />
-              </div>
-
-              {/* Mockup Body Layout */}
-              <div className="grid grid-cols-12 min-h-[360px] text-xs">
-                {/* Mock Sidebar */}
-                <div className="hidden sm:block col-span-3 bg-[#F8FAFC] border-r border-[#E2E8F0] p-3 space-y-4">
-                  <div className="h-4 w-12 bg-slate-200 rounded animate-pulse" />
-                  <div className="space-y-2">
-                    <div className="h-6 bg-[#0F8B8D]/10 rounded flex items-center px-2 text-[#0F8B8D] font-bold">
-                      Calendar
-                    </div>
-                    <div className="h-6 rounded flex items-center px-2 text-slate-400">
-                      POS Billing
-                    </div>
-                    <div className="h-6 rounded flex items-center px-2 text-slate-400">
-                      Clients CRM
-                    </div>
-                    <div className="h-6 rounded flex items-center px-2 text-slate-400">
-                      Staff
-                    </div>
-                    <div className="h-6 rounded flex items-center px-2 text-slate-400">
-                      Reports
-                    </div>
-                  </div>
-                </div>
-
-                {/* Mock Workspace */}
-                <div className="col-span-12 sm:col-span-9 p-4 space-y-4 text-left">
-                  {/* Top line metrics */}
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <div className="bg-white border border-[#E2E8F0] rounded-xl p-3">
-                      <span className="text-[9px] font-bold text-slate-400 block uppercase">Revenue</span>
-                      <span className="text-sm font-extrabold text-[#0F172A]">₹1,42,850</span>
-                    </div>
-                    <div className="bg-white border border-[#E2E8F0] rounded-xl p-3">
-                      <span className="text-[9px] font-bold text-slate-400 block uppercase">No-Show Rate</span>
-                      <span className="text-sm font-extrabold text-emerald-600">1.8%</span>
-                    </div>
-                    <div className="bg-white border border-[#E2E8F0] rounded-xl p-3">
-                      <span className="text-[9px] font-bold text-slate-400 block uppercase">Reminders Sent</span>
-                      <span className="text-sm font-extrabold text-[#0F8B8D]">1,280</span>
-                    </div>
-                  </div>
-
-                  {/* Layout inner content columns */}
-                  <div className="grid grid-cols-1 sm:grid-cols-12 gap-3">
-                    {/* Left: Schedule grid */}
-                    <div className="col-span-12 sm:col-span-7 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-3 space-y-2.5">
-                      <span className="text-[10px] font-bold text-[#0F172A] block border-b border-slate-200 pb-1.5">Today's Appointments</span>
-                      <div className="space-y-2">
-                        <div className="bg-white border border-slate-100 rounded-lg p-2 flex justify-between items-center shadow-xs">
-                          <div>
-                            <span className="font-bold block text-[11px]">Rohan Sharma</span>
-                            <span className="text-[9px] text-[#64748B]">09:00 AM • Signature Cut</span>
-                          </div>
-                          <span className="text-[8px] bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded font-bold uppercase">Confirmed</span>
-                        </div>
-                        <div className="bg-white border border-slate-100 rounded-lg p-2 flex justify-between items-center shadow-xs">
-                          <div>
-                            <span className="font-bold block text-[11px]">Priyanka Nair</span>
-                            <span className="text-[9px] text-[#64748B]">10:30 AM • Nails Spa</span>
-                          </div>
-                          <span className="text-[8px] bg-amber-50 text-amber-700 px-2 py-0.5 rounded font-bold uppercase">In-Progress</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Right: SVG chart mockup */}
-                    <div className="col-span-12 sm:col-span-5 bg-white border border-[#E2E8F0] rounded-xl p-3 flex flex-col justify-between">
-                      <span className="text-[10px] font-bold text-[#0F172A] block mb-1">Weekly Trends</span>
-                      <div className="flex items-end justify-between h-20 px-2 pt-2">
-                        <div className="w-3.5 bg-slate-200 rounded-t h-8" />
-                        <div className="w-3.5 bg-slate-200 rounded-t h-12" />
-                        <div className="w-3.5 bg-[#0F8B8D] rounded-t h-16" />
-                        <div className="w-3.5 bg-slate-200 rounded-t h-10" />
-                        <div className="w-3.5 bg-[#0F8B8D]/50 rounded-t h-14" />
-                      </div>
-                      <span className="text-[8px] text-slate-400 text-center block mt-1">Mon - Fri Revenue</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 3. PROBLEM SECTION */}
-      <section className="py-20 bg-white border-y border-[#E2E8F0] px-6">
-        <div className="max-w-7xl mx-auto text-center space-y-12">
-          <div className="space-y-4">
-            <span className="text-xs font-bold text-[#0F8B8D] uppercase tracking-widest block">The Cost of Disorganization</span>
-            <h2 className="text-3xl md:text-5xl font-black text-[#0F172A] tracking-tight leading-tight">
-              Running a Salon Shouldn't Feel Like Chaos
-            </h2>
-            <p className="text-[#64748B] max-w-2xl mx-auto text-sm md:text-base leading-relaxed">
-              Traditional salons lose up to 20% of their revenue to missed appointments, manual billing errors, and unorganized staff rosters. Careva consolidates your operations into a single system of record.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-4">
-            <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-2xl p-6 text-left space-y-4">
-              <div className="w-10 h-10 bg-red-50 text-red-600 rounded-lg flex items-center justify-center font-bold">
-                ✕
-              </div>
-              <h3 className="font-bold text-[#0F172A] text-lg">Missed Appointments</h3>
-              <p className="text-xs text-[#64748B] leading-relaxed">
-                No-shows eat your profit margins when clients forget their slots. Manual confirmation calls take hours and yield low responses.
-              </p>
-            </div>
-
-            <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-2xl p-6 text-left space-y-4">
-              <div className="w-10 h-10 bg-red-50 text-red-600 rounded-lg flex items-center justify-center font-bold">
-                ✕
-              </div>
-              <h3 className="font-bold text-[#0F172A] text-lg">Manual Billing & Errors</h3>
-              <p className="text-xs text-[#64748B] leading-relaxed">
-                Slow, pen-and-paper billing causes logjams at checkout, incorrect tax calculations, and messy accounts.
-              </p>
-            </div>
-
-            <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-2xl p-6 text-left space-y-4">
-              <div className="w-10 h-10 bg-red-50 text-red-600 rounded-lg flex items-center justify-center font-bold">
-                ✕
-              </div>
-              <h3 className="font-bold text-[#0F172A] text-lg">Inventory Confusion</h3>
-              <p className="text-xs text-[#64748B] leading-relaxed">
-                Running out of premium retail products or over-purchasing surplus supplies eats up working capital.
-              </p>
-            </div>
-
-            <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-2xl p-6 text-left space-y-4">
-              <div className="w-10 h-10 bg-red-50 text-red-600 rounded-lg flex items-center justify-center font-bold">
-                ✕
-              </div>
-              <h3 className="font-bold text-[#0F172A] text-lg">Forgotten Follow-Ups</h3>
-              <p className="text-xs text-[#64748B] leading-relaxed">
-                Zero history records mean you have no automated way to offer birthdate discounts or reach out to inactive clients.
-              </p>
-            </div>
-
-            <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-2xl p-6 text-left space-y-4">
-              <div className="w-10 h-10 bg-red-50 text-red-600 rounded-lg flex items-center justify-center font-bold">
-                ✕
-              </div>
-              <h3 className="font-bold text-[#0F172A] text-lg">Staff Coordination Issues</h3>
-              <p className="text-xs text-[#64748B] leading-relaxed">
-                Disorganized shift schedules lead to double-booked slots, stylist payout calculation mistakes, and general operational drag.
-              </p>
-            </div>
-
-            <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-2xl p-6 text-left space-y-4">
-              <div className="w-10 h-10 bg-red-50 text-red-600 rounded-lg flex items-center justify-center font-bold">
-                ✕
-              </div>
-              <h3 className="font-bold text-[#0F172A] text-lg">Zero Business Visibility</h3>
-              <p className="text-xs text-[#64748B] leading-relaxed">
-                Running multiple outlets without unified sales graphs leaves you completely blind on true margins and margins growth.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 4. FEATURES SECTION */}
-      <section id="features" className="scroll-mt-20 py-20 px-6 max-w-7xl mx-auto">
-        <div className="text-center space-y-4 mb-16">
-          <span className="text-xs font-bold text-[#0F8B8D] uppercase tracking-widest block">Complete Capability Suite</span>
-          <h2 className="text-3xl md:text-5xl font-black text-[#0F172A] tracking-tight">
-            Everything You Need To Run Your Salon
-          </h2>
-          <p className="text-[#64748B] max-w-xl mx-auto text-sm md:text-base">
-            Careva consolidates complex workflows into single clicks, replacing separate software integrations.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {/* Feature Cards */}
-          <div className="bg-white border border-[#E2E8F0] rounded-2xl p-8 space-y-4 hover:shadow-md transition-shadow">
-            <div className="w-10 h-10 bg-[#0F8B8D]/5 text-[#0F8B8D] rounded-lg flex items-center justify-center">
-              <Calendar className="w-5 h-5" />
-            </div>
-            <h3 className="font-bold text-lg text-[#0F172A]">Appointments</h3>
-            <p className="text-xs text-[#64748B] leading-relaxed">
-              Drag-and-drop bookings, real-time slot optimization, buffer allocations, and individual stylist schedules.
-            </p>
-          </div>
-
-          <div className="bg-white border border-[#E2E8F0] rounded-2xl p-8 space-y-4 hover:shadow-md transition-shadow">
-            <div className="w-10 h-10 bg-[#0F8B8D]/5 text-[#0F8B8D] rounded-lg flex items-center justify-center">
-              <Receipt className="w-5 h-5" />
-            </div>
-            <h3 className="font-bold text-lg text-[#0F172A]">Billing & POS</h3>
-            <p className="text-xs text-[#64748B] leading-relaxed">
-              Accept digital payments, calculate split-bills, redeem membership points, and apply coupon codes instantly.
-            </p>
-          </div>
-
-          <div className="bg-white border border-[#E2E8F0] rounded-2xl p-8 space-y-4 hover:shadow-md transition-shadow">
-            <div className="w-10 h-10 bg-[#0F8B8D]/5 text-[#0F8B8D] rounded-lg flex items-center justify-center">
-              <Users className="w-5 h-5" />
-            </div>
-            <h3 className="font-bold text-lg text-[#0F172A]">Customer CRM</h3>
-            <p className="text-xs text-[#64748B] leading-relaxed">
-              Track full profile histories, preferred services, birthday triggers, segmentation lists, and loyalty logs.
-            </p>
-          </div>
-
-          <div className="bg-white border border-[#E2E8F0] rounded-2xl p-8 space-y-4 hover:shadow-md transition-shadow">
-            <div className="w-10 h-10 bg-[#0F8B8D]/5 text-[#0F8B8D] rounded-lg flex items-center justify-center">
-              <Smartphone className="w-5 h-5" />
-            </div>
-            <h3 className="font-bold text-lg text-[#0F172A]">WhatsApp Reminders</h3>
-            <p className="text-xs text-[#64748B] leading-relaxed">
-              Automated template notifications, OTP verification, receipts, and 24-hour appointment alerts.
-            </p>
-          </div>
-
-          <div className="bg-white border border-[#E2E8F0] rounded-2xl p-8 space-y-4 hover:shadow-md transition-shadow">
-            <div className="w-10 h-10 bg-[#0F8B8D]/5 text-[#0F8B8D] rounded-lg flex items-center justify-center">
-              <Package className="w-5 h-5" />
-            </div>
-            <h3 className="font-bold text-lg text-[#0F172A]">Inventory Management</h3>
-            <p className="text-xs text-[#64748B] leading-relaxed">
-              Monitor retail stocks, generate automated purchase orders, check supplier sheets, and get low-stock notifications.
-            </p>
-          </div>
-
-          <div className="bg-white border border-[#E2E8F0] rounded-2xl p-8 space-y-4 hover:shadow-md transition-shadow">
-            <div className="w-10 h-10 bg-[#0F8B8D]/5 text-[#0F8B8D] rounded-lg flex items-center justify-center">
-              <Briefcase className="w-5 h-5" />
-            </div>
-            <h3 className="font-bold text-lg text-[#0F172A]">Staff Management</h3>
-            <p className="text-xs text-[#64748B] leading-relaxed">
-              Define working shifts, log leave calendars, adjust hourly pay scales, and calculate stylist commission metrics.
-            </p>
-          </div>
-
-          <div className="bg-white border border-[#E2E8F0] rounded-2xl p-8 space-y-4 hover:shadow-md transition-shadow md:col-span-2 lg:col-span-3">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-              <div className="space-y-2 max-w-xl text-left">
-                <div className="w-10 h-10 bg-[#0F8B8D]/5 text-[#0F8B8D] rounded-lg flex items-center justify-center">
-                  <BarChart3 className="w-5 h-5" />
-                </div>
-                <h3 className="font-bold text-lg text-[#0F172A]">Analytics & Reports</h3>
-                <p className="text-xs text-[#64748B] leading-relaxed">
-                  Real-time multi-branch reporting dashboards. Graph monthly earnings, active clients, peak slot hours, and stylist performance breakdowns.
+                <p className="text-xs font-semibold text-[#4A574E] mt-0.5">
+                  <span className="font-bold text-[#1F2923]">4.9/5</span> from 200+ spa owners
                 </p>
               </div>
+            </div>
+
+          </div>
+
+          {/* Right Column: Hero Spa Image Frame */}
+          <div className="lg:col-span-5 relative flex justify-center">
+            
+            {/* Arch Mask Container matching reference image */}
+            <div className="relative w-full max-w-md aspect-[4/5] rounded-t-[140px] rounded-b-[40px] overflow-hidden shadow-2xl border-4 border-white/60">
+              <img
+                src="/hero_spa_massage.png"
+                alt="Serene Spa Massage Session"
+                className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700"
+              />
+              
+              {/* Soft warm gradient overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#1E3A2B]/20 via-transparent to-transparent pointer-events-none" />
+            </div>
+
+            {/* Decorative Floating Pill Badge */}
+            <div className="absolute bottom-6 left-2 bg-white/90 backdrop-blur-md border border-[#EDE8E0] px-4 py-2.5 rounded-2xl shadow-lg flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-[#EFF5F0] flex items-center justify-center text-[#1E3A2B]">
+                <Sparkles className="w-4 h-4" />
+              </div>
+              <div>
+                <p className="text-[11px] font-bold text-[#1F2923]">Serene Experience</p>
+                <p className="text-[9px] text-[#6E7A72]">Automated 24/7 Client Bookings</p>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      {/* ─── SECTION 2: EVERYTHING YOU NEED TO RUN A SUCCESSFUL SPA ─── */}
+      <section id="features" className="py-16 md:py-24 bg-white border-y border-[#EDE8E0]">
+        <div className="max-w-7xl mx-auto px-6 space-y-14">
+          
+          {/* Section Header */}
+          <div className="text-center space-y-3 max-w-2xl mx-auto">
+            <h2 className="font-luxury text-3xl md:text-4xl text-[#1F2923] tracking-tight">
+              Everything You Need to Run a Successful Spa
+            </h2>
+          </div>
+
+          {/* 5 Feature Cards Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+            
+            {/* Card 1: Online Booking */}
+            <div className="bg-[#FAF8F5] border border-[#EFEBE4] rounded-2xl p-6 flex flex-col items-center text-center hover:bg-white hover:border-[#DDD7CC] hover:shadow-lg transition-all duration-300 group">
+              <div className="w-14 h-14 rounded-2xl bg-white border border-[#E5E0D5] flex items-center justify-center text-[#1E3A2B] mb-5 shadow-xs group-hover:scale-110 transition-transform">
+                <Calendar className="w-6 h-6 stroke-[1.75]" />
+              </div>
+              <h3 className="font-bold text-base text-[#1F2923] mb-2">Online Booking</h3>
+              <p className="text-xs text-[#6E7A72] leading-relaxed">
+                Easy scheduling and appointment management
+              </p>
+            </div>
+
+            {/* Card 2: Client Management */}
+            <div className="bg-[#FAF8F5] border border-[#EFEBE4] rounded-2xl p-6 flex flex-col items-center text-center hover:bg-white hover:border-[#DDD7CC] hover:shadow-lg transition-all duration-300 group">
+              <div className="w-14 h-14 rounded-2xl bg-white border border-[#E5E0D5] flex items-center justify-center text-[#1E3A2B] mb-5 shadow-xs group-hover:scale-110 transition-transform">
+                <Users className="w-6 h-6 stroke-[1.75]" />
+              </div>
+              <h3 className="font-bold text-base text-[#1F2923] mb-2">Client Management</h3>
+              <p className="text-xs text-[#6E7A72] leading-relaxed">
+                Keep client data, history and preferences at hand
+              </p>
+            </div>
+
+            {/* Card 3: Inventory Control */}
+            <div className="bg-[#FAF8F5] border border-[#EFEBE4] rounded-2xl p-6 flex flex-col items-center text-center hover:bg-white hover:border-[#DDD7CC] hover:shadow-lg transition-all duration-300 group">
+              <div className="w-14 h-14 rounded-2xl bg-white border border-[#E5E0D5] flex items-center justify-center text-[#1E3A2B] mb-5 shadow-xs group-hover:scale-110 transition-transform">
+                <Box className="w-6 h-6 stroke-[1.75]" />
+              </div>
+              <h3 className="font-bold text-base text-[#1F2923] mb-2">Inventory Control</h3>
+              <p className="text-xs text-[#6E7A72] leading-relaxed">
+                Track products, stock and supplies in real-time
+              </p>
+            </div>
+
+            {/* Card 4: Staff Management */}
+            <div className="bg-[#FAF8F5] border border-[#EFEBE4] rounded-2xl p-6 flex flex-col items-center text-center hover:bg-white hover:border-[#DDD7CC] hover:shadow-lg transition-all duration-300 group">
+              <div className="w-14 h-14 rounded-2xl bg-white border border-[#E5E0D5] flex items-center justify-center text-[#1E3A2B] mb-5 shadow-xs group-hover:scale-110 transition-transform">
+                <HeartHandshake className="w-6 h-6 stroke-[1.75]" />
+              </div>
+              <h3 className="font-bold text-base text-[#1F2923] mb-2">Staff Management</h3>
+              <p className="text-xs text-[#6E7A72] leading-relaxed">
+                Manage staff, shifts, commissions & performance
+              </p>
+            </div>
+
+            {/* Card 5: Reports & Analytics */}
+            <div className="bg-[#FAF8F5] border border-[#EFEBE4] rounded-2xl p-6 flex flex-col items-center text-center hover:bg-white hover:border-[#DDD7CC] hover:shadow-lg transition-all duration-300 group">
+              <div className="w-14 h-14 rounded-2xl bg-white border border-[#E5E0D5] flex items-center justify-center text-[#1E3A2B] mb-5 shadow-xs group-hover:scale-110 transition-transform">
+                <BarChart3 className="w-6 h-6 stroke-[1.75]" />
+              </div>
+              <h3 className="font-bold text-base text-[#1F2923] mb-2">Reports & Analytics</h3>
+              <p className="text-xs text-[#6E7A72] leading-relaxed">
+                Powerful insights to grow your spa business
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      {/* ─── SECTION 3: SMARTER OPERATIONS & DASHBOARD PREVIEW ─── */}
+      <section id="dashboard" className="py-20 md:py-28 bg-[#FAF8F5]">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          
+          {/* Left Column: Feature Highlights */}
+          <div className="lg:col-span-5 space-y-6">
+            
+            {/* Tag label */}
+            <div className="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-widest text-[#1E3A2B]">
+              <span>SMARTER OPERATIONS</span>
+              <span className="text-[#88B04B]">🌿</span>
+            </div>
+
+            {/* Headline */}
+            <h2 className="font-luxury text-3xl sm:text-4xl text-[#1F2923] leading-snug">
+              A Powerful Dashboard for Better Decisions
+            </h2>
+
+            {/* Description */}
+            <p className="text-[#5A685D] text-sm md:text-base leading-relaxed">
+              Get a real-time overview of your spa's performance and make data-driven decisions with ease.
+            </p>
+
+            {/* Checkmark List */}
+            <div className="space-y-3.5 pt-2">
+              {[
+                "Daily overview & key metrics",
+                "Revenue & appointment analytics",
+                "Top services & product performance",
+                "Staff performance tracking"
+              ].map((item, idx) => (
+                <div key={idx} className="flex items-center gap-3">
+                  <div className="w-5 h-5 rounded-full bg-[#1E3A2B] flex items-center justify-center text-white shrink-0">
+                    <Check className="w-3.5 h-3.5 stroke-[2.5]" />
+                  </div>
+                  <span className="text-xs md:text-sm font-semibold text-[#2B352E]">{item}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* CTA Button */}
+            <div className="pt-4">
+              <a
+                href={`/tenant/${activeSlug}/admin`}
+                className="inline-flex items-center gap-2 bg-[#1E3A2B] hover:bg-[#15291E] text-white px-6 py-3.5 rounded-2xl text-xs font-semibold uppercase tracking-wider transition-all shadow-sm hover:shadow-md group"
+              >
+                <span>See It in Action</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </a>
+            </div>
+
+          </div>
+
+          {/* Right Column: Realistic Dashboard Mockup Card */}
+          <div className="lg:col-span-7">
+            <div className="bg-white rounded-3xl border border-[#EDE8E0] shadow-2xl p-6 md:p-7 space-y-6 text-[#1F2923] font-sans">
+              
+              {/* Mockup Top Header */}
+              <div className="flex items-center justify-between pb-4 border-b border-[#F0EBE1]">
+                <div className="flex items-center gap-3">
+                  <div className="w-7 h-7 rounded-lg bg-[#1E3A2B] flex items-center justify-center text-white text-xs font-bold">
+                    C
+                  </div>
+                  <span className="font-bold text-sm text-[#1F2923]">Careva <span className="text-[10px] text-slate-400 uppercase font-mono font-medium">Spa ERP</span></span>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500">
+                    <Search className="w-3.5 h-3.5" />
+                  </div>
+                  <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 relative">
+                    <Bell className="w-3.5 h-3.5" />
+                    <span className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                  </div>
+                  <img
+                    src="/testimonial_avatar.png"
+                    alt="Admin Avatar"
+                    className="w-8 h-8 rounded-full object-cover border border-slate-200"
+                  />
+                </div>
+              </div>
+
+              {/* Welcome & Date Picker */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div>
+                  <h3 className="font-bold text-base text-[#1F2923]">Welcome back, Admin 👋</h3>
+                  <p className="text-[11px] text-slate-400">Here's what's happening at your spa today.</p>
+                </div>
+
+                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#EDE8E0] text-[11px] font-medium text-slate-600 bg-[#FAF8F5]">
+                  <Calendar className="w-3.5 h-3.5 text-slate-400" />
+                  <span>May 12 - May 18, 2024</span>
+                  <ChevronDown className="w-3 h-3 text-slate-400 ml-1" />
+                </div>
+              </div>
+
+              {/* 4 Stat Cards */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                
+                {/* Stat 1 */}
+                <div className="bg-[#FAF8F5] border border-[#F0EBE1] rounded-2xl p-3.5">
+                  <span className="text-[10px] text-slate-500 font-semibold block mb-1">Total Revenue</span>
+                  <p className="text-base sm:text-lg font-black text-[#1F2923]">₹ 2,45,000</p>
+                  <span className="text-[10px] font-semibold text-emerald-600 mt-0.5 block">+12.5% from last week</span>
+                </div>
+
+                {/* Stat 2 */}
+                <div className="bg-[#FAF8F5] border border-[#F0EBE1] rounded-2xl p-3.5">
+                  <span className="text-[10px] text-slate-500 font-semibold block mb-1">Appointments</span>
+                  <p className="text-base sm:text-lg font-black text-[#1F2923]">128</p>
+                  <span className="text-[10px] font-semibold text-emerald-600 mt-0.5 block">+8.2% from last week</span>
+                </div>
+
+                {/* Stat 3 */}
+                <div className="bg-[#FAF8F5] border border-[#F0EBE1] rounded-2xl p-3.5">
+                  <span className="text-[10px] text-slate-500 font-semibold block mb-1">New Clients</span>
+                  <p className="text-base sm:text-lg font-black text-[#1F2923]">32</p>
+                  <span className="text-[10px] font-semibold text-emerald-600 mt-0.5 block">+11.3% from last week</span>
+                </div>
+
+                {/* Stat 4 */}
+                <div className="bg-[#FAF8F5] border border-[#F0EBE1] rounded-2xl p-3.5">
+                  <span className="text-[10px] text-slate-500 font-semibold block mb-1">Products Sold</span>
+                  <p className="text-base sm:text-lg font-black text-[#1F2923]">356</p>
+                  <span className="text-[10px] font-semibold text-emerald-600 mt-0.5 block">+9.4% from last week</span>
+                </div>
+
+              </div>
+
+              {/* Chart & Top Services Side-by-Side */}
+              <div className="grid grid-cols-1 sm:grid-cols-12 gap-5 pt-2">
+                
+                {/* Revenue Overview Graph */}
+                <div className="sm:col-span-7 bg-[#FAF8F5] border border-[#F0EBE1] rounded-2xl p-4 space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs font-bold text-[#1F2923]">Revenue Overview</span>
+                    <span className="text-[10px] bg-white border border-[#E5E0D5] px-2 py-0.5 rounded-lg text-slate-500 font-medium">This Week ˅</span>
+                  </div>
+
+                  {/* SVG Wave Line */}
+                  <div className="h-28 w-full pt-2">
+                    <svg className="w-full h-full" viewBox="0 0 300 90" fill="none">
+                      <path
+                        d="M 0 70 Q 50 30, 100 55 T 200 35 T 300 20"
+                        stroke="#1E3A2B"
+                        strokeWidth="3"
+                        fill="none"
+                      />
+                      <path
+                        d="M 0 70 Q 50 30, 100 55 T 200 35 T 300 20 L 300 90 L 0 90 Z"
+                        fill="url(#greenGradient)"
+                        opacity="0.15"
+                      />
+                      <defs>
+                        <linearGradient id="greenGradient" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor="#1E3A2B" />
+                          <stop offset="100%" stopColor="#FAF8F5" />
+                        </linearGradient>
+                      </defs>
+                    </svg>
+                  </div>
+
+                  <div className="flex justify-between text-[9px] text-slate-400 font-medium pt-1 border-t border-slate-200/60">
+                    <span>May 12</span>
+                    <span>May 13</span>
+                    <span>May 14</span>
+                    <span>May 15</span>
+                    <span>May 16</span>
+                    <span>May 17</span>
+                    <span>May 18</span>
+                  </div>
+                </div>
+
+                {/* Top Services Table */}
+                <div className="sm:col-span-5 bg-[#FAF8F5] border border-[#F0EBE1] rounded-2xl p-4 space-y-2.5">
+                  <span className="text-xs font-bold text-[#1F2923] block mb-1">Top Services</span>
+                  
+                  {[
+                    { name: "Aroma Massage", revenue: "₹ 78,500", pct: "85%" },
+                    { name: "Deep Tissue Massage", revenue: "₹ 56,000", pct: "65%" },
+                    { name: "Facial Treatment", revenue: "₹ 43,200", pct: "50%" },
+                    { name: "Body Spa", revenue: "₹ 32,100", pct: "38%" },
+                    { name: "Hair Spa", revenue: "₹ 21,300", pct: "25%" },
+                  ].map((service, idx) => (
+                    <div key={idx} className="space-y-1 text-[10px]">
+                      <div className="flex justify-between font-semibold text-slate-700">
+                        <span>{service.name}</span>
+                        <span className="font-bold text-[#1F2923]">{service.revenue}</span>
+                      </div>
+                      <div className="w-full h-1.5 bg-slate-200/80 rounded-full overflow-hidden">
+                        <div className="h-full bg-[#1E3A2B] rounded-full" style={{ width: service.pct }} />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* ─── SECTION 4: TESTIMONIAL & READY TO ELEVATE CTA ─── */}
+      <section id="testimonials" className="py-20 md:py-24 bg-white border-t border-[#EDE8E0]">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-10 items-stretch">
+          
+          {/* Left Column: Loved by Spa Professionals Testimonial */}
+          <div className="lg:col-span-6 flex flex-col justify-between space-y-8 pr-0 lg:pr-6">
+            
+            <div className="space-y-4">
+              <div className="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-widest text-[#1E3A2B]">
+                <span>TRUSTED BY SPA OWNERS</span>
+                <span className="text-[#88B04B]">🌿</span>
+              </div>
+
+              <h2 className="font-luxury text-3xl sm:text-4xl text-[#1F2923] leading-snug">
+                Loved by Spa Professionals Across the Country
+              </h2>
+            </div>
+
+            {/* Quote block */}
+            <div className="space-y-6 pt-2">
+              <span className="font-serif text-5xl text-[#C9D6CC] leading-none block -mb-4">“</span>
+              <p className="text-[#4A574E] text-base md:text-lg leading-relaxed font-normal italic">
+                Careva has transformed the way we manage our spa. It's easy to use, saves us time and helps us focus on what truly matters — our clients.
+              </p>
+
+              {/* Author Profile */}
+              <div className="flex items-center gap-3.5 pt-2">
+                <img
+                  src="/testimonial_avatar.png"
+                  alt="Priya Mehta"
+                  className="w-12 h-12 rounded-full object-cover border border-[#EDE8E0]"
+                />
+                <div>
+                  <h4 className="font-bold text-sm text-[#1F2923]">Priya Mehta</h4>
+                  <p className="text-xs text-[#6E7A72]">Serenity Spa, Mumbai</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Pagination dots */}
+            <div className="flex items-center gap-2 pt-4">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#1E3A2B]" />
+              <span className="w-2 h-2 rounded-full bg-[#D5DDD7]" />
+              <span className="w-2 h-2 rounded-full bg-[#D5DDD7]" />
+            </div>
+
+          </div>
+
+          {/* Right Column: High-Converting CTA Box with Zen Stones */}
+          <div className="lg:col-span-6 bg-[#EFF4EE] border border-[#DFE8DC] rounded-3xl p-8 md:p-10 relative overflow-hidden flex flex-col justify-between min-h-[340px]">
+            
+            {/* Lotus graphic top left */}
+            <div className="w-10 h-10 rounded-full bg-white/80 border border-[#D0DFC9] flex items-center justify-center text-[#1E3A2B] shadow-xs mb-6">
+              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 3C10.5 6 7 8 4 8C7 11 10.5 13 12 16C13.5 13 17 11 20 8C17 8 13.5 6 12 3Z" fill="currentColor" opacity="0.9" />
+                <path d="M12 8C11 10 8.5 11.5 6 11.5C8.5 13.5 11 15 12 17C13 15 15.5 13.5 18 11.5C15.5 11.5 13 10 12 8Z" fill="#88B04B" />
+              </svg>
+            </div>
+
+            <div className="space-y-3 z-10 max-w-sm">
+              <h3 className="font-luxury text-2xl md:text-3xl text-[#1E3A2B] leading-tight">
+                Ready to Elevate Your Spa Business?
+              </h3>
+              <p className="text-xs md:text-sm text-[#3E5244] leading-relaxed">
+                Join hundreds of spa owners who are growing their business with Careva Spa ERP.
+              </p>
+            </div>
+
+            {/* CTA Button */}
+            <div className="pt-6 z-10">
               <button
                 onClick={() => openDemoModal()}
-                className="px-6 py-3 bg-[#0F8B8D]/10 hover:bg-[#0F8B8D]/15 text-[#0F8B8D] text-xs font-bold rounded-lg transition-colors cursor-pointer"
+                className="bg-[#1E3A2B] hover:bg-[#15291E] text-white px-6 py-3.5 rounded-2xl text-xs font-semibold uppercase tracking-wider transition-all shadow-md hover:shadow-lg flex items-center gap-2 group cursor-pointer active:scale-98"
               >
-                Learn More
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 5. PRODUCT SHOWCASE */}
-      <section className="py-20 bg-white border-y border-[#E2E8F0] px-6">
-        <div className="max-w-7xl mx-auto space-y-12 text-center">
-          <div className="space-y-4">
-            <span className="text-xs font-bold text-[#0F8B8D] uppercase tracking-widest block">Platform Preview</span>
-            <h2 className="text-3xl md:text-5xl font-black text-[#0F172A] tracking-tight">
-              See Careva In Action
-            </h2>
-            <p className="text-[#64748B] max-w-xl mx-auto text-sm md:text-base">
-              Step through our high-performance modules designed for zero layout shifts and seamless administration.
-            </p>
-          </div>
-
-          {/* Tabs Navigation */}
-          <div className="flex flex-wrap justify-center gap-2 max-w-4xl mx-auto pb-4 border-b border-[#E2E8F0]">
-            <button
-              onClick={() => setActiveShowcaseTab("appointments")}
-              className={`px-5 py-2.5 text-xs font-bold rounded-lg transition-colors cursor-pointer ${
-                activeShowcaseTab === "appointments"
-                  ? "bg-[#0F8B8D] text-white"
-                  : "bg-[#F8FAFC] text-[#64748B] hover:text-[#0F172A] border border-[#E2E8F0]"
-              }`}
-            >
-              Appointment Dashboard
-            </button>
-            <button
-              onClick={() => setActiveShowcaseTab("billing")}
-              className={`px-5 py-2.5 text-xs font-bold rounded-lg transition-colors cursor-pointer ${
-                activeShowcaseTab === "billing"
-                  ? "bg-[#0F8B8D] text-white"
-                  : "bg-[#F8FAFC] text-[#64748B] hover:text-[#0F172A] border border-[#E2E8F0]"
-              }`}
-            >
-              Billing Screen
-            </button>
-            <button
-              onClick={() => setActiveShowcaseTab("crm")}
-              className={`px-5 py-2.5 text-xs font-bold rounded-lg transition-colors cursor-pointer ${
-                activeShowcaseTab === "crm"
-                  ? "bg-[#0F8B8D] text-white"
-                  : "bg-[#F8FAFC] text-[#64748B] hover:text-[#0F172A] border border-[#E2E8F0]"
-              }`}
-            >
-              Customer Management
-            </button>
-            <button
-              onClick={() => setActiveShowcaseTab("reports")}
-              className={`px-5 py-2.5 text-xs font-bold rounded-lg transition-colors cursor-pointer ${
-                activeShowcaseTab === "reports"
-                  ? "bg-[#0F8B8D] text-white"
-                  : "bg-[#F8FAFC] text-[#64748B] hover:text-[#0F172A] border border-[#E2E8F0]"
-              }`}
-            >
-              Reports & Analytics
-            </button>
-          </div>
-
-          {/* Active tab content block */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center max-w-6xl mx-auto pt-6 text-left">
-            {/* Left/Right swapping text block */}
-            <div className="lg:col-span-5 space-y-6">
-              {activeShowcaseTab === "appointments" && (
-                <>
-                  <h3 className="text-2xl font-black text-[#0F172A] tracking-tight">Optimize Slot Yield & Rosters</h3>
-                  <p className="text-xs md:text-sm text-[#64748B] leading-relaxed">
-                    Careva's calendar handles double-bookings instantly. Rearrange stylists' hours, assign specialized treatment booths, and lock buffer periods automatically.
-                  </p>
-                  <ul className="space-y-3.5 text-xs font-semibold text-[#0F172A]">
-                    <li className="flex items-center gap-2.5">
-                      <Check className="w-4 h-4 text-[#0F8B8D]" /> Drag-and-drop rescheduling
-                    </li>
-                    <li className="flex items-center gap-2.5">
-                      <Check className="w-4 h-4 text-[#0F8B8D]" /> Booth assignment matrices
-                    </li>
-                    <li className="flex items-center gap-2.5">
-                      <Check className="w-4 h-4 text-[#0F8B8D]" /> Automatic buffer timing insert
-                    </li>
-                  </ul>
-                </>
-              )}
-
-              {activeShowcaseTab === "billing" && (
-                <>
-                  <h3 className="text-2xl font-black text-[#0F172A] tracking-tight">Low-latency POS Checkout</h3>
-                  <p className="text-xs md:text-sm text-[#64748B] leading-relaxed">
-                    Process payments via integrated wallets, cash, or credit. Validate dynamic discount coupons, allocate retail products, and calculate local GST components instantly.
-                  </p>
-                  <ul className="space-y-3.5 text-xs font-semibold text-[#0F172A]">
-                    <li className="flex items-center gap-2.5">
-                      <Check className="w-4 h-4 text-[#0F8B8D]" /> Split payments across card & UPI
-                    </li>
-                    <li className="flex items-center gap-2.5">
-                      <Check className="w-4 h-4 text-[#0F8B8D]" /> Dynamic coupon registration
-                    </li>
-                    <li className="flex items-center gap-2.5">
-                      <Check className="w-4 h-4 text-[#0F8B8D]" /> Auto-calculated GST invoice templates
-                    </li>
-                  </ul>
-                </>
-              )}
-
-              {activeShowcaseTab === "crm" && (
-                <>
-                  <h3 className="text-2xl font-black text-[#0F172A] tracking-tight">Structured Customer History</h3>
-                  <p className="text-xs md:text-sm text-[#64748B] leading-relaxed">
-                    Capture comprehensive client portfolios. Track stylist notes, allergies, preferred colors, average visit values, and loyalty program point logs automatically.
-                  </p>
-                  <ul className="space-y-3.5 text-xs font-semibold text-[#0F172A]">
-                    <li className="flex items-center gap-2.5">
-                      <Check className="w-4 h-4 text-[#0F8B8D]" /> Individual profile histories & notes
-                    </li>
-                    <li className="flex items-center gap-2.5">
-                      <Check className="w-4 h-4 text-[#0F8B8D]" /> Loyalty points earn-and-burn configs
-                    </li>
-                    <li className="flex items-center gap-2.5">
-                      <Check className="w-4 h-4 text-[#0F8B8D]" /> Automatic client segment tags
-                    </li>
-                  </ul>
-                </>
-              )}
-
-              {activeShowcaseTab === "reports" && (
-                <>
-                  <h3 className="text-2xl font-black text-[#0F172A] tracking-tight">Unified Revenue Intelligence</h3>
-                  <p className="text-xs md:text-sm text-[#64748B] leading-relaxed">
-                    Stop guessing your profit margins. View consolidated, multi-branch reports tracking gross bookings, tax collections, item sales, and staff productivity.
-                  </p>
-                  <ul className="space-y-3.5 text-xs font-semibold text-[#0F172A]">
-                    <li className="flex items-center gap-2.5">
-                      <Check className="w-4 h-4 text-[#0F8B8D]" /> Unified multi-outlet performance graphs
-                    </li>
-                    <li className="flex items-center gap-2.5">
-                      <Check className="w-4 h-4 text-[#0F8B8D]" /> Stylist commission automatic tracking
-                    </li>
-                    <li className="flex items-center gap-2.5">
-                      <Check className="w-4 h-4 text-[#0F8B8D]" /> Instant XLS/PDF spreadsheet export
-                    </li>
-                  </ul>
-                </>
-              )}
-
-              <div className="pt-2">
-                <button
-                  onClick={() => openDemoModal()}
-                  className="px-6 py-3.5 bg-[#0F8B8D] hover:bg-[#0c7476] text-white font-bold text-xs rounded-xl shadow-sm cursor-pointer transition-colors flex items-center gap-2"
-                >
-                  Request Live Demo Account <ArrowRight className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-
-            {/* Right: Mockup screens */}
-            <div className="lg:col-span-7">
-              <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-2xl p-4 shadow-sm">
-                
-                {/* 1. APPOINTMENTS MOCKUP */}
-                {activeShowcaseTab === "appointments" && (
-                  <div className="bg-white rounded-xl border border-[#E2E8F0] p-4 text-xs text-[#0F172A] space-y-4 overflow-x-auto">
-                    <div className="min-w-[450px] space-y-4">
-                    <div className="flex justify-between items-center border-b border-slate-100 pb-3">
-                      <div>
-                        <span className="font-bold text-[13px] block">Roster Scheduling</span>
-                        <span className="text-[10px] text-[#64748B]">Friday, June 19, 2026</span>
-                      </div>
-                      <span className="text-[9px] bg-[#0F8B8D]/10 text-[#0F8B8D] px-2.5 py-0.5 rounded font-bold uppercase">Grid View</span>
-                    </div>
-
-                    <div className="grid grid-cols-12 gap-2 text-left">
-                      <div className="col-span-2 text-[#64748B] font-bold py-2">Time</div>
-                      <div className="col-span-5 text-[#64748B] font-bold py-2 border-l border-slate-150 pl-3">Alex (Hair)</div>
-                      <div className="col-span-5 text-[#64748B] font-bold py-2 border-l border-slate-150 pl-3">Sarah (Nails)</div>
-
-                      <div className="col-span-2 font-mono text-[10px] py-3">09:00 AM</div>
-                      <div className="col-span-5 bg-[#0f8b8d]/5 border border-[#0f8b8d]/20 rounded-lg p-2.5 ml-2">
-                        <span className="font-bold block text-[#0F8B8D]">Rohan Sharma</span>
-                        <span className="text-[9px] text-[#64748B] block">Signature Cut (45m)</span>
-                      </div>
-                      <div className="col-span-5 bg-slate-50 border border-dashed border-slate-200 rounded-lg p-2.5 ml-2 text-slate-400 italic flex items-center justify-center text-[10px]">
-                        Available Slot
-                      </div>
-
-                      <div className="col-span-2 font-mono text-[10px] py-3">10:30 AM</div>
-                      <div className="col-span-5 bg-slate-50 border border-dashed border-slate-200 rounded-lg p-2.5 ml-2 text-slate-400 italic flex items-center justify-center text-[10px]">
-                        Available Slot
-                      </div>
-                      <div className="col-span-5 bg-[#0f8b8d]/5 border border-[#0f8b8d]/20 rounded-lg p-2.5 ml-2">
-                        <span className="font-bold block text-[#0f8b8d]">Priyanka Nair</span>
-                        <span className="text-[9px] text-[#64748B] block">Nail Spa Care (60m)</span>
-                      </div>
-                    </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* 2. BILLING MOCKUP */}
-                {activeShowcaseTab === "billing" && (
-                  <div className="bg-white rounded-xl border border-[#E2E8F0] p-4 text-xs text-[#0F172A] space-y-4">
-                    <div className="flex justify-between items-center border-b border-slate-100 pb-3">
-                      <div>
-                        <span className="font-bold text-[13px] block">POS Terminal</span>
-                        <span className="text-[10px] text-[#64748B]">Terminal 01</span>
-                      </div>
-                      <span className="text-[9px] bg-amber-50 text-amber-700 px-2.5 py-0.5 rounded font-bold uppercase">Ready</span>
-                    </div>
-
-                    <div className="space-y-2 text-left">
-                      <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-lg p-3 space-y-2">
-                        <div className="flex justify-between font-semibold">
-                          <span>1x Balayage Touch-Up</span>
-                          <span>₹2,400.00</span>
-                        </div>
-                        <div className="flex justify-between text-[#64748B] text-[10px]">
-                          <span>Stylist: Alex</span>
-                          <span>GST (18% inclusive)</span>
-                        </div>
-                      </div>
-                      <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-lg p-3 space-y-2">
-                        <div className="flex justify-between font-semibold">
-                          <span>1x Deep Conditioning Mask</span>
-                          <span>₹800.00</span>
-                        </div>
-                        <div className="flex justify-between text-[#64748B] text-[10px]">
-                          <span>Product Code: P-102</span>
-                          <span>No Tax adjustment</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="border-t border-slate-200 pt-3 space-y-2 text-left">
-                      <div className="flex justify-between text-[#64748B]">
-                        <span>Subtotal</span>
-                        <span>₹3,200.00</span>
-                      </div>
-                      <div className="flex justify-between text-emerald-600 font-bold">
-                        <span>Discount Coupon CAREVA20 (20%)</span>
-                        <span>-₹640.00</span>
-                      </div>
-                      <div className="flex justify-between font-black text-sm text-[#0F172A] pt-1.5 border-t border-slate-100">
-                        <span>Grand Total</span>
-                        <span>₹2,560.00</span>
-                      </div>
-                    </div>
-
-                    <button className="w-full bg-[#0F8B8D] hover:bg-[#0c7476] text-white py-3 rounded-lg font-bold text-xs transition-colors">
-                      Charge Ticket & Send WhatsApp Invoice
-                    </button>
-                  </div>
-                )}
-
-                {/* 3. CRM MOCKUP */}
-                {activeShowcaseTab === "crm" && (
-                  <div className="bg-white rounded-xl border border-[#E2E8F0] p-4 text-xs text-[#0F172A] space-y-4">
-                    <div className="flex justify-between items-center border-b border-slate-100 pb-3">
-                      <div>
-                        <span className="font-bold text-[13px] block">Client Database</span>
-                        <span className="text-[10px] text-[#64748B]">Active Profiles</span>
-                      </div>
-                      <span className="text-[9px] bg-slate-100 text-slate-700 px-2.5 py-0.5 rounded font-bold uppercase">Filtered: VIP</span>
-                    </div>
-
-                    <div className="space-y-2.5 text-left">
-                      <div className="border border-[#E2E8F0] rounded-xl p-3 flex justify-between items-center bg-[#F8FAFC]">
-                        <div>
-                          <span className="font-extrabold text-[12px] block text-[#0F172A]">Anil Kapoor</span>
-                          <span className="text-[10px] text-[#64748B] block mt-0.5">anil@gmail.com • +91 98950 20111</span>
-                          <div className="flex gap-1.5 mt-2">
-                            <span className="text-[9px] bg-[#0F8B8D]/10 text-[#0F8B8D] px-2 py-0.5 rounded font-bold">VIP</span>
-                            <span className="text-[9px] bg-[#0F8B8D]/10 text-[#0F8B8D] px-2 py-0.5 rounded font-bold">Regular</span>
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <span className="text-[9px] text-[#64748B] block">Total Spent</span>
-                          <span className="font-black text-[#0f8b8d] text-sm">₹42,800</span>
-                        </div>
-                      </div>
-
-                      <div className="border border-[#E2E8F0] rounded-xl p-3 flex justify-between items-center bg-white">
-                        <div>
-                          <span className="font-extrabold text-[12px] block text-[#0F172A]">Meera Nair</span>
-                          <span className="text-[10px] text-[#64748B] block mt-0.5">meera@outlook.com • +91 99611 88000</span>
-                          <div className="flex gap-1.5 mt-2">
-                            <span className="text-[9px] bg-[#0F8B8D]/10 text-[#0F8B8D] px-2 py-0.5 rounded font-bold">VIP</span>
-                            <span className="text-[9px] bg-amber-50 text-amber-700 px-2 py-0.5 rounded font-bold">Loyalty Level 2</span>
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <span className="text-[9px] text-[#64748B] block">Total Spent</span>
-                          <span className="font-black text-[#0f8b8d] text-sm">₹38,200</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* 4. REPORTS MOCKUP */}
-                {activeShowcaseTab === "reports" && (
-                  <div className="bg-white rounded-xl border border-[#E2E8F0] p-4 text-xs text-[#0F172A] space-y-4">
-                    <div className="flex justify-between items-center border-b border-slate-100 pb-3">
-                      <div>
-                        <span className="font-bold text-[13px] block">Revenue breakdown</span>
-                        <span className="text-[10px] text-[#64748B]">Multi-outlet consolidated</span>
-                      </div>
-                      <span className="text-[9px] bg-emerald-50 text-emerald-700 px-2.5 py-0.5 rounded font-bold uppercase">+18% YoY</span>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-left">
-                      <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-lg p-3">
-                        <span className="text-[9px] text-slate-400 block font-bold">Gross Sales</span>
-                        <span className="text-sm font-black text-[#0F172A]">₹8,42,000</span>
-                      </div>
-                      <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-lg p-3">
-                        <span className="text-[9px] text-slate-400 block font-bold">Taxes (GST)</span>
-                        <span className="text-sm font-black text-[#0F172A]">₹1,51,560</span>
-                      </div>
-                      <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-lg p-3">
-                        <span className="text-[9px] text-slate-400 block font-bold">Net Earnings</span>
-                        <span className="text-sm font-black text-[#0F8B8D]">₹6,90,440</span>
-                      </div>
-                    </div>
-
-                    <div className="space-y-2 text-left pt-2">
-                      <span className="text-[10px] font-bold text-[#64748B] block uppercase tracking-wider">Top Services Contribution</span>
-                      <div className="space-y-1.5">
-                        <div>
-                          <div className="flex justify-between text-[10px] font-semibold text-slate-600 mb-0.5">
-                            <span>Hair Styling & Colors</span>
-                            <span>55%</span>
-                          </div>
-                          <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                            <div className="bg-[#0F8B8D] h-full" style={{ width: "55%" }} />
-                          </div>
-                        </div>
-                        <div>
-                          <div className="flex justify-between text-[10px] font-semibold text-slate-600 mb-0.5">
-                            <span>Spa & Facials</span>
-                            <span>30%</span>
-                          </div>
-                          <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                            <div className="bg-[#0F8B8D] h-full opacity-80" style={{ width: "30%" }} />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 6. BENEFITS SECTION */}
-      <section className="py-20 px-6 max-w-7xl mx-auto">
-        <div className="text-center space-y-4 mb-16">
-          <span className="text-xs font-bold text-[#0F8B8D] uppercase tracking-widest block">Executive Value</span>
-          <h2 className="text-3xl md:text-5xl font-black text-[#0F172A] tracking-tight">
-            Why Salon Owners Choose Careva
-          </h2>
-          <p className="text-[#64748B] max-w-xl mx-auto text-sm md:text-base">
-            Careva delivers tangible bottom-line growth. Spend less time in spreadsheets and more time scaling your retail footprint.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          <div className="bg-white border border-[#E2E8F0] rounded-2xl p-8 space-y-3">
-            <h3 className="font-extrabold text-lg text-[#0F172A]">Save 15+ Hours Weekly</h3>
-            <p className="text-xs text-[#64748B] leading-relaxed">
-              Ditch manual bookings, text chains, and log adjustments. Automated rosters and calendars give managers their time back.
-            </p>
-          </div>
-
-          <div className="bg-white border border-[#E2E8F0] rounded-2xl p-8 space-y-3">
-            <h3 className="font-extrabold text-lg text-[#0F172A]">Increase Revenue by 15%</h3>
-            <p className="text-xs text-[#64748B] leading-relaxed">
-              Automated reminders prompt lapsed clients to return before their typical 30-day window expires.
-            </p>
-          </div>
-
-          <div className="bg-white border border-[#E2E8F0] rounded-2xl p-8 space-y-3">
-            <h3 className="font-extrabold text-lg text-[#0F172A]">Eliminate No-Shows</h3>
-            <p className="text-xs text-[#64748B] leading-relaxed">
-              Transactional WhatsApp cards check client attendance. 24h & 1h reminders reduce missed appointments up to 90%.
-            </p>
-          </div>
-
-          <div className="bg-white border border-[#E2E8F0] rounded-2xl p-8 space-y-3">
-            <h3 className="font-extrabold text-lg text-[#0F172A]">Improve Client Retention</h3>
-            <p className="text-xs text-[#64748B] leading-relaxed">
-              Personalized birthday offers, loyalty points reminders, and stylist history notes make clients feel valued and regular.
-            </p>
-          </div>
-
-          <div className="bg-white border border-[#E2E8F0] rounded-2xl p-8 space-y-3">
-            <h3 className="font-extrabold text-lg text-[#0F172A]">Manage Staff Better</h3>
-            <p className="text-xs text-[#64748B] leading-relaxed">
-              Assign commissions automatically based on service sales. Track leaves, schedule rosters, and check stylist outputs.
-            </p>
-          </div>
-
-          <div className="bg-white border border-[#E2E8F0] rounded-2xl p-8 space-y-3">
-            <h3 className="font-extrabold text-lg text-[#0F172A]">Track Business Performance</h3>
-            <p className="text-xs text-[#64748B] leading-relaxed">
-              Get clean financial reporting daily. Know your top products, gross tax collections, and net revenues instantly.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* 7. PRICING SECTION */}
-      <section id="pricing" className="scroll-mt-20 py-20 bg-white border-y border-[#E2E8F0] px-6">
-        <div className="max-w-7xl mx-auto space-y-16">
-          <div className="text-center space-y-4">
-            <span className="text-xs font-bold text-[#0F8B8D] uppercase tracking-widest block">Subscription Plans</span>
-            <h2 className="text-3xl md:text-5xl font-black text-[#0F172A] tracking-tight">
-              Simple, Transparent Pricing
-            </h2>
-            <p className="text-[#64748B] max-w-xl mx-auto text-sm md:text-base">
-              No hidden fees, no complicated add-ons. Choose the plan that fits your salon size.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {/* Starter Plan */}
-            <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-2xl p-8 flex flex-col justify-between">
-              <div className="space-y-6">
-                <div>
-                  <h3 className="font-bold text-[#0F172A] text-lg">Starter</h3>
-                  <p className="text-xs text-[#64748B] mt-1">For independent, single-chair operators.</p>
-                </div>
-                <div className="flex items-baseline text-[#0F172A]">
-                  <span className="text-4xl font-extrabold">₹999</span>
-                  <span className="text-xs text-[#64748B] ml-1">/ month</span>
-                </div>
-                <ul className="space-y-3 text-xs text-[#64748B] pt-6 border-t border-slate-200">
-                  <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#0F8B8D] shrink-0" /> 1 Outlet</li>
-                  <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#0F8B8D] shrink-0" /> Standard Booking Calendar</li>
-                  <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#0F8B8D] shrink-0" /> POS Billing Terminal</li>
-                  <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#0F8B8D] shrink-0" /> Email Invoices</li>
-                </ul>
-              </div>
-              <button
-                onClick={() => openDemoModal("Starter")}
-                className="mt-8 w-full py-3 bg-white border border-[#E2E8F0] hover:border-[#64748B]/30 text-xs font-bold text-[#0F172A] rounded-xl transition-colors cursor-pointer"
-              >
-                Book Free Demo
+                <span>Book a Demo Now</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
             </div>
 
-            {/* Professional Plan (Highlighted) */}
-            <div className="bg-white border-2 border-[#0F8B8D] rounded-2xl p-8 flex flex-col justify-between relative shadow-lg">
-              <span className="absolute top-0 right-1/2 translate-x-1/2 -translate-y-1/2 bg-[#0F8B8D] text-white text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded-full">
-                Most Popular
-              </span>
-              <div className="space-y-6">
-                <div>
-                  <h3 className="font-bold text-[#0F172A] text-lg">Professional</h3>
-                  <p className="text-xs text-[#64748B] mt-1">Best for expanding salons & multi-outlets.</p>
-                </div>
-                <div className="flex items-baseline text-[#0F172A]">
-                  <span className="text-4xl font-extrabold">₹2,499</span>
-                  <span className="text-xs text-[#64748B] ml-1">/ month</span>
-                </div>
-                <ul className="space-y-3 text-xs text-[#64748B] pt-6 border-t border-slate-200">
-                  <li className="flex items-center gap-2 font-bold text-[#0F172A]">
-                    <Check className="w-4 h-4 text-[#0F8B8D] shrink-0" /> Up to 3 Outlets
-                  </li>
-                  <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#0F8B8D] shrink-0" /> Full Customer CRM & Notes</li>
-                  <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#0F8B8D] shrink-0" /> Automated WhatsApp Reminders</li>
-                  <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#0F8B8D] shrink-0" /> Inventory Low-stock Alerts</li>
-                  <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#0F8B8D] shrink-0" /> Staff Rosters & Commission Tracking</li>
-                  <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#0F8B8D] shrink-0" /> Multi-branch Revenue Reports</li>
-                </ul>
-              </div>
-              <button
-                onClick={() => openDemoModal("Professional")}
-                className="mt-8 w-full py-3 bg-[#0F8B8D] hover:bg-[#0c7476] text-white text-xs font-black rounded-xl shadow-sm transition-colors cursor-pointer"
-              >
-                Book Free Demo
-              </button>
+            {/* Zen Stones Graphic Bottom Right matching reference image */}
+            <div className="absolute right-0 bottom-0 w-44 md:w-56 pointer-events-none opacity-90">
+              <img
+                src="/zen_spa_stones.png"
+                alt="Balanced Spa Stones"
+                className="w-full h-auto object-contain"
+              />
             </div>
 
-            {/* Enterprise Plan */}
-            <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-2xl p-8 flex flex-col justify-between">
-              <div className="space-y-6">
-                <div>
-                  <h3 className="font-bold text-[#0F172A] text-lg">Enterprise</h3>
-                  <p className="text-xs text-[#64748B] mt-1">For national salon chains & franchises.</p>
-                </div>
-                <div className="flex items-baseline text-[#0F172A]">
-                  <span className="text-4xl font-extrabold">₹4,999</span>
-                  <span className="text-xs text-[#64748B] ml-1">/ month</span>
-                </div>
-                <ul className="space-y-3 text-xs text-[#64748B] pt-6 border-t border-slate-200">
-                  <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#0F8B8D] shrink-0" /> Unlimited Outlets</li>
-                  <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#0F8B8D] shrink-0" /> Custom Domain Mapping</li>
-                  <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#0F8B8D] shrink-0" /> Dedicated WhatsApp API Gateway</li>
-                  <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#0F8B8D] shrink-0" /> Custom Integrations & priority SLA</li>
-                  <li className="flex items-center gap-2"><Check className="w-4 h-4 text-[#0F8B8D] shrink-0" /> 24/7 Dedicated Support</li>
-                </ul>
-              </div>
-              <button
-                onClick={() => openDemoModal("Enterprise")}
-                className="mt-8 w-full py-3 bg-white border border-[#E2E8F0] hover:border-[#64748B]/30 text-xs font-bold text-[#0F172A] rounded-xl transition-colors cursor-pointer"
-              >
-                Book Free Demo
-              </button>
-            </div>
           </div>
+
         </div>
       </section>
 
-      {/* 8. TESTIMONIALS SECTION */}
-      <section className="py-20 px-6 max-w-7xl mx-auto">
-        <div className="text-center space-y-4 mb-16">
-          <span className="text-xs font-bold text-[#0F8B8D] uppercase tracking-widest block">Trusted Reviews</span>
-          <h2 className="text-3xl md:text-5xl font-black text-[#0F172A] tracking-tight">
-            What Salon Owners Say
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {/* Testimonial cards */}
-          <div className="bg-white border border-[#E2E8F0] rounded-2xl p-6 space-y-4">
-            <div className="flex gap-1 text-[#0f8b8d] font-bold">★★★★★</div>
-            <p className="text-xs text-[#64748B] leading-relaxed italic">
-              "We migrated all 3 of our outlets to Careva last month. The WhatsApp reminder system has already saved us thousands in potential no-shows. Checking clients out has never been this simple."
-            </p>
-            <div className="flex items-center gap-3 pt-2 border-t border-slate-100">
-              <div className="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center font-bold text-[#0F172A] text-xs">
-                RS
-              </div>
-              <div>
-                <span className="font-bold text-xs block text-[#0F172A]">Rohan Sharma</span>
-                <span className="text-[10px] text-[#64748B] block">Owner, Lavender Spa Retreat</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white border border-[#E2E8F0] rounded-2xl p-6 space-y-4">
-            <div className="flex gap-1 text-[#0f8b8d] font-bold">★★★★★</div>
-            <p className="text-xs text-[#64748B] leading-relaxed italic">
-              "GST invoice calculations used to take up hours at the end of our shifts. Careva does everything in the background during billing. The multi-outlet roster reports are highly reliable."
-            </p>
-            <div className="flex items-center gap-3 pt-2 border-t border-slate-100">
-              <div className="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center font-bold text-[#0F172A] text-xs">
-                MN
-              </div>
-              <div>
-                <span className="font-bold text-xs block text-[#0F172A]">Meera Nair</span>
-                <span className="text-[10px] text-[#64748B] block">Director, Aura Wellness Centers</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white border border-[#E2E8F0] rounded-2xl p-6 space-y-4">
-            <div className="flex gap-1 text-[#0f8b8d] font-bold">★★★★★</div>
-            <p className="text-xs text-[#64748B] leading-relaxed italic">
-              "My stylists love using the calendar schedule. They can track their individual service metrics and leaves directly. This has made employee coordination a breeze."
-            </p>
-            <div className="flex items-center gap-3 pt-2 border-t border-slate-100">
-              <div className="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center font-bold text-[#0F172A] text-xs">
-                AK
-              </div>
-              <div>
-                <span className="font-bold text-xs block text-[#0F172A]">Anoop Kumar</span>
-                <span className="text-[10px] text-[#64748B] block">Founder, Classic Scissors Group</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 9. FAQ SECTION */}
-      <section id="faq" className="scroll-mt-20 py-20 bg-white border-t border-[#E2E8F0] px-6">
-        <div className="max-w-4xl mx-auto space-y-16">
-          <div className="text-center space-y-4">
-            <span className="text-xs font-bold text-[#0F8B8D] uppercase tracking-widest block">Help Desk</span>
-            <h2 className="text-3xl md:text-5xl font-black text-[#0F172A] tracking-tight">
-              Frequently Asked Questions
-            </h2>
-          </div>
-
-          <div className="space-y-4">
-            {/* Accordion Questions */}
-            {[
-              {
-                q: "Is training included?",
-                a: "Yes! Every Careva plan comes with complimentary onboarding assistance, digital training videos, and live team walkthrough sessions to ensure your staff get up to speed in under a day."
-              },
-              {
-                q: "Can I migrate existing data?",
-                a: "Absolutely. Our engineering team assists with full data migrations. You can import client directories, product inventories, and past stylist rosters from XLS or CSV files easily."
-              },
-              {
-                q: "Does Careva support GST billing?",
-                a: "Yes. Careva fully supports Indian GST billing. It automatically handles SGST/CGST split calculations, dynamic HSN/SAC codes, and lets you generate compliant PDF receipts directly."
-              },
-              {
-                q: "Can I use it on mobile?",
-                a: "Yes. The entire platform is built with modern web standards and is fully responsive. You can manage scheduling, billing POS, and check reports from any smartphone, tablet, or laptop."
-              },
-              {
-                q: "Does it support WhatsApp reminders?",
-                a: "Yes. Careva features a built-in low-latency WhatsApp delivery engine that automatically messages customers for OTPs, confirmations, invoices, and 24h/1h booking prompts."
-              }
-            ].map((item, idx) => {
-              const isOpen = activeFaq === idx;
-              return (
-                <div key={idx} className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl overflow-hidden">
-                  <button
-                    onClick={() => setActiveFaq(isOpen ? null : idx)}
-                    className="w-full px-6 py-5 text-left flex justify-between items-center hover:bg-slate-100/50 cursor-pointer font-bold text-sm md:text-base text-[#0F172A]"
-                  >
-                    <span>{item.q}</span>
-                    <span className="text-[#64748B] text-lg font-bold ml-4">{isOpen ? "−" : "+"}</span>
-                  </button>
-                  {isOpen && (
-                    <div className="px-6 pb-5 text-xs md:text-sm text-[#64748B] leading-relaxed border-t border-[#E2E8F0] pt-4 bg-white">
-                      {item.a}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* 10. FINAL CTA SECTION (BOOK A DEMO FORM INLINE FOR HIGH CONVERSION) */}
-      <section id="contact" className="scroll-mt-20 py-20 px-6 max-w-7xl mx-auto border-t border-[#E2E8F0] relative">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          <div className="lg:col-span-5 space-y-6 text-left">
-            <span className="text-xs font-bold text-[#0F8B8D] uppercase tracking-widest block">Get Started Today</span>
-            <h2 className="text-3xl md:text-5xl font-black text-[#0F172A] tracking-tight leading-tight">
-              Ready To Simplify Your Salon Operations?
-            </h2>
-            <p className="text-[#64748B] leading-relaxed text-sm md:text-base">
-              Book a free demo and see how Careva helps salons save time, reduce no-shows, and grow revenue. Our setup is instant.
-            </p>
-            <div className="space-y-3.5 text-xs text-[#64748B]">
-              <div className="flex items-center gap-2">
-                <CheckSquare className="w-4 h-4 text-[#0F8B8D]" /> Instant sandbox sandbox generation
-              </div>
-              <div className="flex items-center gap-2">
-                <CheckSquare className="w-4 h-4 text-[#0F8B8D]" /> Complimentary customer import support
-              </div>
-              <div className="flex items-center gap-2">
-                <CheckSquare className="w-4 h-4 text-[#0F8B8D]" /> No credit card required to explore
-              </div>
-            </div>
-          </div>
-
-          {/* Inline demo booking form */}
-          <div className="lg:col-span-7 bg-white border border-[#E2E8F0] rounded-2xl p-6 md:p-8 shadow-sm">
-            <h3 className="font-extrabold text-lg text-[#0F172A] mb-6 text-left">Request Your Free Demo Workspace</h3>
-            
-            {demoSuccess ? (
-              <div className="text-center space-y-6 py-6 animate-fadeIn">
-                <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100 flex items-center justify-center mx-auto">
-                  <Check className="w-8 h-8" />
-                </div>
-                <div>
-                  <h4 className="font-black text-xl text-[#0F172A]">Demo Request Received!</h4>
-                  <p className="text-xs text-[#64748B] max-w-md mx-auto mt-2 leading-relaxed">
-                    Thank you for booking a free demo! Your request has been registered in our Super Admin desk. 
-                    Our executive will reach out to you within 24 hours to schedule a personalized live walkthrough.
-                  </p>
-                </div>
-
-                <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-4 text-left space-y-3.5 max-w-md mx-auto">
-                  <div className="text-xs font-bold text-[#0F172A] border-b border-slate-200 pb-2">Registered Details</div>
-                  <div className="grid grid-cols-2 gap-y-2.5 text-[11px]">
-                    <span className="text-[#64748B]">Business Name:</span>
-                    <span className="font-bold text-[#0F172A] text-right">{businessName}</span>
-
-                    <span className="text-[#64748B]">Contact Email:</span>
-                    <span className="font-bold text-[#0F172A] text-right truncate">{emailAddress}</span>
-
-                    <span className="text-[#64748B]">Phone Number:</span>
-                    <span className="font-bold text-[#0F172A] text-right">{phoneNumber}</span>
-
-                    <span className="text-[#64748B]">Location / City:</span>
-                    <span className="font-bold text-[#0F172A] text-right">{cityLocation}</span>
-
-                    <span className="text-[#64748B]">Requested Plan:</span>
-                    <span className="font-bold text-[#0F8B8D] text-right uppercase tracking-wider">{selectedPlan}</span>
-                  </div>
-                </div>
-
-                <button
-                  onClick={() => setDemoSuccess(false)}
-                  className="px-6 py-2.5 bg-slate-100 hover:bg-slate-200 text-[#0F172A] text-xs font-bold rounded-lg transition-colors cursor-pointer"
-                >
-                  Request Another Demo
-                </button>
-              </div>
-            ) : (
-              <form onSubmit={handleBookDemo} className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left">
-                <div className="space-y-1.5">
-                  <label className="block text-[10px] font-bold text-slate-400 uppercase">Owner Name</label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="e.g. Farhan"
-                    value={ownerName}
-                    onChange={(e) => setOwnerName(e.target.value)}
-                    className="w-full bg-[#F8FAFC] border border-[#E2E8F0] focus:border-[#0F8B8D] rounded-xl py-3 px-4 text-xs font-semibold text-[#0F172A] outline-none transition-colors"
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="block text-[10px] font-bold text-slate-400 uppercase">Salon Business Name</label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="e.g. Lavender Spa"
-                    value={businessName}
-                    onChange={(e) => setBusinessName(e.target.value)}
-                    className="w-full bg-[#F8FAFC] border border-[#E2E8F0] focus:border-[#0F8B8D] rounded-xl py-3 px-4 text-xs font-semibold text-[#0F172A] outline-none transition-colors"
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="block text-[10px] font-bold text-slate-400 uppercase">Email Address</label>
-                  <input
-                    type="email"
-                    required
-                    placeholder="e.g. owner@lavenderspa.com"
-                    value={emailAddress}
-                    onChange={(e) => setEmailAddress(e.target.value)}
-                    className="w-full bg-[#F8FAFC] border border-[#E2E8F0] focus:border-[#0F8B8D] rounded-xl py-3 px-4 text-xs font-semibold text-[#0F172A] outline-none transition-colors"
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="block text-[10px] font-bold text-slate-400 uppercase">Contact Number</label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="e.g. +91 99999 55555"
-                    value={phoneNumber}
-                    onChange={(e) => setPhoneNumber(e.target.value)}
-                    className="w-full bg-[#F8FAFC] border border-[#E2E8F0] focus:border-[#0F8B8D] rounded-xl py-3 px-4 text-xs font-semibold text-[#0F172A] outline-none transition-colors"
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="block text-[10px] font-bold text-slate-400 uppercase">Salon City</label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="e.g. Calicut"
-                    value={cityLocation}
-                    onChange={(e) => setCityLocation(e.target.value)}
-                    className="w-full bg-[#F8FAFC] border border-[#E2E8F0] focus:border-[#0F8B8D] rounded-xl py-3 px-4 text-xs font-semibold text-[#0F172A] outline-none transition-colors"
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="block text-[10px] font-bold text-slate-400 uppercase">Onboarding Plan</label>
-                  <select
-                    value={selectedPlan}
-                    onChange={(e) => setSelectedPlan(e.target.value)}
-                    className="w-full bg-[#F8FAFC] border border-[#E2E8F0] focus:border-[#0F8B8D] rounded-xl py-3 px-4 text-xs font-semibold text-[#64748B] outline-none transition-colors cursor-pointer"
-                  >
-                    <option value="Starter">Starter Plan</option>
-                    <option value="Professional">Professional Plan</option>
-                    <option value="Enterprise">Enterprise Plan</option>
-                  </select>
-                </div>
-
-                {errorMsg && (
-                  <p className="col-span-1 sm:col-span-2 text-xs font-bold text-red-600 bg-red-50 p-3 rounded-lg border border-red-200">
-                    {errorMsg}
-                  </p>
-                )}
-
-                <button
-                  type="submit"
-                  className="col-span-1 sm:col-span-2 mt-2 w-full py-4 bg-[#0F8B8D] hover:bg-[#0c7476] text-white font-bold text-xs uppercase tracking-widest rounded-xl transition-colors shadow-md shadow-[#0F8B8D]/10 cursor-pointer"
-                >
-                  Deploy Free Demo Workspace
-                </button>
-              </form>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* 11. FOOTER */}
-      <footer className="bg-white border-t border-[#E2E8F0] py-16 px-6 text-xs text-[#64748B]">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+      {/* ─── SECTION 5: BOTTOM TRUST SIGNAL BAR ─── */}
+      <footer className="py-10 bg-[#FAF8F5] border-t border-[#EDE8E0]">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-6">
           
-          <div className="md:col-span-4 space-y-4">
-            <CarevaLogo />
-            <p className="max-w-xs text-xs text-[#64748B] leading-relaxed">
-              Enterprise operations and customer engagement platform for high-growth salons, spas, and wellness chains.
-            </p>
+          {/* Trust item 1 */}
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-full bg-white border border-[#E5E0D5] flex items-center justify-center text-[#1E3A2B] shrink-0 shadow-xs">
+              <ShieldCheck className="w-4 h-4 stroke-[2]" />
+            </div>
+            <div>
+              <h5 className="font-bold text-xs text-[#1F2923]">Secure & Reliable</h5>
+              <p className="text-[10px] text-[#6E7A72]">Your data is safe with us</p>
+            </div>
           </div>
 
-          <div className="md:col-span-2 space-y-3">
-            <span className="font-extrabold text-[11px] uppercase tracking-wider text-[#0F172A] block">Product</span>
-            <ul className="space-y-2">
-              <li><a href="#features" className="hover:text-[#0F172A] transition-colors">Features</a></li>
-              <li><a href="#pricing" className="hover:text-[#0F172A] transition-colors">Pricing</a></li>
-              <li><a href="#faq" className="hover:text-[#0F172A] transition-colors">FAQ</a></li>
-            </ul>
+          {/* Trust item 2 */}
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-full bg-white border border-[#E5E0D5] flex items-center justify-center text-[#1E3A2B] shrink-0 shadow-xs">
+              <Sparkles className="w-4 h-4 stroke-[2]" />
+            </div>
+            <div>
+              <h5 className="font-bold text-xs text-[#1F2923]">Easy to Use</h5>
+              <p className="text-[10px] text-[#6E7A72]">Simple. Intuitive. Efficient.</p>
+            </div>
           </div>
 
-          <div className="md:col-span-2 space-y-3">
-            <span className="font-extrabold text-[11px] uppercase tracking-wider text-[#0F172A] block">Legal</span>
-            <ul className="space-y-2">
-              <li><span className="cursor-default">Privacy Policy</span></li>
-              <li><span className="cursor-default">Terms of Service</span></li>
-              <li><span className="cursor-default">Security Standard</span></li>
-            </ul>
+          {/* Trust item 3 */}
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-full bg-white border border-[#E5E0D5] flex items-center justify-center text-[#1E3A2B] shrink-0 shadow-xs">
+              <Clock className="w-4 h-4 stroke-[2]" />
+            </div>
+            <div>
+              <h5 className="font-bold text-xs text-[#1F2923]">24/7 Support</h5>
+              <p className="text-[10px] text-[#6E7A72]">We're here when you need us</p>
+            </div>
           </div>
 
-          <div className="md:col-span-4 space-y-3 text-left">
-            <span className="font-extrabold text-[11px] uppercase tracking-wider text-[#0F172A] block">Central Support</span>
-            <p>Email: sales@careva.in</p>
-            <p>Hours: Mon - Fri, 09:00 AM - 06:00 PM IST</p>
+          {/* Trust item 4 */}
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-full bg-white border border-[#E5E0D5] flex items-center justify-center text-[#1E3A2B] shrink-0 shadow-xs">
+              <TrendingUp className="w-4 h-4 stroke-[2]" />
+            </div>
+            <div>
+              <h5 className="font-bold text-xs text-[#1F2923]">Scalable</h5>
+              <p className="text-[10px] text-[#6E7A72]">Grow your spa, we'll grow with you</p>
+            </div>
           </div>
 
         </div>
 
-        <div className="max-w-7xl mx-auto border-t border-[#E2E8F0] mt-12 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p>© {new Date().getFullYear()} Careva SaaS. All rights reserved.</p>
-          <div className="flex gap-4">
-            <span className="hover:text-[#0F172A] cursor-pointer">Twitter</span>
-            <span className="hover:text-[#0F172A] cursor-pointer">LinkedIn</span>
-            <span className="hover:text-[#0F172A] cursor-pointer">GitHub</span>
+        {/* Copyright */}
+        <div className="max-w-7xl mx-auto px-6 mt-8 pt-6 border-t border-[#EDE8E0]/60 flex flex-col sm:flex-row items-center justify-between text-[11px] text-[#8C988F]">
+          <p>© {new Date().getFullYear()} Careva Spa ERP. All rights reserved.</p>
+          <div className="flex items-center gap-6 mt-2 sm:mt-0">
+            <a href="#" className="hover:text-[#1E3A2B] transition-colors">Privacy Policy</a>
+            <a href="#" className="hover:text-[#1E3A2B] transition-colors">Terms of Service</a>
+            <a href="/superadmin" className="hover:text-[#1E3A2B] transition-colors font-bold text-[#1E3A2B]">Super Admin Portal</a>
           </div>
         </div>
       </footer>
 
-      {/* ─── DEMO BOOKING MODAL OVERLAY ─── */}
+      {/* ─── BOOK A DEMO MODAL ─── */}
       {isDemoModalOpen && (
-        <div className="fixed inset-0 z-50 bg-[#0F172A]/70 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="w-full max-w-lg bg-white border border-[#E2E8F0] rounded-2xl p-6 md:p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto">
-            {/* Close */}
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white border border-[#EDE8E0] rounded-3xl p-8 max-w-md w-full shadow-2xl relative space-y-5">
             <button
               onClick={() => setIsDemoModalOpen(false)}
-              className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-650 transition-colors cursor-pointer border border-[#E2E8F0] bg-[#F8FAFC] rounded-full text-xs font-bold"
+              className="absolute top-6 right-6 text-slate-400 hover:text-slate-700 transition-colors p-1"
             >
-              ✕
+              <X className="w-5 h-5" />
             </button>
 
-            <h3 className="font-extrabold text-xl text-[#0F172A] mb-4 text-left">Book a Free Demo</h3>
-            <p className="text-xs text-[#64748B] mb-6 text-left leading-relaxed">
-              Provision an instant sandbox database space. Experience real-time POS checkouts, customer logs, and automatic WhatsApp templates instantly.
-            </p>
-
             {demoSuccess ? (
-              <div className="text-center space-y-6 py-6 animate-fadeIn">
-                <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100 flex items-center justify-center mx-auto">
-                  <Check className="w-8 h-8" />
+              <div className="text-center py-6 space-y-4">
+                <div className="w-14 h-14 rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600 mx-auto">
+                  <CheckCircle2 className="w-8 h-8" />
                 </div>
-                <div>
-                  <h4 className="font-black text-xl text-[#0F172A]">Demo Request Received!</h4>
-                  <p className="text-xs text-[#64748B] mt-2 leading-relaxed">
-                    Thank you for booking a free demo! Your request has been registered in our Super Admin desk. 
-                    Our executive will reach out to you within 24 hours to schedule a personalized live walkthrough.
-                  </p>
-                </div>
-
-                <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-4 text-left space-y-3.5">
-                  <div className="text-xs font-bold text-[#0F172A] border-b border-slate-200 pb-2">Registered Details</div>
-                  <div className="grid grid-cols-2 gap-y-2.5 text-[11px]">
-                    <span className="text-[#64748B]">Business Name:</span>
-                    <span className="font-bold text-[#0F172A] text-right">{businessName}</span>
-
-                    <span className="text-[#64748B]">Contact Email:</span>
-                    <span className="font-bold text-[#0F172A] text-right truncate">{emailAddress}</span>
-
-                    <span className="text-[#64748B]">Phone Number:</span>
-                    <span className="font-bold text-[#0F172A] text-right">{phoneNumber}</span>
-
-                    <span className="text-[#64748B]">Location / City:</span>
-                    <span className="font-bold text-[#0F172A] text-right">{cityLocation}</span>
-
-                    <span className="text-[#64748B]">Requested Plan:</span>
-                    <span className="font-bold text-[#0F8B8D] text-right uppercase tracking-wider">{selectedPlan}</span>
-                  </div>
-                </div>
-
-                <div className="flex gap-3">
-                  <button
-                    onClick={() => setIsDemoModalOpen(false)}
-                    className="flex-1 py-3 bg-[#F8FAFC] border border-[#E2E8F0] hover:bg-[#F1F5F9] text-[#0F172A] text-xs font-bold rounded-xl transition-colors cursor-pointer"
-                  >
-                    Done
-                  </button>
-                </div>
+                <h3 className="font-luxury text-2xl text-[#1F2923]">Demo Request Received!</h3>
+                <p className="text-xs text-[#5A685D] leading-relaxed">
+                  Thank you <span className="font-bold">{ownerName}</span>! Our spa ERP product specialist will get in touch with you shortly to demonstrate <span className="font-bold">{businessName}</span>.
+                </p>
+                <button
+                  onClick={() => setIsDemoModalOpen(false)}
+                  className="w-full py-3 rounded-2xl bg-[#1E3A2B] text-white text-xs font-bold uppercase tracking-wider"
+                >
+                  Return to Website
+                </button>
               </div>
             ) : (
-              <form onSubmit={handleBookDemo} className="space-y-4 text-left">
-                <div className="space-y-1.5">
-                  <label className="block text-[10px] font-bold text-slate-400 uppercase">Your Name</label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="e.g. Farhan"
-                    value={ownerName}
-                    onChange={(e) => setOwnerName(e.target.value)}
-                    className="w-full bg-[#F8FAFC] border border-[#E2E8F0] focus:border-[#0F8B8D] rounded-xl py-2.5 px-3.5 text-xs font-semibold text-[#0F172A] outline-none transition-colors"
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="block text-[10px] font-bold text-slate-400 uppercase">Salon Business Name</label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="e.g. Lavender Spa"
-                    value={businessName}
-                    onChange={(e) => setBusinessName(e.target.value)}
-                    className="w-full bg-[#F8FAFC] border border-[#E2E8F0] focus:border-[#0F8B8D] rounded-xl py-2.5 px-3.5 text-xs font-semibold text-[#0F172A] outline-none transition-colors"
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="block text-[10px] font-bold text-slate-400 uppercase">Email Address</label>
-                  <input
-                    type="email"
-                    required
-                    placeholder="e.g. owner@lavenderspa.com"
-                    value={emailAddress}
-                    onChange={(e) => setEmailAddress(e.target.value)}
-                    className="w-full bg-[#F8FAFC] border border-[#E2E8F0] focus:border-[#0F8B8D] rounded-xl py-2.5 px-3.5 text-xs font-semibold text-[#0F172A] outline-none transition-colors"
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="block text-[10px] font-bold text-slate-400 uppercase">Phone Number</label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="e.g. +91 99999 55555"
-                    value={phoneNumber}
-                    onChange={(e) => setPhoneNumber(e.target.value)}
-                    className="w-full bg-[#F8FAFC] border border-[#E2E8F0] focus:border-[#0F8B8D] rounded-xl py-2.5 px-3.5 text-xs font-semibold text-[#0F172A] outline-none transition-colors"
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-1.5">
-                    <label className="block text-[10px] font-bold text-slate-400 uppercase">City</label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="e.g. Calicut"
-                      value={cityLocation}
-                      onChange={(e) => setCityLocation(e.target.value)}
-                      className="w-full bg-[#F8FAFC] border border-[#E2E8F0] focus:border-[#0F8B8D] rounded-xl py-2.5 px-3.5 text-xs font-semibold text-[#0F172A] outline-none transition-colors"
-                    />
+              <>
+                <div className="space-y-1">
+                  <div className="inline-flex items-center gap-1 text-[10px] uppercase font-bold tracking-widest text-[#1E3A2B]">
+                    <Sparkles className="w-3 h-3" />
+                    <span>Free Live Demo</span>
                   </div>
-
-                  <div className="space-y-1.5">
-                    <label className="block text-[10px] font-bold text-slate-400 uppercase">Preferred Plan</label>
-                    <select
-                      value={selectedPlan}
-                      onChange={(e) => setSelectedPlan(e.target.value)}
-                      className="w-full bg-[#F8FAFC] border border-[#E2E8F0] focus:border-[#0F8B8D] rounded-xl py-2.5 px-3 text-xs font-semibold text-[#64748B] outline-none transition-colors cursor-pointer"
-                    >
-                      <option value="Starter">Starter Plan</option>
-                      <option value="Professional">Professional Plan</option>
-                      <option value="Enterprise">Enterprise Plan</option>
-                    </select>
-                  </div>
+                  <h3 className="font-luxury text-2xl text-[#1F2923]">Book Your Spa Demo</h3>
+                  <p className="text-xs text-slate-500">Experience how Careva Spa ERP simplifies your operations.</p>
                 </div>
 
                 {errorMsg && (
-                  <p className="text-xs font-bold text-red-650 bg-red-50 p-3 rounded-lg border border-red-200">
+                  <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold">
                     {errorMsg}
-                  </p>
+                  </div>
                 )}
 
-                <button
-                  type="submit"
-                  className="w-full py-3.5 bg-[#0F8B8D] hover:bg-[#0c7476] text-white font-bold text-xs uppercase tracking-widest rounded-xl transition-colors shadow-md cursor-pointer"
-                >
-                  Confirm Free Demo Booking
-                </button>
-              </form>
+                <form onSubmit={handleBookDemo} className="space-y-3.5">
+                  <div>
+                    <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Your Full Name</label>
+                    <div className="relative">
+                      <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                      <input
+                        type="text"
+                        required
+                        placeholder="e.g. Priya Sharma"
+                        value={ownerName}
+                        onChange={(e) => setOwnerName(e.target.value)}
+                        className="w-full pl-9 pr-3 py-2.5 border border-[#EDE8E0] rounded-xl text-xs font-semibold focus:outline-none focus:border-[#1E3A2B]"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Spa / Business Name</label>
+                    <div className="relative">
+                      <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                      <input
+                        type="text"
+                        required
+                        placeholder="e.g. Serenity Spa & Wellness"
+                        value={businessName}
+                        onChange={(e) => setBusinessName(e.target.value)}
+                        className="w-full pl-9 pr-3 py-2.5 border border-[#EDE8E0] rounded-xl text-xs font-semibold focus:outline-none focus:border-[#1E3A2B]"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Email</label>
+                      <input
+                        type="email"
+                        required
+                        placeholder="name@example.com"
+                        value={emailAddress}
+                        onChange={(e) => setEmailAddress(e.target.value)}
+                        className="w-full px-3 py-2.5 border border-[#EDE8E0] rounded-xl text-xs font-semibold focus:outline-none focus:border-[#1E3A2B]"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Phone Number</label>
+                      <input
+                        type="tel"
+                        required
+                        placeholder="+91 9988776655"
+                        value={phoneNumber}
+                        onChange={(e) => setPhoneNumber(e.target.value)}
+                        className="w-full px-3 py-2.5 border border-[#EDE8E0] rounded-xl text-xs font-semibold focus:outline-none focus:border-[#1E3A2B]"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">City / Location</label>
+                    <div className="relative">
+                      <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                      <input
+                        type="text"
+                        required
+                        placeholder="e.g. Mumbai, Maharashtra"
+                        value={cityLocation}
+                        onChange={(e) => setCityLocation(e.target.value)}
+                        className="w-full pl-9 pr-3 py-2.5 border border-[#EDE8E0] rounded-xl text-xs font-semibold focus:outline-none focus:border-[#1E3A2B]"
+                      />
+                    </div>
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="w-full py-3.5 rounded-2xl bg-[#1E3A2B] hover:bg-[#15291E] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-md mt-2 cursor-pointer"
+                  >
+                    Submit Demo Request
+                  </button>
+                </form>
+              </>
             )}
-          </div>
-        </div>
-      )}
-
-      {/* ─── PRODUCT TOUR MODAL OVERLAY ─── */}
-      {isTourOpen && (
-        <div className="fixed inset-0 z-50 bg-[#0F172A]/75 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="w-full max-w-2xl bg-white border border-[#E2E8F0] rounded-2xl p-6 md:p-8 shadow-2xl relative">
-            {/* Close */}
-            <button
-              onClick={() => setIsTourOpen(false)}
-              className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-650 transition-colors cursor-pointer border border-[#E2E8F0] bg-[#F8FAFC] rounded-full text-xs font-bold"
-            >
-              ✕
-            </button>
-
-            <div className="space-y-4">
-              <span className="text-[10px] font-bold text-[#0F8B8D] uppercase tracking-wider">
-                Product Tour (Step {tourStep + 1} of {productTourSteps.length})
-              </span>
-              <h3 className="text-2xl font-black text-[#0F172A] tracking-tight">
-                {productTourSteps[tourStep].title}
-              </h3>
-              <p className="text-xs md:text-sm text-[#64748B] leading-relaxed">
-                {productTourSteps[tourStep].desc}
-              </p>
-            </div>
-
-            {/* Visual Mockup inside tour */}
-            <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-2xl p-6 my-6 min-h-[160px] flex items-center justify-center">
-              <div className="w-full max-w-md">
-                {productTourSteps[tourStep].mockup}
-              </div>
-            </div>
-
-            <div className="flex justify-between items-center">
-              <div className="flex gap-1">
-                {productTourSteps.map((_, idx) => (
-                  <span
-                    key={idx}
-                    className={`w-1.5 h-1.5 rounded-full transition-colors ${
-                      idx === tourStep ? "bg-[#0F8B8D]" : "bg-slate-200"
-                    }`}
-                  />
-                ))}
-              </div>
-
-              <div className="flex gap-2">
-                <button
-                  disabled={tourStep === 0}
-                  onClick={() => setTourStep(tourStep - 1)}
-                  className="px-4 py-2 border border-[#E2E8F0] text-xs font-bold text-[#0F172A] hover:bg-[#F8FAFC] rounded-lg disabled:opacity-40 disabled:hover:bg-transparent cursor-pointer"
-                >
-                  Previous
-                </button>
-                {tourStep < productTourSteps.length - 1 ? (
-                  <button
-                    onClick={() => setTourStep(tourStep + 1)}
-                    className="px-4 py-2 bg-[#0F8B8D] hover:bg-[#0c7476] text-white text-xs font-bold rounded-lg cursor-pointer"
-                  >
-                    Next
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => { setIsTourOpen(false); openDemoModal(); }}
-                    className="px-4 py-2 bg-[#0F8B8D] hover:bg-[#0c7476] text-white text-xs font-bold rounded-lg cursor-pointer"
-                  >
-                    Book Demo Now
-                  </button>
-                )}
-              </div>
-            </div>
           </div>
         </div>
       )}
