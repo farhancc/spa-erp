@@ -22,6 +22,7 @@ import {
   HeartHandshake,
   Check,
   X,
+  Menu,
   Play,
   Scissors,
   Receipt,
