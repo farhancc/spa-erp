@@ -289,7 +289,7 @@ export default function CarevaLandingPage() {
           <div className="lg:col-span-6 space-y-8 pr-0 lg:pr-6">
             <div className="space-y-4">
               <h1 className="font-luxury text-4xl sm:text-5xl lg:text-6xl text-[#1F2923] tracking-tight leading-[1.12]">
-                All-in-One <span className="inline-block relative">Spa<span className="text-xs text-[#88B04B] absolute -top-1 -right-4 font-serif italic">🌿</span></span> Management Software
+                All-in-One Spa Management Software
               </h1>
               <p className="text-[#5A685D] text-base sm:text-lg leading-relaxed max-w-lg font-normal">
                 Careva Spa ERP helps you manage appointments, clients, staff, inventory and more — all in one beautifully simple platform.
@@ -432,7 +432,7 @@ export default function CarevaLandingPage() {
           <div className="lg:col-span-5 space-y-7">
             <div className="space-y-3">
               <span className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#5A685D] block">
-                SMARTER OPERATIONS 🌿
+                SMARTER OPERATIONS
               </span>
               <h2 className="font-luxury text-3xl sm:text-4xl text-[#1F2923] tracking-tight leading-tight">
                 A Powerful Dashboard for Better Decisions
@@ -486,7 +486,7 @@ export default function CarevaLandingPage() {
               </div>
 
               <div>
-                <h3 className="font-bold text-sm text-[#1F2923]">Welcome back, Admin 👋</h3>
+                <h3 className="font-bold text-sm text-[#1F2923]">Welcome back, Admin</h3>
                 <p className="text-[10px] text-slate-400">Here's what's happening at your spa today.</p>
               </div>
 
