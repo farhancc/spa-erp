@@ -28,26 +28,34 @@ import {
   Receipt,
   Mail,
   Building,
-  MapPin
+  MapPin,
+  PenTool,
+  RefreshCw,
+  Smartphone,
+  Headphones,
+  Send,
+  Flower2,
+  Droplets,
+  Sparkle
 } from "lucide-react";
 import { getSharedTenants, saveDemoBooking } from "../shared/utils/utils";
 
-// Clean Lotus & Scissors Spa & Salon Logo
-function CarevaSpaLogo() {
+// Clean Lotus & Spa/Salon Brand Logo
+function CarevaSpaLogo({ darkBg = false }: { darkBg?: boolean }) {
   return (
     <Link href="/" className="flex items-center gap-3 group">
-      <div className="w-9.5 h-9.5 rounded-full bg-[#1E3A2B] flex items-center justify-center text-white shadow-sm transition-transform group-hover:scale-105">
+      <div className={`w-9.5 h-9.5 rounded-full ${darkBg ? "bg-white text-[#15271D]" : "bg-[#1E3A2B] text-white"} flex items-center justify-center shadow-sm transition-transform group-hover:scale-105`}>
         <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M12 3C10.5 6 7 8 4 8C7 11 10.5 13 12 16C13.5 13 17 11 20 8C17 8 13.5 6 12 3Z" fill="currentColor" opacity="0.9" />
-          <path d="M12 8C11 10 8.5 11.5 6 11.5C8.5 13.5 11 15 12 17C13 15 15.5 13.5 18 11.5C15.5 11.5 13 10 12 8Z" fill="#88B04B" />
+          <path d="M12 8C11 10 8.5 11.5 6 11.5C8.5 13.5 11 15 12 17C13 15 15.5 13.5 18 11.5C15.5 11.5 13 10 12 8Z" fill={darkBg ? "#15271D" : "#88B04B"} />
           <path d="M12 21V16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
         </svg>
       </div>
       <div className="flex flex-col">
-        <span className="font-luxury font-bold text-xl tracking-tight text-[#1F2923] leading-none">
+        <span className={`font-luxury font-bold text-xl tracking-tight leading-none ${darkBg ? "text-white" : "text-[#1F2923]"}`}>
           Careva
         </span>
-        <span className="text-[9px] font-sans font-extrabold tracking-[0.22em] text-[#5A685D] uppercase -mt-0.5">
+        <span className={`text-[9px] font-sans font-extrabold tracking-[0.22em] uppercase -mt-0.5 ${darkBg ? "text-[#9EB0A3]" : "text-[#5A685D]"}`}>
           SPA & SALON ERP
         </span>
       </div>
@@ -66,13 +74,17 @@ export default function CarevaLandingPage() {
   const [emailAddress, setEmailAddress] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [cityLocation, setCityLocation] = useState("");
-  const [selectedPlan, setSelectedPlan] = useState("Spa & Salon Growth");
+  const [selectedPlan, setSelectedPlan] = useState("Professional");
   const [demoSuccess, setDemoSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
   // Dropdown states
   const [isSolutionsOpen, setIsSolutionsOpen] = useState(false);
   const [isResourcesOpen, setIsResourcesOpen] = useState(false);
+
+  // Newsletter Email state
+  const [newsletterEmail, setNewsletterEmail] = useState("");
+  const [newsletterSent, setNewsletterSent] = useState(false);
 
   // Active Sandbox Tenant State
   const [activeSlug, setActiveSlug] = useState("luxcuts");
@@ -126,6 +138,15 @@ export default function CarevaLandingPage() {
     }
   };
 
+  const handleNewsletterSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (newsletterEmail) {
+      setNewsletterSent(true);
+      setNewsletterEmail("");
+      setTimeout(() => setNewsletterSent(false), 4000);
+    }
+  };
+
   return (
     <div className="bg-[#FAF8F5] text-[#2B352E] font-minimal min-h-screen selection:bg-[#1E3A2B] selection:text-white relative">
       
@@ -150,15 +171,15 @@ export default function CarevaLandingPage() {
               </button>
               {isSolutionsOpen && (
                 <div className="absolute top-full left-0 w-64 bg-white rounded-2xl shadow-xl border border-[#EDE8E0] p-3 space-y-1 z-50">
-                  <a href={`/tenant/${activeSlug}`} className="block p-2.5 rounded-xl hover:bg-[#FAF8F5] transition-colors">
+                  <a href="#solutions" className="block p-2.5 rounded-xl hover:bg-[#FAF8F5] transition-colors">
                     <p className="font-bold text-[#1F2923] text-xs">Day Spas & Wellness Retreats</p>
                     <p className="text-[10px] text-slate-500">Therapist rosters, treatment consents & billing</p>
                   </a>
-                  <a href={`/tenant/${activeSlug}`} className="block p-2.5 rounded-xl hover:bg-[#FAF8F5] transition-colors">
+                  <a href="#solutions" className="block p-2.5 rounded-xl hover:bg-[#FAF8F5] transition-colors">
                     <p className="font-bold text-[#1F2923] text-xs">Hair & Beauty Salons</p>
                     <p className="text-[10px] text-slate-500">Stylist scheduling, chair booking & fast POS</p>
                   </a>
-                  <a href={`/tenant/${activeSlug}`} className="block p-2.5 rounded-xl hover:bg-[#FAF8F5] transition-colors">
+                  <a href="#solutions" className="block p-2.5 rounded-xl hover:bg-[#FAF8F5] transition-colors">
                     <p className="font-bold text-[#1F2923] text-xs">Multi-Chain Spa & Salon Outlets</p>
                     <p className="text-[10px] text-slate-500">Centralized reports, inventory & staff payroll</p>
                   </a>
@@ -168,10 +189,6 @@ export default function CarevaLandingPage() {
 
             <a href="#pricing" className="hover:text-[#1E3A2B] transition-colors">
               Pricing
-            </a>
-
-            <a href="#about" className="hover:text-[#1E3A2B] transition-colors">
-              About Us
             </a>
 
             {/* Resources Dropdown */}
@@ -194,6 +211,10 @@ export default function CarevaLandingPage() {
                 </div>
               )}
             </div>
+
+            <a href="#footer" className="hover:text-[#1E3A2B] transition-colors">
+              About Us
+            </a>
           </nav>
 
           {/* Desktop Right Action Buttons */}
@@ -228,14 +249,14 @@ export default function CarevaLandingPage() {
             <a href="#features" onClick={() => setIsMobileMenuOpen(false)} className="block py-2 text-sm font-medium text-[#1F2923]">
               Features
             </a>
-            <a href="#dashboard" onClick={() => setIsMobileMenuOpen(false)} className="block py-2 text-sm font-medium text-[#1F2923]">
-              Dashboard
-            </a>
-            <a href="#testimonials" onClick={() => setIsMobileMenuOpen(false)} className="block py-2 text-sm font-medium text-[#1F2923]">
-              Testimonials
+            <a href="#solutions" onClick={() => setIsMobileMenuOpen(false)} className="block py-2 text-sm font-medium text-[#1F2923]">
+              Solutions
             </a>
             <a href="#pricing" onClick={() => setIsMobileMenuOpen(false)} className="block py-2 text-sm font-medium text-[#1F2923]">
               Pricing
+            </a>
+            <a href="#testimonials" onClick={() => setIsMobileMenuOpen(false)} className="block py-2 text-sm font-medium text-[#1F2923]">
+              Testimonials
             </a>
             <div className="pt-3 border-t border-[#EDE8E0] flex flex-col gap-2">
               <Link
@@ -258,482 +279,598 @@ export default function CarevaLandingPage() {
         )}
       </header>
 
-      {/* ─── HERO SECTION ─── */}
-      <section className="relative pt-12 pb-20 md:pt-20 md:pb-28 overflow-hidden">
+      {/* ─── SECTION 1: EVERYTHING AT YOUR FINGERTIPS (HERO & DASHBOARD PREVIEW) ─── */}
+      <section id="features" className="py-16 md:py-24 bg-[#FAF8F5]">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           
-          {/* Left Column: Text & CTAs */}
-          <div className="lg:col-span-7 space-y-8">
+          {/* Left Column: Headline & Bullet points */}
+          <div className="lg:col-span-5 space-y-7">
             
-            {/* Main Headline */}
-            <div className="space-y-4">
-              <h1 className="font-luxury text-4xl sm:text-5xl lg:text-6xl text-[#1F2923] tracking-tight leading-[1.12]">
-                All-in-One <span className="inline-block text-[#88B04B] font-sans text-3xl md:text-4xl align-top">🌿</span>
-                <br />
-                Spa & Salon Management
-                <br />
-                Software
+            <div className="space-y-3">
+              <span className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#5A685D] block">
+                COMPLETE CONTROL, ALL IN ONE PLACE
+              </span>
+
+              <h1 className="font-luxury text-4xl sm:text-5xl text-[#1F2923] tracking-tight leading-[1.15]">
+                Everything at Your Fingertips
               </h1>
 
-              <p className="text-[#5A685D] text-base sm:text-lg max-w-xl leading-relaxed font-normal">
-                Careva Spa & Salon ERP helps you manage appointments, clients, staff, inventory, POS billing and more — all in one beautifully simple platform.
+              <p className="text-[#5A685D] text-sm md:text-base leading-relaxed font-normal pt-1">
+                Careva Spa & Salon ERP brings your entire spa and salon operations together in one beautiful, easy-to-use platform.
               </p>
             </div>
 
-            {/* Action Buttons */}
-            <div className="flex flex-wrap items-center gap-4 pt-2">
-              <button
-                onClick={() => openDemoModal()}
-                className="bg-[#1E3A2B] hover:bg-[#15291E] text-white px-7 py-3.5 rounded-2xl text-sm font-semibold transition-all shadow-md hover:shadow-lg flex items-center gap-2.5 group cursor-pointer active:scale-98"
-              >
-                <span>Book a Demo</span>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </button>
-
-              <a
-                href="#features"
-                className="bg-[#FAF8F5] hover:bg-white border border-[#DDD7CC] text-[#1E3A2B] px-7 py-3.5 rounded-2xl text-sm font-semibold transition-all shadow-xs hover:shadow-sm"
-              >
-                Explore Features
-              </a>
+            {/* 4 Bullet Points */}
+            <div className="space-y-3.5 pt-1">
+              {[
+                "Real-time dashboard & insights",
+                "Manage bookings, staff & services",
+                "Track inventory & sales performance",
+                "Delight clients & grow revenue"
+              ].map((point, idx) => (
+                <div key={idx} className="flex items-center gap-3">
+                  <div className="w-5 h-5 rounded-full bg-[#1E3A2B] flex items-center justify-center text-white shrink-0">
+                    <Check className="w-3.5 h-3.5 stroke-[2.5]" />
+                  </div>
+                  <span className="text-xs md:text-sm font-semibold text-[#1F2923]">{point}</span>
+                </div>
+              ))}
             </div>
 
-            {/* Social Proof Rating */}
-            <div className="flex items-center gap-4 pt-4 border-t border-[#EDE8E0]/80">
-              {/* Avatar stack */}
-              <div className="flex -space-x-2.5">
-                <img
-                  src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80"
-                  alt="Spa Manager"
-                  className="w-10 h-10 rounded-full border-2 border-[#FAF8F5] object-cover"
-                />
-                <img
-                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=80"
-                  alt="Salon Owner"
-                  className="w-10 h-10 rounded-full border-2 border-[#FAF8F5] object-cover"
-                />
-                <img
-                  src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=120&q=80"
-                  alt="Wellness Specialist"
-                  className="w-10 h-10 rounded-full border-2 border-[#FAF8F5] object-cover"
-                />
-                <img
-                  src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&q=80"
-                  alt="Spa Director"
-                  className="w-10 h-10 rounded-full border-2 border-[#FAF8F5] object-cover"
-                />
+            {/* Action Button */}
+            <div className="pt-3">
+              <button
+                onClick={() => openDemoModal()}
+                className="inline-flex items-center gap-2.5 bg-white hover:bg-[#FAF8F5] border border-[#DDD7CC] text-[#1E3A2B] px-6 py-3 rounded-2xl text-xs font-bold shadow-xs hover:shadow-sm transition-all group"
+              >
+                <div className="w-5 h-5 rounded-full bg-[#EFF4EE] flex items-center justify-center text-[#1E3A2B] group-hover:scale-110 transition-transform">
+                  <Play className="w-2.5 h-2.5 fill-current ml-0.5" />
+                </div>
+                <span>See How It Works</span>
+              </button>
+            </div>
+
+          </div>
+
+          {/* Right Column: Full Dashboard Mockup Card */}
+          <div className="lg:col-span-7">
+            <div className="bg-white rounded-3xl border border-[#EDE8E0] shadow-2xl p-6 md:p-7 space-y-5 text-[#1F2923] font-sans">
+              
+              <div className="flex gap-6">
+                
+                {/* Left Mini Sidebar inside mockup */}
+                <div className="hidden sm:flex flex-col w-36 border-r border-[#F0EBE1] pr-4 space-y-4 shrink-0">
+                  <div className="flex items-center gap-2 pb-2 border-b border-[#F0EBE1]">
+                    <div className="w-6 h-6 rounded-md bg-[#1E3A2B] flex items-center justify-center text-white text-[10px] font-bold">
+                      C
+                    </div>
+                    <span className="font-bold text-xs text-[#1F2923]">Careva</span>
+                  </div>
+
+                  <div className="space-y-1 text-[11px] font-medium text-slate-500">
+                    <div className="px-2.5 py-1.5 rounded-lg bg-[#EFF4EE] text-[#1E3A2B] font-bold flex items-center gap-2">
+                      <Layers className="w-3.5 h-3.5" />
+                      <span>Dashboard</span>
+                    </div>
+                    <div className="px-2.5 py-1.5 rounded-lg hover:bg-slate-50 flex items-center gap-2">
+                      <Calendar className="w-3.5 h-3.5" />
+                      <span>Appointments</span>
+                    </div>
+                    <div className="px-2.5 py-1.5 rounded-lg hover:bg-slate-50 flex items-center gap-2">
+                      <Users className="w-3.5 h-3.5" />
+                      <span>Clients</span>
+                    </div>
+                    <div className="px-2.5 py-1.5 rounded-lg hover:bg-slate-50 flex items-center gap-2">
+                      <HeartHandshake className="w-3.5 h-3.5" />
+                      <span>Staff</span>
+                    </div>
+                    <div className="px-2.5 py-1.5 rounded-lg hover:bg-slate-50 flex items-center gap-2">
+                      <Scissors className="w-3.5 h-3.5" />
+                      <span>Services</span>
+                    </div>
+                    <div className="px-2.5 py-1.5 rounded-lg hover:bg-slate-50 flex items-center gap-2">
+                      <Box className="w-3.5 h-3.5" />
+                      <span>Inventory</span>
+                    </div>
+                    <div className="px-2.5 py-1.5 rounded-lg hover:bg-slate-50 flex items-center gap-2">
+                      <Receipt className="w-3.5 h-3.5" />
+                      <span>Sales</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Main Content Pane inside mockup */}
+                <div className="flex-1 space-y-4">
+                  
+                  {/* Top Bar inside mockup */}
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="font-bold text-sm text-[#1F2923]">Dashboard</h3>
+                      <p className="text-[10px] text-slate-400">Here's what's happening at your spa & salon today.</p>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1 px-2.5 py-1 rounded-lg border border-[#EDE8E0] text-[10px] font-medium text-slate-600 bg-[#FAF8F5]">
+                        <Calendar className="w-3 h-3 text-slate-400" />
+                        <span>May 12 - May 18, 2024</span>
+                        <ChevronDown className="w-2.5 h-2.5 text-slate-400" />
+                      </div>
+                      <img src="/testimonial_avatar.png" alt="Avatar" className="w-7 h-7 rounded-full object-cover border border-slate-200" />
+                    </div>
+                  </div>
+
+                  {/* 4 Stat Cards inside mockup */}
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                    <div className="bg-[#FAF8F5] border border-[#F0EBE1] rounded-xl p-2.5">
+                      <span className="text-[9px] text-slate-500 font-semibold block">Today's Revenue</span>
+                      <p className="text-sm font-black text-[#1F2923] mt-0.5">₹ 24,560</p>
+                      <span className="text-[9px] font-semibold text-emerald-600">+12.5% vs yesterday</span>
+                    </div>
+                    <div className="bg-[#FAF8F5] border border-[#F0EBE1] rounded-xl p-2.5">
+                      <span className="text-[9px] text-slate-500 font-semibold block">Appointments</span>
+                      <p className="text-sm font-black text-[#1F2923] mt-0.5">28</p>
+                      <span className="text-[9px] font-semibold text-emerald-600">+16.7% vs yesterday</span>
+                    </div>
+                    <div className="bg-[#FAF8F5] border border-[#F0EBE1] rounded-xl p-2.5">
+                      <span className="text-[9px] text-slate-500 font-semibold block">New Clients</span>
+                      <p className="text-sm font-black text-[#1F2923] mt-0.5">14</p>
+                      <span className="text-[9px] font-semibold text-emerald-600">+7.7% vs yesterday</span>
+                    </div>
+                    <div className="bg-[#FAF8F5] border border-[#F0EBE1] rounded-xl p-2.5">
+                      <span className="text-[9px] text-slate-500 font-semibold block">Products Sold</span>
+                      <p className="text-sm font-black text-[#1F2923] mt-0.5">42</p>
+                      <span className="text-[9px] font-semibold text-emerald-600">+9.5% vs yesterday</span>
+                    </div>
+                  </div>
+
+                  {/* Revenue Curve & Top Services */}
+                  <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 pt-1">
+                    
+                    {/* Revenue Curve */}
+                    <div className="sm:col-span-7 bg-[#FAF8F5] border border-[#F0EBE1] rounded-xl p-3 space-y-2">
+                      <div className="flex justify-between items-center text-[11px]">
+                        <span className="font-bold text-[#1F2923]">Revenue Overview</span>
+                        <span className="text-[9px] text-slate-400">This Week ˅</span>
+                      </div>
+                      <div className="h-20 w-full">
+                        <svg className="w-full h-full" viewBox="0 0 300 70" fill="none">
+                          <path
+                            d="M 0 55 Q 50 25, 100 45 T 200 25 T 300 15"
+                            stroke="#1E3A2B"
+                            strokeWidth="2.5"
+                            fill="none"
+                          />
+                          <path
+                            d="M 0 55 Q 50 25, 100 45 T 200 25 T 300 15 L 300 70 L 0 70 Z"
+                            fill="#1E3A2B"
+                            opacity="0.1"
+                          />
+                        </svg>
+                      </div>
+                      <div className="flex justify-between text-[8px] text-slate-400 font-mono">
+                        <span>May 12</span>
+                        <span>May 14</span>
+                        <span>May 16</span>
+                        <span>May 18</span>
+                      </div>
+                    </div>
+
+                    {/* Top Services */}
+                    <div className="sm:col-span-5 bg-[#FAF8F5] border border-[#F0EBE1] rounded-xl p-3 space-y-2">
+                      <span className="text-[11px] font-bold text-[#1F2923] block">Top Services</span>
+                      {[
+                        { name: "Aroma Massage", rev: "₹ 12,450" },
+                        { name: "Facial Treatment", rev: "₹ 9,850" },
+                        { name: "Body Spa", rev: "₹ 8,240" },
+                        { name: "Hair Spa", rev: "₹ 6,420" },
+                        { name: "Detox Therapy", rev: "₹ 4,560" }
+                      ].map((item, i) => (
+                        <div key={i} className="flex justify-between items-center text-[9px] font-medium text-slate-700">
+                          <span>{item.name}</span>
+                          <span className="font-bold text-[#1F2923]">{item.rev}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                  </div>
+
+                </div>
               </div>
 
-              {/* Stars and score */}
-              <div>
-                <div className="flex items-center gap-1 text-[#E5A93C]">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-current" />
-                  ))}
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* ─── SECTION 2: TAILORED SOLUTIONS FOR EVERY SPA & SALON ─── */}
+      <section id="solutions" className="py-20 md:py-28 bg-white border-y border-[#EDE8E0]">
+        <div className="max-w-7xl mx-auto px-6 space-y-16">
+          
+          {/* Section Heading */}
+          <div className="text-center space-y-3 max-w-2xl mx-auto">
+            <span className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#5A685D] block">
+              TAILORED SOLUTIONS FOR EVERY SPA & SALON
+            </span>
+            <h2 className="font-luxury text-3xl sm:text-4xl text-[#1F2923] tracking-tight">
+              Built for Every Type of Wellness Business
+            </h2>
+          </div>
+
+          {/* 5 Business Cards Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 items-stretch">
+            
+            {/* Card 1: Day Spas */}
+            <div className="bg-[#FAF8F5] border border-[#EDE8E0] rounded-2xl p-5 flex flex-col justify-between text-center relative group hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+              <div className="w-11 h-11 rounded-full bg-[#1E3A2B] text-white flex items-center justify-center -mt-9 mb-4 mx-auto shadow-md border-2 border-white">
+                <Flower2 className="w-5 h-5" />
+              </div>
+              <div className="space-y-3">
+                <div className="aspect-[4/3] rounded-xl overflow-hidden mb-3 border border-[#E5E0D5]">
+                  <img
+                    src="/day_spas_treatment_room.png"
+                    alt="Day Spas"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
                 </div>
-                <p className="text-xs font-semibold text-[#4A574E] mt-0.5">
-                  <span className="font-bold text-[#1F2923]">4.9/5</span> from 200+ spa & salon owners
+                <h3 className="font-bold text-base text-[#1F2923]">Day Spas</h3>
+                <p className="text-xs text-[#6E7A72] leading-relaxed">
+                  Manage appointments, therapists, inventory & client experience effortlessly.
+                </p>
+              </div>
+            </div>
+
+            {/* Card 2: Resort Spas */}
+            <div className="bg-[#FAF8F5] border border-[#EDE8E0] rounded-2xl p-5 flex flex-col justify-between text-center relative group hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+              <div className="w-11 h-11 rounded-full bg-[#1E3A2B] text-white flex items-center justify-center -mt-9 mb-4 mx-auto shadow-md border-2 border-white">
+                <Sparkle className="w-5 h-5" />
+              </div>
+              <div className="space-y-3">
+                <div className="aspect-[4/3] rounded-xl overflow-hidden mb-3 border border-[#E5E0D5]">
+                  <img
+                    src="/resort_spa_pool.png"
+                    alt="Resort Spas"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+                <h3 className="font-bold text-base text-[#1F2923]">Resort Spas</h3>
+                <p className="text-xs text-[#6E7A72] leading-relaxed">
+                  Streamline operations across multiple locations & teams seamlessly.
+                </p>
+              </div>
+            </div>
+
+            {/* Card 3: Salons & Beauty Centers */}
+            <div className="bg-[#FAF8F5] border border-[#EDE8E0] rounded-2xl p-5 flex flex-col justify-between text-center relative group hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+              <div className="w-11 h-11 rounded-full bg-[#1E3A2B] text-white flex items-center justify-center -mt-9 mb-4 mx-auto shadow-md border-2 border-white">
+                <Droplets className="w-5 h-5" />
+              </div>
+              <div className="space-y-3">
+                <div className="aspect-[4/3] rounded-xl overflow-hidden mb-3 border border-[#E5E0D5]">
+                  <img
+                    src="/salon_beauty_center.png"
+                    alt="Salons & Beauty Centers"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+                <h3 className="font-bold text-base text-[#1F2923]">Salons & Beauty Centers</h3>
+                <p className="text-xs text-[#6E7A72] leading-relaxed">
+                  Handle services, staff, products & loyalty programs in one place.
+                </p>
+              </div>
+            </div>
+
+            {/* Card 4: Wellness Centers */}
+            <div className="bg-[#FAF8F5] border border-[#EDE8E0] rounded-2xl p-5 flex flex-col justify-between text-center relative group hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+              <div className="w-11 h-11 rounded-full bg-[#1E3A2B] text-white flex items-center justify-center -mt-9 mb-4 mx-auto shadow-md border-2 border-white">
+                <Sparkles className="w-5 h-5" />
+              </div>
+              <div className="space-y-3">
+                <div className="aspect-[4/3] rounded-xl overflow-hidden mb-3 border border-[#E5E0D5]">
+                  <img
+                    src="/wellness_center_meditation.png"
+                    alt="Wellness Centers"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+                <h3 className="font-bold text-base text-[#1F2923]">Wellness Centers</h3>
+                <p className="text-xs text-[#6E7A72] leading-relaxed">
+                  Manage therapies, memberships & sessions with ease.
+                </p>
+              </div>
+            </div>
+
+            {/* Card 5: Medical Spas */}
+            <div className="bg-[#FAF8F5] border border-[#EDE8E0] rounded-2xl p-5 flex flex-col justify-between text-center relative group hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+              <div className="w-11 h-11 rounded-full bg-[#1E3A2B] text-white flex items-center justify-center -mt-9 mb-4 mx-auto shadow-md border-2 border-white">
+                <Box className="w-5 h-5" />
+              </div>
+              <div className="space-y-3">
+                <div className="aspect-[4/3] rounded-xl overflow-hidden mb-3 border border-[#E5E0D5]">
+                  <img
+                    src="/medical_spa_skincare.png"
+                    alt="Medical Spas"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+                <h3 className="font-bold text-base text-[#1F2923]">Medical Spas</h3>
+                <p className="text-xs text-[#6E7A72] leading-relaxed">
+                  Stay compliant, manage treatments & deliver exceptional care.
                 </p>
               </div>
             </div>
 
           </div>
 
-          {/* Right Column: Hero Spa & Salon Image Frame */}
-          <div className="lg:col-span-5 relative flex justify-center">
-            
-            {/* Arch Mask Container */}
-            <div className="relative w-full max-w-md aspect-[4/5] rounded-t-[140px] rounded-b-[40px] overflow-hidden shadow-2xl border-4 border-white/60">
-              <img
-                src="/hero_spa_massage.png"
-                alt="Serene Spa & Salon Therapy Session"
-                className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700"
-              />
-              
-              {/* Soft warm gradient overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#1E3A2B]/20 via-transparent to-transparent pointer-events-none" />
-            </div>
-
-            {/* Floating Pill Badge */}
-            <div className="absolute bottom-6 left-2 bg-white/90 backdrop-blur-md border border-[#EDE8E0] px-4 py-2.5 rounded-2xl shadow-lg flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-[#EFF5F0] flex items-center justify-center text-[#1E3A2B]">
-                <Sparkles className="w-4 h-4" />
-              </div>
-              <div>
-                <p className="text-[11px] font-bold text-[#1F2923]">Serene Experience</p>
-                <p className="text-[9px] text-[#6E7A72]">24/7 Appointments & Stylist Rostering</p>
-              </div>
-            </div>
-
-          </div>
-
         </div>
       </section>
 
-      {/* ─── SECTION 2: EVERYTHING YOU NEED TO RUN A SUCCESSFUL SPA & SALON ─── */}
-      <section id="features" className="py-16 md:py-24 bg-white border-y border-[#EDE8E0]">
-        <div className="max-w-7xl mx-auto px-6 space-y-14">
+      {/* ─── SECTION 3: PRICING (SIMPLE PRICING, POWERFUL VALUE) ─── */}
+      <section id="pricing" className="py-20 md:py-28 bg-[#FAF8F5]">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
           
-          {/* Section Header */}
-          <div className="text-center space-y-3 max-w-2xl mx-auto">
-            <h2 className="font-luxury text-3xl md:text-4xl text-[#1F2923] tracking-tight">
-              Everything You Need to Run a Successful Spa & Salon
-            </h2>
-          </div>
+          {/* Left Column: Heading & Leaf */}
+          <div className="lg:col-span-4 space-y-6">
+            <span className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#5A685D] block">
+              SIMPLE PRICING, POWERFUL VALUE
+            </span>
 
-          {/* 5 Feature Cards Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
-            
-            {/* Card 1: Online Booking */}
-            <div className="bg-[#FAF8F5] border border-[#EFEBE4] rounded-2xl p-6 flex flex-col items-center text-center hover:bg-white hover:border-[#DDD7CC] hover:shadow-lg transition-all duration-300 group">
-              <div className="w-14 h-14 rounded-2xl bg-white border border-[#E5E0D5] flex items-center justify-center text-[#1E3A2B] mb-5 shadow-xs group-hover:scale-110 transition-transform">
-                <Calendar className="w-6 h-6 stroke-[1.75]" />
-              </div>
-              <h3 className="font-bold text-base text-[#1F2923] mb-2">Online Booking</h3>
-              <p className="text-xs text-[#6E7A72] leading-relaxed">
-                Easy scheduling for spa treatments & hair/beauty salon services
-              </p>
-            </div>
-
-            {/* Card 2: Client Management */}
-            <div className="bg-[#FAF8F5] border border-[#EFEBE4] rounded-2xl p-6 flex flex-col items-center text-center hover:bg-white hover:border-[#DDD7CC] hover:shadow-lg transition-all duration-300 group">
-              <div className="w-14 h-14 rounded-2xl bg-white border border-[#E5E0D5] flex items-center justify-center text-[#1E3A2B] mb-5 shadow-xs group-hover:scale-110 transition-transform">
-                <Users className="w-6 h-6 stroke-[1.75]" />
-              </div>
-              <h3 className="font-bold text-base text-[#1F2923] mb-2">Client Management</h3>
-              <p className="text-xs text-[#6E7A72] leading-relaxed">
-                Keep client history, preferences and treatment consents at hand
-              </p>
-            </div>
-
-            {/* Card 3: Inventory Control */}
-            <div className="bg-[#FAF8F5] border border-[#EFEBE4] rounded-2xl p-6 flex flex-col items-center text-center hover:bg-white hover:border-[#DDD7CC] hover:shadow-lg transition-all duration-300 group">
-              <div className="w-14 h-14 rounded-2xl bg-white border border-[#E5E0D5] flex items-center justify-center text-[#1E3A2B] mb-5 shadow-xs group-hover:scale-110 transition-transform">
-                <Box className="w-6 h-6 stroke-[1.75]" />
-              </div>
-              <h3 className="font-bold text-base text-[#1F2923] mb-2">Inventory Control</h3>
-              <p className="text-xs text-[#6E7A72] leading-relaxed">
-                Track products, hair colors, stock and spa supplies in real-time
-              </p>
-            </div>
-
-            {/* Card 4: Staff Management */}
-            <div className="bg-[#FAF8F5] border border-[#EFEBE4] rounded-2xl p-6 flex flex-col items-center text-center hover:bg-white hover:border-[#DDD7CC] hover:shadow-lg transition-all duration-300 group">
-              <div className="w-14 h-14 rounded-2xl bg-white border border-[#E5E0D5] flex items-center justify-center text-[#1E3A2B] mb-5 shadow-xs group-hover:scale-110 transition-transform">
-                <HeartHandshake className="w-6 h-6 stroke-[1.75]" />
-              </div>
-              <h3 className="font-bold text-base text-[#1F2923] mb-2">Staff Management</h3>
-              <p className="text-xs text-[#6E7A72] leading-relaxed">
-                Manage therapists, stylists, shifts, commissions & payroll
-              </p>
-            </div>
-
-            {/* Card 5: Reports & Analytics */}
-            <div className="bg-[#FAF8F5] border border-[#EFEBE4] rounded-2xl p-6 flex flex-col items-center text-center hover:bg-white hover:border-[#DDD7CC] hover:shadow-lg transition-all duration-300 group">
-              <div className="w-14 h-14 rounded-2xl bg-white border border-[#E5E0D5] flex items-center justify-center text-[#1E3A2B] mb-5 shadow-xs group-hover:scale-110 transition-transform">
-                <BarChart3 className="w-6 h-6 stroke-[1.75]" />
-              </div>
-              <h3 className="font-bold text-base text-[#1F2923] mb-2">Reports & Analytics</h3>
-              <p className="text-xs text-[#6E7A72] leading-relaxed">
-                Powerful insights to grow your spa & salon business
-              </p>
-            </div>
-
-          </div>
-
-        </div>
-      </section>
-
-      {/* ─── SECTION 3: SMARTER OPERATIONS & DASHBOARD PREVIEW ─── */}
-      <section id="dashboard" className="py-20 md:py-28 bg-[#FAF8F5]">
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          
-          {/* Left Column: Feature Highlights */}
-          <div className="lg:col-span-5 space-y-6">
-            
-            {/* Tag label */}
-            <div className="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-widest text-[#1E3A2B]">
-              <span>SMARTER OPERATIONS</span>
-              <span className="text-[#88B04B]">🌿</span>
-            </div>
-
-            {/* Headline */}
-            <h2 className="font-luxury text-3xl sm:text-4xl text-[#1F2923] leading-snug">
-              A Powerful Dashboard for Better Spa & Salon Decisions
+            <h2 className="font-luxury text-3xl sm:text-4xl text-[#1F2923] tracking-tight leading-snug">
+              Choose the Plan That Fits Your Spa
             </h2>
 
-            {/* Description */}
             <p className="text-[#5A685D] text-sm md:text-base leading-relaxed">
-              Get a real-time overview of your spa & salon performance and make data-driven decisions with ease.
+              No hidden fees. No surprises. Just everything you need to run & grow your spa or salon.
             </p>
 
-            {/* Checkmark List */}
-            <div className="space-y-3.5 pt-2">
-              {[
-                "Daily overview & key performance metrics",
-                "Revenue & appointment analytics across outlets",
-                "Top treatments, hair services & product sales",
-                "Stylist & therapist performance tracking"
-              ].map((item, idx) => (
-                <div key={idx} className="flex items-center gap-3">
-                  <div className="w-5 h-5 rounded-full bg-[#1E3A2B] flex items-center justify-center text-white shrink-0">
-                    <Check className="w-3.5 h-3.5 stroke-[2.5]" />
-                  </div>
-                  <span className="text-xs md:text-sm font-semibold text-[#2B352E]">{item}</span>
-                </div>
-              ))}
+            {/* Leaf Graphic */}
+            <div className="pt-2">
+              <svg className="w-8 h-8 text-[#88B04B]" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M12 3C10.5 6 7 8 4 8C7 11 10.5 13 12 16C13.5 13 17 11 20 8C17 8 13.5 6 12 3Z" fill="currentColor" opacity="0.3" />
+                <path d="M12 21V16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+              </svg>
             </div>
-
-            {/* CTA Button */}
-            <div className="pt-4">
-              <a
-                href={`/tenant/${activeSlug}/admin`}
-                className="inline-flex items-center gap-2 bg-[#1E3A2B] hover:bg-[#15291E] text-white px-6 py-3.5 rounded-2xl text-xs font-semibold uppercase tracking-wider transition-all shadow-sm hover:shadow-md group"
-              >
-                <span>See It in Action</span>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </a>
-            </div>
-
           </div>
 
-          {/* Right Column: Realistic Dashboard Mockup Card */}
-          <div className="lg:col-span-7">
-            <div className="bg-white rounded-3xl border border-[#EDE8E0] shadow-2xl p-6 md:p-7 space-y-6 text-[#1F2923] font-sans">
-              
-              {/* Mockup Top Header */}
-              <div className="flex items-center justify-between pb-4 border-b border-[#F0EBE1]">
-                <div className="flex items-center gap-3">
-                  <div className="w-7 h-7 rounded-lg bg-[#1E3A2B] flex items-center justify-center text-white text-xs font-bold">
-                    C
-                  </div>
-                  <span className="font-bold text-sm text-[#1F2923]">Careva <span className="text-[10px] text-slate-400 uppercase font-mono font-medium">Spa & Salon ERP</span></span>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500">
-                    <Search className="w-3.5 h-3.5" />
-                  </div>
-                  <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 relative">
-                    <Bell className="w-3.5 h-3.5" />
-                    <span className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                  </div>
-                  <img
-                    src="/testimonial_avatar.png"
-                    alt="Admin Avatar"
-                    className="w-8 h-8 rounded-full object-cover border border-slate-200"
-                  />
-                </div>
-              </div>
-
-              {/* Welcome & Date Picker */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          {/* Right Column: 3 Pricing Cards Grid */}
+          <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
+            
+            {/* Starter Plan */}
+            <div className="bg-white border border-[#EDE8E0] rounded-3xl p-6 flex flex-col justify-between space-y-6 shadow-sm hover:shadow-md transition-all">
+              <div className="space-y-4">
                 <div>
-                  <h3 className="font-bold text-base text-[#1F2923]">Welcome back, Admin 👋</h3>
-                  <p className="text-[11px] text-slate-400">Here's what's happening at your spa & salon today.</p>
+                  <h3 className="font-bold text-lg text-[#1F2923]">Starter</h3>
+                  <p className="text-xs text-[#6E7A72] mt-1">Perfect for small spas & salons getting started.</p>
                 </div>
 
-                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#EDE8E0] text-[11px] font-medium text-slate-600 bg-[#FAF8F5]">
-                  <Calendar className="w-3.5 h-3.5 text-slate-400" />
-                  <span>May 12 - May 18, 2024</span>
-                  <ChevronDown className="w-3 h-3 text-slate-400 ml-1" />
+                <div className="pt-2 border-t border-[#F0EBE1]">
+                  <span className="font-luxury text-3xl font-bold text-[#1F2923]">₹2,999</span>
+                  <span className="text-xs text-[#6E7A72]"> /month</span>
+                  <p className="text-[10px] text-slate-400 font-medium">Billed annually</p>
+                </div>
+
+                <div className="space-y-2.5 pt-2 text-xs text-[#2B352E]">
+                  <div className="flex items-center gap-2">
+                    <Check className="w-4 h-4 text-[#1E3A2B] shrink-0" />
+                    <span>Up to 2 Staff Users</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Check className="w-4 h-4 text-[#1E3A2B] shrink-0" />
+                    <span>Online Booking</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Check className="w-4 h-4 text-[#1E3A2B] shrink-0" />
+                    <span>Client Management</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Check className="w-4 h-4 text-[#1E3A2B] shrink-0" />
+                    <span>Basic Reports</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Check className="w-4 h-4 text-[#1E3A2B] shrink-0" />
+                    <span>Email Support</span>
+                  </div>
                 </div>
               </div>
 
-              {/* 4 Stat Cards */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                
-                {/* Stat 1 */}
-                <div className="bg-[#FAF8F5] border border-[#F0EBE1] rounded-2xl p-3.5">
-                  <span className="text-[10px] text-slate-500 font-semibold block mb-1">Total Revenue</span>
-                  <p className="text-base sm:text-lg font-black text-[#1F2923]">₹ 2,45,000</p>
-                  <span className="text-[10px] font-semibold text-emerald-600 mt-0.5 block">+12.5% from last week</span>
-                </div>
-
-                {/* Stat 2 */}
-                <div className="bg-[#FAF8F5] border border-[#F0EBE1] rounded-2xl p-3.5">
-                  <span className="text-[10px] text-slate-500 font-semibold block mb-1">Appointments</span>
-                  <p className="text-base sm:text-lg font-black text-[#1F2923]">128</p>
-                  <span className="text-[10px] font-semibold text-emerald-600 mt-0.5 block">+8.2% from last week</span>
-                </div>
-
-                {/* Stat 3 */}
-                <div className="bg-[#FAF8F5] border border-[#F0EBE1] rounded-2xl p-3.5">
-                  <span className="text-[10px] text-slate-500 font-semibold block mb-1">New Clients</span>
-                  <p className="text-base sm:text-lg font-black text-[#1F2923]">32</p>
-                  <span className="text-[10px] font-semibold text-emerald-600 mt-0.5 block">+11.3% from last week</span>
-                </div>
-
-                {/* Stat 4 */}
-                <div className="bg-[#FAF8F5] border border-[#F0EBE1] rounded-2xl p-3.5">
-                  <span className="text-[10px] text-slate-500 font-semibold block mb-1">Products Sold</span>
-                  <p className="text-base sm:text-lg font-black text-[#1F2923]">356</p>
-                  <span className="text-[10px] font-semibold text-emerald-600 mt-0.5 block">+9.4% from last week</span>
-                </div>
-
-              </div>
-
-              {/* Chart & Top Services Side-by-Side */}
-              <div className="grid grid-cols-1 sm:grid-cols-12 gap-5 pt-2">
-                
-                {/* Revenue Overview Graph */}
-                <div className="sm:col-span-7 bg-[#FAF8F5] border border-[#F0EBE1] rounded-2xl p-4 space-y-3">
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs font-bold text-[#1F2923]">Revenue Overview</span>
-                    <span className="text-[10px] bg-white border border-[#E5E0D5] px-2 py-0.5 rounded-lg text-slate-500 font-medium">This Week ˅</span>
-                  </div>
-
-                  {/* SVG Wave Line */}
-                  <div className="h-28 w-full pt-2">
-                    <svg className="w-full h-full" viewBox="0 0 300 90" fill="none">
-                      <path
-                        d="M 0 70 Q 50 30, 100 55 T 200 35 T 300 20"
-                        stroke="#1E3A2B"
-                        strokeWidth="3"
-                        fill="none"
-                      />
-                      <path
-                        d="M 0 70 Q 50 30, 100 55 T 200 35 T 300 20 L 300 90 L 0 90 Z"
-                        fill="url(#greenGradient)"
-                        opacity="0.15"
-                      />
-                      <defs>
-                        <linearGradient id="greenGradient" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="0%" stopColor="#1E3A2B" />
-                          <stop offset="100%" stopColor="#FAF8F5" />
-                        </linearGradient>
-                      </defs>
-                    </svg>
-                  </div>
-
-                  <div className="flex justify-between text-[9px] text-slate-400 font-medium pt-1 border-t border-slate-200/60">
-                    <span>May 12</span>
-                    <span>May 13</span>
-                    <span>May 14</span>
-                    <span>May 15</span>
-                    <span>May 16</span>
-                    <span>May 17</span>
-                    <span>May 18</span>
-                  </div>
-                </div>
-
-                {/* Top Services Table */}
-                <div className="sm:col-span-5 bg-[#FAF8F5] border border-[#F0EBE1] rounded-2xl p-4 space-y-2.5">
-                  <span className="text-xs font-bold text-[#1F2923] block mb-1">Top Services & Treatments</span>
-                  
-                  {[
-                    { name: "Aroma Therapy Massage", revenue: "₹ 78,500", pct: "85%" },
-                    { name: "Hair Cut & Styling", revenue: "₹ 64,200", pct: "72%" },
-                    { name: "Deep Tissue Therapy", revenue: "₹ 56,000", pct: "60%" },
-                    { name: "Facial & Skin Cleanup", revenue: "₹ 43,200", pct: "48%" },
-                    { name: "Body Spa & Pedicure", revenue: "₹ 32,100", pct: "35%" },
-                  ].map((service, idx) => (
-                    <div key={idx} className="space-y-1 text-[10px]">
-                      <div className="flex justify-between font-semibold text-slate-700">
-                        <span>{service.name}</span>
-                        <span className="font-bold text-[#1F2923]">{service.revenue}</span>
-                      </div>
-                      <div className="w-full h-1.5 bg-slate-200/80 rounded-full overflow-hidden">
-                        <div className="h-full bg-[#1E3A2B] rounded-full" style={{ width: service.pct }} />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-              </div>
-
+              <button
+                onClick={() => openDemoModal("Starter")}
+                className="w-full py-3 rounded-2xl border border-[#EDE8E0] text-[#1E3A2B] font-bold text-xs hover:bg-[#FAF8F5] transition-colors cursor-pointer"
+              >
+                Get Started
+              </button>
             </div>
+
+            {/* Professional Plan (MOST POPULAR) */}
+            <div className="bg-white border-2 border-[#1E3A2B] rounded-3xl p-6 flex flex-col justify-between space-y-6 shadow-xl relative scale-105 z-10">
+              
+              {/* Badge */}
+              <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-[#1E3A2B] text-white px-3.5 py-1 rounded-full text-[9px] font-extrabold uppercase tracking-widest shadow-sm">
+                MOST POPULAR
+              </div>
+
+              <div className="space-y-4">
+                <div>
+                  <h3 className="font-bold text-lg text-[#1F2923]">Professional</h3>
+                  <p className="text-xs text-[#6E7A72] mt-1">For growing spas, salons & wellness centers.</p>
+                </div>
+
+                <div className="pt-2 border-t border-[#F0EBE1]">
+                  <span className="font-luxury text-3xl font-bold text-[#1F2923]">₹5,999</span>
+                  <span className="text-xs text-[#6E7A72]"> /month</span>
+                  <p className="text-[10px] text-slate-400 font-medium">Billed annually</p>
+                </div>
+
+                <div className="space-y-2.5 pt-2 text-xs text-[#2B352E]">
+                  <div className="flex items-center gap-2 font-semibold">
+                    <Check className="w-4 h-4 text-[#1E3A2B] shrink-0" />
+                    <span>Up to 10 Staff Users</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Check className="w-4 h-4 text-[#1E3A2B] shrink-0" />
+                    <span>Everything in Starter</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Check className="w-4 h-4 text-[#1E3A2B] shrink-0" />
+                    <span>Inventory Management</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Check className="w-4 h-4 text-[#1E3A2B] shrink-0" />
+                    <span>Advanced Reports</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Check className="w-4 h-4 text-[#1E3A2B] shrink-0" />
+                    <span>SMS & Email Marketing</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Check className="w-4 h-4 text-[#1E3A2B] shrink-0" />
+                    <span>Priority Support</span>
+                  </div>
+                </div>
+              </div>
+
+              <button
+                onClick={() => openDemoModal("Professional")}
+                className="w-full py-3.5 rounded-2xl bg-[#1E3A2B] hover:bg-[#15291E] text-white font-bold text-xs uppercase tracking-wider transition-all shadow-md cursor-pointer"
+              >
+                Get Started
+              </button>
+            </div>
+
+            {/* Enterprise Plan */}
+            <div className="bg-white border border-[#EDE8E0] rounded-3xl p-6 flex flex-col justify-between space-y-6 shadow-sm hover:shadow-md transition-all">
+              <div className="space-y-4">
+                <div>
+                  <h3 className="font-bold text-lg text-[#1F2923]">Enterprise</h3>
+                  <p className="text-xs text-[#6E7A72] mt-1">For large spa chains, resorts & multi-outlets.</p>
+                </div>
+
+                <div className="pt-2 border-t border-[#F0EBE1]">
+                  <span className="font-luxury text-3xl font-bold text-[#1F2923]">₹11,999</span>
+                  <span className="text-xs text-[#6E7A72]"> /month</span>
+                  <p className="text-[10px] text-slate-400 font-medium">Billed annually</p>
+                </div>
+
+                <div className="space-y-2.5 pt-2 text-xs text-[#2B352E]">
+                  <div className="flex items-center gap-2 font-semibold">
+                    <Check className="w-4 h-4 text-[#1E3A2B] shrink-0" />
+                    <span>Unlimited Staff Users</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Check className="w-4 h-4 text-[#1E3A2B] shrink-0" />
+                    <span>Everything in Professional</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Check className="w-4 h-4 text-[#1E3A2B] shrink-0" />
+                    <span>Multi-location Management</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Check className="w-4 h-4 text-[#1E3A2B] shrink-0" />
+                    <span>Custom Integrations</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Check className="w-4 h-4 text-[#1E3A2B] shrink-0" />
+                    <span>Dedicated Account Manager</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Check className="w-4 h-4 text-[#1E3A2B] shrink-0" />
+                    <span>24/7 Phone Support</span>
+                  </div>
+                </div>
+              </div>
+
+              <button
+                onClick={() => openDemoModal("Enterprise")}
+                className="w-full py-3 rounded-2xl border border-[#EDE8E0] text-[#1E3A2B] font-bold text-xs hover:bg-[#FAF8F5] transition-colors cursor-pointer"
+              >
+                Get Started
+              </button>
+            </div>
+
           </div>
 
         </div>
       </section>
 
-      {/* ─── SECTION 4: TESTIMONIAL & READY TO ELEVATE CTA ─── */}
+      {/* ─── SECTION 4: TESTIMONIAL & DARK GREEN CTA BANNER ─── */}
       <section id="testimonials" className="py-20 md:py-24 bg-white border-t border-[#EDE8E0]">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-10 items-stretch">
           
-          {/* Left Column: Loved by Spa & Salon Professionals Testimonial */}
-          <div className="lg:col-span-6 flex flex-col justify-between space-y-8 pr-0 lg:pr-6">
+          {/* Left Column: Testimonial */}
+          <div className="lg:col-span-5 flex flex-col justify-between space-y-8 pr-0 lg:pr-4">
             
             <div className="space-y-4">
-              <div className="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-widest text-[#1E3A2B]">
-                <span>TRUSTED BY SPA & SALON OWNERS</span>
-                <span className="text-[#88B04B]">🌿</span>
-              </div>
+              <span className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#5A685D] block">
+                TRUSTED BY SPA OWNERS
+              </span>
 
               <h2 className="font-luxury text-3xl sm:text-4xl text-[#1F2923] leading-snug">
-                Loved by Spa & Salon Professionals Across the Country
+                Loved by Spa Professionals Across the Country
               </h2>
             </div>
 
             {/* Quote block */}
-            <div className="space-y-6 pt-2">
+            <div className="space-y-5 pt-1">
               <span className="font-serif text-5xl text-[#C9D6CC] leading-none block -mb-4">“</span>
-              <p className="text-[#4A574E] text-base md:text-lg leading-relaxed font-normal italic">
-                Careva has transformed the way we manage our luxury salon and spa. It's easy to use, saves us hours every day, and helps us focus on what truly matters — our clients.
+              <p className="text-[#4A574E] text-base leading-relaxed font-normal italic">
+                Careva has completely transformed the way we manage our spa. It's easy to use, saves us time and helps us focus on what truly matters — our clients.
               </p>
 
               {/* Author Profile */}
               <div className="flex items-center gap-3.5 pt-2">
                 <img
                   src="/testimonial_avatar.png"
-                  alt="Priya Mehta"
-                  className="w-12 h-12 rounded-full object-cover border border-[#EDE8E0]"
+                  alt="Anjali Mehta"
+                  className="w-11 h-11 rounded-full object-cover border border-[#EDE8E0]"
                 />
                 <div>
-                  <h4 className="font-bold text-sm text-[#1F2923]">Priya Mehta</h4>
-                  <p className="text-xs text-[#6E7A72]">Serenity Spa & Hair Salon, Mumbai</p>
+                  <h4 className="font-bold text-sm text-[#1F2923]">Anjali Mehta</h4>
+                  <p className="text-xs text-[#6E7A72]">Owner, Aura Day Spa, Bangalore</p>
+                  <div className="flex items-center gap-1 text-[#E5A93C] mt-1">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-3.5 h-3.5 fill-current" />
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
 
             {/* Pagination dots */}
-            <div className="flex items-center gap-2 pt-4">
+            <div className="flex items-center gap-2 pt-2">
+              <span className="w-2 h-2 rounded-full border border-[#1E3A2B]" />
               <span className="w-2.5 h-2.5 rounded-full bg-[#1E3A2B]" />
-              <span className="w-2 h-2 rounded-full bg-[#D5DDD7]" />
-              <span className="w-2 h-2 rounded-full bg-[#D5DDD7]" />
+              <span className="w-2 h-2 rounded-full border border-[#1E3A2B]" />
             </div>
 
           </div>
 
-          {/* Right Column: High-Converting CTA Box with Zen Stones */}
-          <div className="lg:col-span-6 bg-[#EFF4EE] border border-[#DFE8DC] rounded-3xl p-8 md:p-10 relative overflow-hidden flex flex-col justify-between min-h-[340px]">
+          {/* Right Column: Dark Forest Green CTA Banner */}
+          <div className="lg:col-span-7 bg-[#1E3A2B] text-white rounded-3xl p-8 sm:p-12 relative overflow-hidden flex flex-col justify-between shadow-2xl min-h-[360px]">
             
-            {/* Lotus graphic top left */}
-            <div className="w-10 h-10 rounded-full bg-white/80 border border-[#D0DFC9] flex items-center justify-center text-[#1E3A2B] shadow-xs mb-6">
-              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 3C10.5 6 7 8 4 8C7 11 10.5 13 12 16C13.5 13 17 11 20 8C17 8 13.5 6 12 3Z" fill="currentColor" opacity="0.9" />
-                <path d="M12 8C11 10 8.5 11.5 6 11.5C8.5 13.5 11 15 12 17C13 15 15.5 13.5 18 11.5C15.5 11.5 13 10 12 8Z" fill="#88B04B" />
-              </svg>
+            {/* Background image overlay */}
+            <div className="absolute inset-0 opacity-20 pointer-events-none">
+              <img src="/hero_spa_massage.png" alt="Spa Background" className="w-full h-full object-cover" />
             </div>
 
-            <div className="space-y-3 z-10 max-w-sm">
-              <h3 className="font-luxury text-2xl md:text-3xl text-[#1E3A2B] leading-tight">
-                Ready to Elevate Your Spa & Salon Business?
+            <div className="space-y-4 z-10 max-w-md">
+              <h3 className="font-luxury text-3xl sm:text-4xl text-white leading-tight">
+                Ready to Elevate Your Spa Business?
               </h3>
-              <p className="text-xs md:text-sm text-[#3E5244] leading-relaxed">
-                Join hundreds of spa & salon owners who are growing their business with Careva Spa & Salon ERP.
+              <p className="text-[#C8D6CB] text-sm md:text-base leading-relaxed">
+                Join hundreds of spa owners who are simplifying operations and growing their business with Careva.
               </p>
             </div>
 
-            {/* CTA Button */}
-            <div className="pt-6 z-10">
+            {/* CTA Button & Subtext */}
+            <div className="pt-8 z-10">
               <button
                 onClick={() => openDemoModal()}
-                className="bg-[#1E3A2B] hover:bg-[#15291E] text-white px-6 py-3.5 rounded-2xl text-xs font-semibold uppercase tracking-wider transition-all shadow-md hover:shadow-lg flex items-center gap-2 group cursor-pointer active:scale-98"
+                className="bg-white hover:bg-slate-100 text-[#1E3A2B] px-7 py-3.5 rounded-full font-bold text-xs uppercase tracking-wider transition-all shadow-lg flex items-center gap-2 group cursor-pointer active:scale-98"
               >
                 <span>Book a Demo Now</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
-            </div>
-
-            {/* Zen Stones Graphic Bottom Right */}
-            <div className="absolute right-0 bottom-0 w-44 md:w-56 pointer-events-none opacity-90">
-              <img
-                src="/zen_spa_stones.png"
-                alt="Balanced Spa Stones"
-                className="w-full h-auto object-contain"
-              />
+              <span className="text-[11px] text-[#A6B8AA] mt-2.5 block">No credit card required</span>
             </div>
 
           </div>
@@ -741,64 +878,168 @@ export default function CarevaLandingPage() {
         </div>
       </section>
 
-      {/* ─── SECTION 5: BOTTOM TRUST SIGNAL BAR ─── */}
-      <footer className="py-10 bg-[#FAF8F5] border-t border-[#EDE8E0]">
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-6">
+      {/* ─── SECTION 5: TRUST BADGES ROW ─── */}
+      <section className="py-10 bg-[#FAF8F5] border-t border-[#EDE8E0]">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-5 gap-6">
           
-          {/* Trust item 1 */}
+          {/* Trust 1 */}
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-full bg-white border border-[#E5E0D5] flex items-center justify-center text-[#1E3A2B] shrink-0 shadow-xs">
+              <PenTool className="w-4 h-4 stroke-[2]" />
+            </div>
+            <div>
+              <h5 className="font-bold text-xs text-[#1F2923]">Easy Setup</h5>
+              <p className="text-[10px] text-[#6E7A72]">Get started in minutes</p>
+            </div>
+          </div>
+
+          {/* Trust 2 */}
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-full bg-white border border-[#E5E0D5] flex items-center justify-center text-[#1E3A2B] shrink-0 shadow-xs">
               <ShieldCheck className="w-4 h-4 stroke-[2]" />
             </div>
             <div>
               <h5 className="font-bold text-xs text-[#1F2923]">Secure & Reliable</h5>
-              <p className="text-[10px] text-[#6E7A72]">Your data is safe with us</p>
+              <p className="text-[10px] text-[#6E7A72]">Your data is 100% safe</p>
             </div>
           </div>
 
-          {/* Trust item 2 */}
+          {/* Trust 3 */}
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-full bg-white border border-[#E5E0D5] flex items-center justify-center text-[#1E3A2B] shrink-0 shadow-xs">
-              <Sparkles className="w-4 h-4 stroke-[2]" />
+              <RefreshCw className="w-4 h-4 stroke-[2]" />
             </div>
             <div>
-              <h5 className="font-bold text-xs text-[#1F2923]">Easy to Use</h5>
-              <p className="text-[10px] text-[#6E7A72]">Simple. Intuitive. Efficient.</p>
+              <h5 className="font-bold text-xs text-[#1F2923]">Regular Updates</h5>
+              <p className="text-[10px] text-[#6E7A72]">Always getting better</p>
             </div>
           </div>
 
-          {/* Trust item 3 */}
+          {/* Trust 4 */}
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-full bg-white border border-[#E5E0D5] flex items-center justify-center text-[#1E3A2B] shrink-0 shadow-xs">
-              <Clock className="w-4 h-4 stroke-[2]" />
+              <Smartphone className="w-4 h-4 stroke-[2]" />
             </div>
             <div>
-              <h5 className="font-bold text-xs text-[#1F2923]">24/7 Support</h5>
-              <p className="text-[10px] text-[#6E7A72]">We're here when you need us</p>
+              <h5 className="font-bold text-xs text-[#1F2923]">Works Everywhere</h5>
+              <p className="text-[10px] text-[#6E7A72]">Web, Mobile & Tablet</p>
             </div>
           </div>
 
-          {/* Trust item 4 */}
-          <div className="flex items-center gap-3">
+          {/* Trust 5 */}
+          <div className="flex items-center gap-3 col-span-2 md:col-span-1">
             <div className="w-9 h-9 rounded-full bg-white border border-[#E5E0D5] flex items-center justify-center text-[#1E3A2B] shrink-0 shadow-xs">
-              <TrendingUp className="w-4 h-4 stroke-[2]" />
+              <Headphones className="w-4 h-4 stroke-[2]" />
             </div>
             <div>
-              <h5 className="font-bold text-xs text-[#1F2923]">Scalable</h5>
-              <p className="text-[10px] text-[#6E7A72]">Grow your spa or salon, we'll grow with you</p>
+              <h5 className="font-bold text-xs text-[#1F2923]">Dedicated Support</h5>
+              <p className="text-[10px] text-[#6E7A72]">We're here for you</p>
             </div>
           </div>
 
         </div>
+      </section>
 
-        {/* Copyright */}
-        <div className="max-w-7xl mx-auto px-6 mt-8 pt-6 border-t border-[#EDE8E0]/60 flex flex-col sm:flex-row items-center justify-between text-[11px] text-[#8C988F]">
-          <p>© {new Date().getFullYear()} Careva Spa & Salon ERP. All rights reserved.</p>
-          <div className="flex items-center gap-6 mt-2 sm:mt-0">
-            <a href="#" className="hover:text-[#1E3A2B] transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-[#1E3A2B] transition-colors">Terms of Service</a>
-            <a href="/superadmin" className="hover:text-[#1E3A2B] transition-colors font-bold text-[#1E3A2B]">Super Admin Portal</a>
+      {/* ─── SECTION 6: DEEP FOREST GREEN FOOTER ─── */}
+      <footer id="footer" className="bg-[#15271D] text-[#C0CCC3] pt-16 pb-8 border-t border-[#1E3A2B]">
+        <div className="max-w-7xl mx-auto px-6 space-y-12">
+          
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+            
+            {/* Col 1: Brand Info */}
+            <div className="md:col-span-4 space-y-4">
+              <CarevaSpaLogo darkBg={true} />
+              <p className="text-xs text-[#9EB0A3] leading-relaxed max-w-sm">
+                The all-in-one ERP software designed exclusively for spa & wellness businesses.
+              </p>
+
+              {/* Social icons */}
+              <div className="flex items-center gap-3 pt-2">
+                <a href="#" className="w-8 h-8 rounded-full bg-[#1E3A2B] flex items-center justify-center text-[#C0CCC3] hover:text-white transition-colors">
+                  <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                </a>
+                <a href="#" className="w-8 h-8 rounded-full bg-[#1E3A2B] flex items-center justify-center text-[#C0CCC3] hover:text-white transition-colors">
+                  <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                </a>
+                <a href="#" className="w-8 h-8 rounded-full bg-[#1E3A2B] flex items-center justify-center text-[#C0CCC3] hover:text-white transition-colors">
+                  <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.762-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                </a>
+                <a href="#" className="w-8 h-8 rounded-full bg-[#1E3A2B] flex items-center justify-center text-[#C0CCC3] hover:text-white transition-colors">
+                  <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                </a>
+              </div>
+            </div>
+
+            {/* Col 2: Product */}
+            <div className="md:col-span-2 space-y-3">
+              <h5 className="font-bold text-xs text-white uppercase tracking-wider">Product</h5>
+              <ul className="space-y-2 text-xs">
+                <li><a href="#features" className="hover:text-white transition-colors">Features</a></li>
+                <li><a href="#pricing" className="hover:text-white transition-colors">Pricing</a></li>
+                <li><a href="#solutions" className="hover:text-white transition-colors">Integrations</a></li>
+                <li><a href="#features" className="hover:text-white transition-colors">Changelog</a></li>
+              </ul>
+            </div>
+
+            {/* Col 3: Company */}
+            <div className="md:col-span-2 space-y-3">
+              <h5 className="font-bold text-xs text-white uppercase tracking-wider">Company</h5>
+              <ul className="space-y-2 text-xs">
+                <li><a href="#footer" className="hover:text-white transition-colors">About Us</a></li>
+                <li><a href="#footer" className="hover:text-white transition-colors">Blog</a></li>
+                <li><a href="#footer" className="hover:text-white transition-colors">Careers</a></li>
+                <li><a href="#footer" className="hover:text-white transition-colors">Contact Us</a></li>
+              </ul>
+            </div>
+
+            {/* Col 4: Resources */}
+            <div className="md:col-span-2 space-y-3">
+              <h5 className="font-bold text-xs text-white uppercase tracking-wider">Resources</h5>
+              <ul className="space-y-2 text-xs">
+                <li><a href={`/tenant/${activeSlug}/booking`} className="hover:text-white transition-colors">Help Center</a></li>
+                <li><a href="/superadmin" className="hover:text-white transition-colors">Guides</a></li>
+                <li><a href={`/tenant/${activeSlug}/admin`} className="hover:text-white transition-colors">Webinars</a></li>
+                <li><a href="#footer" className="hover:text-white transition-colors">Support</a></li>
+              </ul>
+            </div>
+
+            {/* Col 5: Newsletter */}
+            <div className="md:col-span-2 space-y-3">
+              <h5 className="font-bold text-xs text-white uppercase tracking-wider">Newsletter</h5>
+              <p className="text-[11px] text-[#9EB0A3]">Get tips, updates & resources straight to your inbox.</p>
+              
+              <form onSubmit={handleNewsletterSubmit} className="space-y-2">
+                <div className="relative">
+                  <input
+                    type="email"
+                    required
+                    placeholder="Enter your email"
+                    value={newsletterEmail}
+                    onChange={(e) => setNewsletterEmail(e.target.value)}
+                    className="w-full bg-[#1E3A2B] border border-[#2D4D3A] rounded-xl px-3 py-2 pr-9 text-xs text-white placeholder:text-slate-400 focus:outline-none focus:border-[#88B04B]"
+                  />
+                  <button type="submit" className="absolute right-1 top-1/2 -translate-y-1/2 p-1.5 text-slate-300 hover:text-white">
+                    <Send className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+                {newsletterSent && (
+                  <p className="text-[10px] text-emerald-400">Subscribed successfully!</p>
+                )}
+              </form>
+            </div>
+
           </div>
+
+          {/* Bottom Copyright Bar */}
+          <div className="pt-6 border-t border-[#1E3A2B] flex flex-col sm:flex-row items-center justify-between text-[11px] text-[#809486]">
+            <p>© 2026 Careva Spa ERP. All rights reserved.</p>
+            <div className="flex items-center gap-6 mt-2 sm:mt-0">
+              <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
+              <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
+              <a href="#" className="hover:text-white transition-colors">Cookie Policy</a>
+            </div>
+          </div>
+
         </div>
       </footer>
 
@@ -837,7 +1078,7 @@ export default function CarevaLandingPage() {
                     <span>Free Live Demo</span>
                   </div>
                   <h3 className="font-luxury text-2xl text-[#1F2923]">Book Your Spa & Salon Demo</h3>
-                  <p className="text-xs text-slate-500">Experience how Careva Spa & Salon ERP simplifies your operations.</p>
+                  <p className="text-xs text-slate-500">Experience how Careva Spa ERP simplifies your operations.</p>
                 </div>
 
                 {errorMsg && (
