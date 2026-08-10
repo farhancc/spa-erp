@@ -15,6 +15,11 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Careva — Premium Multi-Tenant Salon & Spa SaaS Platform",
   description: "Next-generation booking, POS, CRM, and customer retention platform for high-end salons, spas, and grooming outlets.",
+  icons: {
+    icon: "/icon.png",
+    shortcut: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
+  },
 };
 
 export default function RootLayout({

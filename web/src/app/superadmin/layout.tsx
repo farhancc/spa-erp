@@ -19,11 +19,8 @@ function SuperAdminSidebar({
     <aside className="w-full md:w-64 border-b md:border-b-0 md:border-r border-slate-900 bg-slate-950/60 backdrop-blur-md flex flex-col justify-between shrink-0 p-6">
       <div className="space-y-8">
         {/* Logo */}
-        <div className="flex items-center gap-2.5">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center shadow-lg shadow-emerald-500/20 relative overflow-hidden group">
-            <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-            <Shield className="size-5 text-white animate-pulse" />
-          </div>
+        <div className="flex items-center gap-3">
+          <img src="/logo-icon.png" alt="Careva Logo" className="w-9 h-9 object-contain rounded-xl shadow-lg shadow-emerald-500/20" />
           <div>
             <span className="font-black text-xl tracking-tight bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent">
               Careva

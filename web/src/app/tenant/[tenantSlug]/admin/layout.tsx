@@ -576,9 +576,7 @@ export default function TenantAdminLayout({
           {/* Identity Block */}
           <div className="text-center mb-8 space-y-4">
             <div className="inline-flex flex-col items-center gap-4">
-              <div className="w-14 h-14 rounded-2xl bg-white border border-stone-200 shadow-xs flex items-center justify-center">
-                <Receipt className="size-6 text-stone-800" />
-              </div>
+              <img src="/logo-icon.png" alt="Careva Logo" className="w-14 h-14 object-contain rounded-2xl bg-white border border-stone-200 p-1 shadow-xs" />
               <div className="space-y-1">
                 <span className="text-3xl font-normal font-luxury tracking-normal text-stone-900 block leading-tight">{businessName}</span>
                 <span className="text-[9px] block font-semibold tracking-[0.22em] text-stone-500 uppercase font-minimal">Workspace Control Desk</span>
@@ -781,9 +779,7 @@ export default function TenantAdminLayout({
         <div className="space-y-8 flex-1 flex flex-col">
           {/* Logo & Tenant Identity */}
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-stone-900 flex items-center justify-center shadow-sm shrink-0">
-              <Receipt className="size-5 text-[#FAF9F6]" />
-            </div>
+            <img src="/logo-icon.png" alt="Careva Logo" className="w-10 h-10 object-contain rounded-xl border border-stone-200 p-0.5 shadow-sm shrink-0" />
             <div>
               <span className="font-normal font-luxury text-lg tracking-tight text-stone-900 block leading-tight capitalize">
                 {businessName}
