@@ -42,25 +42,17 @@ import {
 } from "lucide-react";
 import { getSharedTenants, saveDemoBooking } from "../shared/utils/utils";
 
-// Clean Lotus & Spa/Salon Brand Logo
+// New Careva Salon ERP Brand Logo
 function CarevaSpaLogo({ darkBg = false }: { darkBg?: boolean }) {
   return (
-    <Link href="/" className="flex items-center gap-3 group">
-      <div className={`w-9.5 h-9.5 rounded-full ${darkBg ? "bg-white text-[#15271D]" : "bg-[#1E3A2B] text-white"} flex items-center justify-center shadow-sm transition-transform group-hover:scale-105`}>
-        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 3C10.5 6 7 8 4 8C7 11 10.5 13 12 16C13.5 13 17 11 20 8C17 8 13.5 6 12 3Z" fill="currentColor" opacity="0.9" />
-          <path d="M12 8C11 10 8.5 11.5 6 11.5C8.5 13.5 11 15 12 17C13 15 15.5 13.5 18 11.5C15.5 11.5 13 10 12 8Z" fill={darkBg ? "#15271D" : "#88B04B"} />
-          <path d="M12 21V16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-        </svg>
-      </div>
-      <div className="flex flex-col">
-        <span className={`font-luxury font-bold text-xl tracking-tight leading-none ${darkBg ? "text-white" : "text-[#1F2923]"}`}>
-          Careva
-        </span>
-        <span className={`text-[9px] font-sans font-extrabold tracking-[0.22em] uppercase -mt-0.5 ${darkBg ? "text-[#9EB0A3]" : "text-[#5A685D]"}`}>
-          SPA & SALON ERP
-        </span>
-      </div>
+    <Link href="/" className="flex items-center gap-2 group">
+      <img
+        src="/careva-logo.png"
+        alt="Careva Salon ERP"
+        className={`h-10 w-auto object-contain rounded-xl transition-transform group-hover:scale-105 ${
+          darkBg ? "bg-white p-1 shadow-sm" : ""
+        }`}
+      />
     </Link>
   );
 }
