@@ -32,11 +32,11 @@ import {
 } from "lucide-react";
 import { getSharedTenants, saveDemoBooking } from "../shared/utils/utils";
 
-// Clean Lotus Icon Logo matching reference image
+// Clean Lotus & Scissors Spa & Salon Logo
 function CarevaSpaLogo() {
   return (
     <Link href="/" className="flex items-center gap-3 group">
-      <div className="w-9 h-9 rounded-full bg-[#1E3A2B] flex items-center justify-center text-white shadow-sm transition-transform group-hover:scale-105">
+      <div className="w-9.5 h-9.5 rounded-full bg-[#1E3A2B] flex items-center justify-center text-white shadow-sm transition-transform group-hover:scale-105">
         <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M12 3C10.5 6 7 8 4 8C7 11 10.5 13 12 16C13.5 13 17 11 20 8C17 8 13.5 6 12 3Z" fill="currentColor" opacity="0.9" />
           <path d="M12 8C11 10 8.5 11.5 6 11.5C8.5 13.5 11 15 12 17C13 15 15.5 13.5 18 11.5C15.5 11.5 13 10 12 8Z" fill="#88B04B" />
@@ -47,8 +47,8 @@ function CarevaSpaLogo() {
         <span className="font-luxury font-bold text-xl tracking-tight text-[#1F2923] leading-none">
           Careva
         </span>
-        <span className="text-[9px] font-sans font-semibold tracking-[0.25em] text-[#6E7A72] uppercase -mt-0.5">
-          SPA ERP
+        <span className="text-[9px] font-sans font-extrabold tracking-[0.22em] text-[#5A685D] uppercase -mt-0.5">
+          SPA & SALON ERP
         </span>
       </div>
     </Link>
@@ -66,11 +66,11 @@ export default function CarevaLandingPage() {
   const [emailAddress, setEmailAddress] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [cityLocation, setCityLocation] = useState("");
-  const [selectedPlan, setSelectedPlan] = useState("Growth Spa");
+  const [selectedPlan, setSelectedPlan] = useState("Spa & Salon Growth");
   const [demoSuccess, setDemoSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
-  // Solutions dropdown state
+  // Dropdown states
   const [isSolutionsOpen, setIsSolutionsOpen] = useState(false);
   const [isResourcesOpen, setIsResourcesOpen] = useState(false);
 
@@ -151,16 +151,16 @@ export default function CarevaLandingPage() {
               {isSolutionsOpen && (
                 <div className="absolute top-full left-0 w-64 bg-white rounded-2xl shadow-xl border border-[#EDE8E0] p-3 space-y-1 z-50">
                   <a href={`/tenant/${activeSlug}`} className="block p-2.5 rounded-xl hover:bg-[#FAF8F5] transition-colors">
-                    <p className="font-bold text-[#1F2923] text-xs">Day Spas & Wellness Centers</p>
-                    <p className="text-[10px] text-slate-500">Appointments, treatment consents & billing</p>
+                    <p className="font-bold text-[#1F2923] text-xs">Day Spas & Wellness Retreats</p>
+                    <p className="text-[10px] text-slate-500">Therapist rosters, treatment consents & billing</p>
                   </a>
                   <a href={`/tenant/${activeSlug}`} className="block p-2.5 rounded-xl hover:bg-[#FAF8F5] transition-colors">
                     <p className="font-bold text-[#1F2923] text-xs">Hair & Beauty Salons</p>
-                    <p className="text-[10px] text-slate-500">Stylist scheduling & POS checkout</p>
+                    <p className="text-[10px] text-slate-500">Stylist scheduling, chair booking & fast POS</p>
                   </a>
                   <a href={`/tenant/${activeSlug}`} className="block p-2.5 rounded-xl hover:bg-[#FAF8F5] transition-colors">
-                    <p className="font-bold text-[#1F2923] text-xs">Multi-Chain Outlets</p>
-                    <p className="text-[10px] text-slate-500">Centralized analytics & staff payroll</p>
+                    <p className="font-bold text-[#1F2923] text-xs">Multi-Chain Spa & Salon Outlets</p>
+                    <p className="text-[10px] text-slate-500">Centralized reports, inventory & staff payroll</p>
                   </a>
                 </div>
               )}
@@ -183,13 +183,13 @@ export default function CarevaLandingPage() {
               {isResourcesOpen && (
                 <div className="absolute top-full left-0 w-56 bg-white rounded-2xl shadow-xl border border-[#EDE8E0] p-3 space-y-1 z-50">
                   <a href={`/tenant/${activeSlug}/booking`} className="block p-2 rounded-xl hover:bg-[#FAF8F5] text-xs font-semibold text-[#1F2923]">
-                    Online Booking Portal
+                    Online Client Booking Portal
                   </a>
                   <a href="/superadmin" className="block p-2 rounded-xl hover:bg-[#FAF8F5] text-xs font-semibold text-[#1F2923]">
                     Super Admin Console
                   </a>
                   <a href={`/tenant/${activeSlug}/admin`} className="block p-2 rounded-xl hover:bg-[#FAF8F5] text-xs font-semibold text-[#1F2923]">
-                    Outlet Manager Desk
+                    Outlet Operations Desk
                   </a>
                 </div>
               )}
@@ -270,13 +270,13 @@ export default function CarevaLandingPage() {
               <h1 className="font-luxury text-4xl sm:text-5xl lg:text-6xl text-[#1F2923] tracking-tight leading-[1.12]">
                 All-in-One <span className="inline-block text-[#88B04B] font-sans text-3xl md:text-4xl align-top">🌿</span>
                 <br />
-                Spa Management
+                Spa & Salon Management
                 <br />
                 Software
               </h1>
 
               <p className="text-[#5A685D] text-base sm:text-lg max-w-xl leading-relaxed font-normal">
-                Careva Spa ERP helps you manage appointments, clients, staff, inventory and more — all in one beautifully simple platform.
+                Careva Spa & Salon ERP helps you manage appointments, clients, staff, inventory, POS billing and more — all in one beautifully simple platform.
               </p>
             </div>
 
@@ -309,7 +309,7 @@ export default function CarevaLandingPage() {
                 />
                 <img
                   src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=80"
-                  alt="Spa Owner"
+                  alt="Salon Owner"
                   className="w-10 h-10 rounded-full border-2 border-[#FAF8F5] object-cover"
                 />
                 <img
@@ -319,7 +319,7 @@ export default function CarevaLandingPage() {
                 />
                 <img
                   src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&q=80"
-                  alt="Salon Owner"
+                  alt="Spa Director"
                   className="w-10 h-10 rounded-full border-2 border-[#FAF8F5] object-cover"
                 />
               </div>
@@ -332,21 +332,21 @@ export default function CarevaLandingPage() {
                   ))}
                 </div>
                 <p className="text-xs font-semibold text-[#4A574E] mt-0.5">
-                  <span className="font-bold text-[#1F2923]">4.9/5</span> from 200+ spa owners
+                  <span className="font-bold text-[#1F2923]">4.9/5</span> from 200+ spa & salon owners
                 </p>
               </div>
             </div>
 
           </div>
 
-          {/* Right Column: Hero Spa Image Frame */}
+          {/* Right Column: Hero Spa & Salon Image Frame */}
           <div className="lg:col-span-5 relative flex justify-center">
             
-            {/* Arch Mask Container matching reference image */}
+            {/* Arch Mask Container */}
             <div className="relative w-full max-w-md aspect-[4/5] rounded-t-[140px] rounded-b-[40px] overflow-hidden shadow-2xl border-4 border-white/60">
               <img
                 src="/hero_spa_massage.png"
-                alt="Serene Spa Massage Session"
+                alt="Serene Spa & Salon Therapy Session"
                 className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700"
               />
               
@@ -354,14 +354,14 @@ export default function CarevaLandingPage() {
               <div className="absolute inset-0 bg-gradient-to-t from-[#1E3A2B]/20 via-transparent to-transparent pointer-events-none" />
             </div>
 
-            {/* Decorative Floating Pill Badge */}
+            {/* Floating Pill Badge */}
             <div className="absolute bottom-6 left-2 bg-white/90 backdrop-blur-md border border-[#EDE8E0] px-4 py-2.5 rounded-2xl shadow-lg flex items-center gap-3">
               <div className="w-8 h-8 rounded-full bg-[#EFF5F0] flex items-center justify-center text-[#1E3A2B]">
                 <Sparkles className="w-4 h-4" />
               </div>
               <div>
                 <p className="text-[11px] font-bold text-[#1F2923]">Serene Experience</p>
-                <p className="text-[9px] text-[#6E7A72]">Automated 24/7 Client Bookings</p>
+                <p className="text-[9px] text-[#6E7A72]">24/7 Appointments & Stylist Rostering</p>
               </div>
             </div>
 
@@ -370,14 +370,14 @@ export default function CarevaLandingPage() {
         </div>
       </section>
 
-      {/* ─── SECTION 2: EVERYTHING YOU NEED TO RUN A SUCCESSFUL SPA ─── */}
+      {/* ─── SECTION 2: EVERYTHING YOU NEED TO RUN A SUCCESSFUL SPA & SALON ─── */}
       <section id="features" className="py-16 md:py-24 bg-white border-y border-[#EDE8E0]">
         <div className="max-w-7xl mx-auto px-6 space-y-14">
           
           {/* Section Header */}
           <div className="text-center space-y-3 max-w-2xl mx-auto">
             <h2 className="font-luxury text-3xl md:text-4xl text-[#1F2923] tracking-tight">
-              Everything You Need to Run a Successful Spa
+              Everything You Need to Run a Successful Spa & Salon
             </h2>
           </div>
 
@@ -391,7 +391,7 @@ export default function CarevaLandingPage() {
               </div>
               <h3 className="font-bold text-base text-[#1F2923] mb-2">Online Booking</h3>
               <p className="text-xs text-[#6E7A72] leading-relaxed">
-                Easy scheduling and appointment management
+                Easy scheduling for spa treatments & hair/beauty salon services
               </p>
             </div>
 
@@ -402,7 +402,7 @@ export default function CarevaLandingPage() {
               </div>
               <h3 className="font-bold text-base text-[#1F2923] mb-2">Client Management</h3>
               <p className="text-xs text-[#6E7A72] leading-relaxed">
-                Keep client data, history and preferences at hand
+                Keep client history, preferences and treatment consents at hand
               </p>
             </div>
 
@@ -413,7 +413,7 @@ export default function CarevaLandingPage() {
               </div>
               <h3 className="font-bold text-base text-[#1F2923] mb-2">Inventory Control</h3>
               <p className="text-xs text-[#6E7A72] leading-relaxed">
-                Track products, stock and supplies in real-time
+                Track products, hair colors, stock and spa supplies in real-time
               </p>
             </div>
 
@@ -424,7 +424,7 @@ export default function CarevaLandingPage() {
               </div>
               <h3 className="font-bold text-base text-[#1F2923] mb-2">Staff Management</h3>
               <p className="text-xs text-[#6E7A72] leading-relaxed">
-                Manage staff, shifts, commissions & performance
+                Manage therapists, stylists, shifts, commissions & payroll
               </p>
             </div>
 
@@ -435,7 +435,7 @@ export default function CarevaLandingPage() {
               </div>
               <h3 className="font-bold text-base text-[#1F2923] mb-2">Reports & Analytics</h3>
               <p className="text-xs text-[#6E7A72] leading-relaxed">
-                Powerful insights to grow your spa business
+                Powerful insights to grow your spa & salon business
               </p>
             </div>
 
@@ -459,21 +459,21 @@ export default function CarevaLandingPage() {
 
             {/* Headline */}
             <h2 className="font-luxury text-3xl sm:text-4xl text-[#1F2923] leading-snug">
-              A Powerful Dashboard for Better Decisions
+              A Powerful Dashboard for Better Spa & Salon Decisions
             </h2>
 
             {/* Description */}
             <p className="text-[#5A685D] text-sm md:text-base leading-relaxed">
-              Get a real-time overview of your spa's performance and make data-driven decisions with ease.
+              Get a real-time overview of your spa & salon performance and make data-driven decisions with ease.
             </p>
 
             {/* Checkmark List */}
             <div className="space-y-3.5 pt-2">
               {[
-                "Daily overview & key metrics",
-                "Revenue & appointment analytics",
-                "Top services & product performance",
-                "Staff performance tracking"
+                "Daily overview & key performance metrics",
+                "Revenue & appointment analytics across outlets",
+                "Top treatments, hair services & product sales",
+                "Stylist & therapist performance tracking"
               ].map((item, idx) => (
                 <div key={idx} className="flex items-center gap-3">
                   <div className="w-5 h-5 rounded-full bg-[#1E3A2B] flex items-center justify-center text-white shrink-0">
@@ -507,7 +507,7 @@ export default function CarevaLandingPage() {
                   <div className="w-7 h-7 rounded-lg bg-[#1E3A2B] flex items-center justify-center text-white text-xs font-bold">
                     C
                   </div>
-                  <span className="font-bold text-sm text-[#1F2923]">Careva <span className="text-[10px] text-slate-400 uppercase font-mono font-medium">Spa ERP</span></span>
+                  <span className="font-bold text-sm text-[#1F2923]">Careva <span className="text-[10px] text-slate-400 uppercase font-mono font-medium">Spa & Salon ERP</span></span>
                 </div>
 
                 <div className="flex items-center gap-3">
@@ -530,7 +530,7 @@ export default function CarevaLandingPage() {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div>
                   <h3 className="font-bold text-base text-[#1F2923]">Welcome back, Admin 👋</h3>
-                  <p className="text-[11px] text-slate-400">Here's what's happening at your spa today.</p>
+                  <p className="text-[11px] text-slate-400">Here's what's happening at your spa & salon today.</p>
                 </div>
 
                 <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#EDE8E0] text-[11px] font-medium text-slate-600 bg-[#FAF8F5]">
@@ -619,14 +619,14 @@ export default function CarevaLandingPage() {
 
                 {/* Top Services Table */}
                 <div className="sm:col-span-5 bg-[#FAF8F5] border border-[#F0EBE1] rounded-2xl p-4 space-y-2.5">
-                  <span className="text-xs font-bold text-[#1F2923] block mb-1">Top Services</span>
+                  <span className="text-xs font-bold text-[#1F2923] block mb-1">Top Services & Treatments</span>
                   
                   {[
-                    { name: "Aroma Massage", revenue: "₹ 78,500", pct: "85%" },
-                    { name: "Deep Tissue Massage", revenue: "₹ 56,000", pct: "65%" },
-                    { name: "Facial Treatment", revenue: "₹ 43,200", pct: "50%" },
-                    { name: "Body Spa", revenue: "₹ 32,100", pct: "38%" },
-                    { name: "Hair Spa", revenue: "₹ 21,300", pct: "25%" },
+                    { name: "Aroma Therapy Massage", revenue: "₹ 78,500", pct: "85%" },
+                    { name: "Hair Cut & Styling", revenue: "₹ 64,200", pct: "72%" },
+                    { name: "Deep Tissue Therapy", revenue: "₹ 56,000", pct: "60%" },
+                    { name: "Facial & Skin Cleanup", revenue: "₹ 43,200", pct: "48%" },
+                    { name: "Body Spa & Pedicure", revenue: "₹ 32,100", pct: "35%" },
                   ].map((service, idx) => (
                     <div key={idx} className="space-y-1 text-[10px]">
                       <div className="flex justify-between font-semibold text-slate-700">
@@ -652,17 +652,17 @@ export default function CarevaLandingPage() {
       <section id="testimonials" className="py-20 md:py-24 bg-white border-t border-[#EDE8E0]">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-10 items-stretch">
           
-          {/* Left Column: Loved by Spa Professionals Testimonial */}
+          {/* Left Column: Loved by Spa & Salon Professionals Testimonial */}
           <div className="lg:col-span-6 flex flex-col justify-between space-y-8 pr-0 lg:pr-6">
             
             <div className="space-y-4">
               <div className="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-widest text-[#1E3A2B]">
-                <span>TRUSTED BY SPA OWNERS</span>
+                <span>TRUSTED BY SPA & SALON OWNERS</span>
                 <span className="text-[#88B04B]">🌿</span>
               </div>
 
               <h2 className="font-luxury text-3xl sm:text-4xl text-[#1F2923] leading-snug">
-                Loved by Spa Professionals Across the Country
+                Loved by Spa & Salon Professionals Across the Country
               </h2>
             </div>
 
@@ -670,7 +670,7 @@ export default function CarevaLandingPage() {
             <div className="space-y-6 pt-2">
               <span className="font-serif text-5xl text-[#C9D6CC] leading-none block -mb-4">“</span>
               <p className="text-[#4A574E] text-base md:text-lg leading-relaxed font-normal italic">
-                Careva has transformed the way we manage our spa. It's easy to use, saves us time and helps us focus on what truly matters — our clients.
+                Careva has transformed the way we manage our luxury salon and spa. It's easy to use, saves us hours every day, and helps us focus on what truly matters — our clients.
               </p>
 
               {/* Author Profile */}
@@ -682,7 +682,7 @@ export default function CarevaLandingPage() {
                 />
                 <div>
                   <h4 className="font-bold text-sm text-[#1F2923]">Priya Mehta</h4>
-                  <p className="text-xs text-[#6E7A72]">Serenity Spa, Mumbai</p>
+                  <p className="text-xs text-[#6E7A72]">Serenity Spa & Hair Salon, Mumbai</p>
                 </div>
               </div>
             </div>
@@ -709,10 +709,10 @@ export default function CarevaLandingPage() {
 
             <div className="space-y-3 z-10 max-w-sm">
               <h3 className="font-luxury text-2xl md:text-3xl text-[#1E3A2B] leading-tight">
-                Ready to Elevate Your Spa Business?
+                Ready to Elevate Your Spa & Salon Business?
               </h3>
               <p className="text-xs md:text-sm text-[#3E5244] leading-relaxed">
-                Join hundreds of spa owners who are growing their business with Careva Spa ERP.
+                Join hundreds of spa & salon owners who are growing their business with Careva Spa & Salon ERP.
               </p>
             </div>
 
@@ -727,7 +727,7 @@ export default function CarevaLandingPage() {
               </button>
             </div>
 
-            {/* Zen Stones Graphic Bottom Right matching reference image */}
+            {/* Zen Stones Graphic Bottom Right */}
             <div className="absolute right-0 bottom-0 w-44 md:w-56 pointer-events-none opacity-90">
               <img
                 src="/zen_spa_stones.png"
@@ -785,7 +785,7 @@ export default function CarevaLandingPage() {
             </div>
             <div>
               <h5 className="font-bold text-xs text-[#1F2923]">Scalable</h5>
-              <p className="text-[10px] text-[#6E7A72]">Grow your spa, we'll grow with you</p>
+              <p className="text-[10px] text-[#6E7A72]">Grow your spa or salon, we'll grow with you</p>
             </div>
           </div>
 
@@ -793,7 +793,7 @@ export default function CarevaLandingPage() {
 
         {/* Copyright */}
         <div className="max-w-7xl mx-auto px-6 mt-8 pt-6 border-t border-[#EDE8E0]/60 flex flex-col sm:flex-row items-center justify-between text-[11px] text-[#8C988F]">
-          <p>© {new Date().getFullYear()} Careva Spa ERP. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Careva Spa & Salon ERP. All rights reserved.</p>
           <div className="flex items-center gap-6 mt-2 sm:mt-0">
             <a href="#" className="hover:text-[#1E3A2B] transition-colors">Privacy Policy</a>
             <a href="#" className="hover:text-[#1E3A2B] transition-colors">Terms of Service</a>
@@ -820,7 +820,7 @@ export default function CarevaLandingPage() {
                 </div>
                 <h3 className="font-luxury text-2xl text-[#1F2923]">Demo Request Received!</h3>
                 <p className="text-xs text-[#5A685D] leading-relaxed">
-                  Thank you <span className="font-bold">{ownerName}</span>! Our spa ERP product specialist will get in touch with you shortly to demonstrate <span className="font-bold">{businessName}</span>.
+                  Thank you <span className="font-bold">{ownerName}</span>! Our Spa & Salon ERP specialist will get in touch with you shortly to demonstrate <span className="font-bold">{businessName}</span>.
                 </p>
                 <button
                   onClick={() => setIsDemoModalOpen(false)}
@@ -836,8 +836,8 @@ export default function CarevaLandingPage() {
                     <Sparkles className="w-3 h-3" />
                     <span>Free Live Demo</span>
                   </div>
-                  <h3 className="font-luxury text-2xl text-[#1F2923]">Book Your Spa Demo</h3>
-                  <p className="text-xs text-slate-500">Experience how Careva Spa ERP simplifies your operations.</p>
+                  <h3 className="font-luxury text-2xl text-[#1F2923]">Book Your Spa & Salon Demo</h3>
+                  <p className="text-xs text-slate-500">Experience how Careva Spa & Salon ERP simplifies your operations.</p>
                 </div>
 
                 {errorMsg && (
@@ -863,13 +863,13 @@ export default function CarevaLandingPage() {
                   </div>
 
                   <div>
-                    <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Spa / Business Name</label>
+                    <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Spa / Salon Business Name</label>
                     <div className="relative">
                       <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                       <input
                         type="text"
                         required
-                        placeholder="e.g. Serenity Spa & Wellness"
+                        placeholder="e.g. Serenity Spa & Hair Studio"
                         value={businessName}
                         onChange={(e) => setBusinessName(e.target.value)}
                         className="w-full pl-9 pr-3 py-2.5 border border-[#EDE8E0] rounded-xl text-xs font-semibold focus:outline-none focus:border-[#1E3A2B]"

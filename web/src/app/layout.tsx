@@ -15,8 +15,8 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Careva — Premium Multi-Tenant Salon & Spa SaaS Platform",
-  description: "Next-generation booking, POS, CRM, and customer retention platform for high-end salons, spas, and grooming outlets.",
+  title: "Careva — Premium Multi-Tenant Spa & Salon ERP SaaS Platform",
+  description: "Next-generation booking, POS, CRM, and customer retention platform for high-end spas, hair salons, and wellness centers.",
   icons: {
     icon: "/icon.png",
     shortcut: "/favicon.ico",
