@@ -2,19 +2,17 @@ import { execSync } from 'child_process';
 
 let isRedisOnline = false;
 try {
-  const redisHost = process.env.REDIS_HOST || '127.0.0.1';
-  const redisPort = process.env.REDIS_PORT || '6379';
-  execSync(`timeout 1 bash -c "cat < /dev/null > /dev/tcp/${redisHost}/${redisPort}" 2>/dev/null`);
-  isRedisOnline = true;
+  if (process.env.REDIS_HOST) {
+    const redisHost = process.env.REDIS_HOST;
+    const redisPort = process.env.REDIS_PORT || '6379';
+    execSync(`timeout 1 bash -c "cat < /dev/null > /dev/tcp/${redisHost}/${redisPort}" 2>/dev/null`);
+    isRedisOnline = true;
+  }
 } catch (e) {
   isRedisOnline = false;
 }
 
 if (!isRedisOnline) {
-  if (process.env.NODE_ENV === 'production') {
-    console.error('❌ Redis is offline. Careva requires Redis to be running in non-test environments.');
-    process.exit(1);
-  }
   console.warn('⚠️  Redis is offline. Monkey-patching @nestjs/bullmq to run inside mock memory queues.');
 
   const mockProcessors = new Map<string, any>();
