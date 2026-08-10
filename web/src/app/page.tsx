@@ -36,7 +36,9 @@ import {
   Send,
   Flower2,
   Droplets,
-  Sparkle
+  Sparkle,
+  UserCheck,
+  PieChart
 } from "lucide-react";
 import { getSharedTenants, saveDemoBooking } from "../shared/utils/utils";
 
@@ -279,28 +281,295 @@ export default function CarevaLandingPage() {
         )}
       </header>
 
-      {/* ─── SECTION 1: EVERYTHING AT YOUR FINGERTIPS (HERO & DASHBOARD PREVIEW) ─── */}
-      <section id="features" className="py-16 md:py-24 bg-[#FAF8F5]">
+      {/* ─── HERO SECTION 1: ALL-IN-ONE SPA MANAGEMENT SOFTWARE (ARCH PHOTO) ─── */}
+      <section className="pt-12 pb-20 md:pt-16 md:pb-28 overflow-hidden bg-[#FAF8F5]">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           
-          {/* Left Column: Headline & Bullet points */}
-          <div className="lg:col-span-5 space-y-7">
+          {/* Left Hero Content */}
+          <div className="lg:col-span-6 space-y-8 pr-0 lg:pr-6">
+            <div className="space-y-4">
+              <h1 className="font-luxury text-4xl sm:text-5xl lg:text-6xl text-[#1F2923] tracking-tight leading-[1.12]">
+                All-in-One <span className="inline-block relative">Spa<span className="text-xs text-[#88B04B] absolute -top-1 -right-4 font-serif italic">🌿</span></span> Management Software
+              </h1>
+              <p className="text-[#5A685D] text-base sm:text-lg leading-relaxed max-w-lg font-normal">
+                Careva Spa ERP helps you manage appointments, clients, staff, inventory and more — all in one beautifully simple platform.
+              </p>
+            </div>
+
+            {/* CTA Buttons */}
+            <div className="flex flex-wrap items-center gap-4">
+              <button
+                onClick={() => openDemoModal()}
+                className="bg-[#1E3A2B] hover:bg-[#15291E] text-white px-7 py-3.5 rounded-full font-bold text-xs uppercase tracking-wider transition-all shadow-md flex items-center gap-2 group cursor-pointer active:scale-98"
+              >
+                <span>Book a Demo</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </button>
+
+              <a
+                href="#features"
+                className="bg-white hover:bg-slate-50 border border-[#DDD7CC] text-[#1E3A2B] px-7 py-3.5 rounded-full font-bold text-xs tracking-wider transition-all shadow-xs"
+              >
+                Explore Features
+              </a>
+            </div>
+
+            {/* Rating & Social Proof */}
+            <div className="pt-4 flex items-center gap-4">
+              <div className="flex -space-x-2">
+                <img src="/testimonial_avatar.png" alt="User 1" className="w-9 h-9 rounded-full border-2 border-white object-cover shadow-xs" />
+                <div className="w-9 h-9 rounded-full bg-[#1E3A2B] text-white font-bold text-xs flex items-center justify-center border-2 border-white">PS</div>
+                <div className="w-9 h-9 rounded-full bg-[#E5E0D5] text-[#1F2923] font-bold text-xs flex items-center justify-center border-2 border-white">AM</div>
+                <div className="w-9 h-9 rounded-full bg-[#88B04B] text-white font-bold text-xs flex items-center justify-center border-2 border-white">SK</div>
+              </div>
+              <div>
+                <div className="flex items-center gap-1 text-[#E5A93C]">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-3.5 h-3.5 fill-current" />
+                  ))}
+                </div>
+                <p className="text-xs font-semibold text-[#1F2923] mt-0.5">
+                  <span className="font-bold">4.9/5</span> from 200+ spa & salon owners
+                </p>
+              </div>
+            </div>
+
+          </div>
+
+          {/* Right Hero Image: Arched Spa Photo Mask */}
+          <div className="lg:col-span-6 relative flex justify-center lg:justify-end">
+            <div className="relative w-full max-w-lg aspect-[4/5] rounded-t-[180px] rounded-b-[40px] overflow-hidden shadow-2xl border-4 border-white">
+              <img
+                src="/hero_spa_massage.png"
+                alt="Spa Facial Massage Therapy"
+                className="w-full h-full object-cover object-center scale-105 hover:scale-100 transition-transform duration-700"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* ─── SECTION 2: EVERYTHING YOU NEED TO RUN A SUCCESSFUL SPA (5 ICON BOXES) ─── */}
+      <section className="py-16 md:py-20 bg-white border-y border-[#EDE8E0]">
+        <div className="max-w-7xl mx-auto px-6 space-y-12">
+          
+          <div className="text-center space-y-2 max-w-2xl mx-auto">
+            <h2 className="font-luxury text-3xl sm:text-4xl text-[#1F2923] tracking-tight">
+              Everything You Need to Run a Successful Spa & Salon
+            </h2>
+          </div>
+
+          {/* 5 Feature Cards Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
             
+            {/* Card 1: Online Booking */}
+            <div className="bg-[#FAF8F5] border border-[#EDE8E0] rounded-2xl p-6 text-center space-y-3 hover:shadow-md transition-all">
+              <div className="w-12 h-12 rounded-2xl bg-white border border-[#E5E0D5] text-[#1E3A2B] flex items-center justify-center mx-auto shadow-xs">
+                <Calendar className="w-6 h-6 stroke-[1.75]" />
+              </div>
+              <h3 className="font-bold text-base text-[#1F2923]">Online Booking</h3>
+              <p className="text-xs text-[#6E7A72] leading-relaxed">
+                Easy scheduling and appointment management
+              </p>
+            </div>
+
+            {/* Card 2: Client Management */}
+            <div className="bg-[#FAF8F5] border border-[#EDE8E0] rounded-2xl p-6 text-center space-y-3 hover:shadow-md transition-all">
+              <div className="w-12 h-12 rounded-2xl bg-white border border-[#E5E0D5] text-[#1E3A2B] flex items-center justify-center mx-auto shadow-xs">
+                <Users className="w-6 h-6 stroke-[1.75]" />
+              </div>
+              <h3 className="font-bold text-base text-[#1F2923]">Client Management</h3>
+              <p className="text-xs text-[#6E7A72] leading-relaxed">
+                Keep client data, history and preferences at hand
+              </p>
+            </div>
+
+            {/* Card 3: Inventory Control */}
+            <div className="bg-[#FAF8F5] border border-[#EDE8E0] rounded-2xl p-6 text-center space-y-3 hover:shadow-md transition-all">
+              <div className="w-12 h-12 rounded-2xl bg-white border border-[#E5E0D5] text-[#1E3A2B] flex items-center justify-center mx-auto shadow-xs">
+                <Box className="w-6 h-6 stroke-[1.75]" />
+              </div>
+              <h3 className="font-bold text-base text-[#1F2923]">Inventory Control</h3>
+              <p className="text-xs text-[#6E7A72] leading-relaxed">
+                Track products, stock and supplies in real-time
+              </p>
+            </div>
+
+            {/* Card 4: Staff Management */}
+            <div className="bg-[#FAF8F5] border border-[#EDE8E0] rounded-2xl p-6 text-center space-y-3 hover:shadow-md transition-all">
+              <div className="w-12 h-12 rounded-2xl bg-white border border-[#E5E0D5] text-[#1E3A2B] flex items-center justify-center mx-auto shadow-xs">
+                <UserCheck className="w-6 h-6 stroke-[1.75]" />
+              </div>
+              <h3 className="font-bold text-base text-[#1F2923]">Staff Management</h3>
+              <p className="text-xs text-[#6E7A72] leading-relaxed">
+                Manage staff, shifts, commissions & performance
+              </p>
+            </div>
+
+            {/* Card 5: Reports & Analytics */}
+            <div className="bg-[#FAF8F5] border border-[#EDE8E0] rounded-2xl p-6 text-center space-y-3 hover:shadow-md transition-all">
+              <div className="w-12 h-12 rounded-2xl bg-white border border-[#E5E0D5] text-[#1E3A2B] flex items-center justify-center mx-auto shadow-xs">
+                <PieChart className="w-6 h-6 stroke-[1.75]" />
+              </div>
+              <h3 className="font-bold text-base text-[#1F2923]">Reports & Analytics</h3>
+              <p className="text-xs text-[#6E7A72] leading-relaxed">
+                Powerful insights to grow your spa & salon business
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      {/* ─── SECTION 3: SMARTER OPERATIONS (A POWERFUL DASHBOARD FOR BETTER DECISIONS) ─── */}
+      <section className="py-20 md:py-24 bg-[#FAF8F5]">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          
+          {/* Left Column */}
+          <div className="lg:col-span-5 space-y-7">
+            <div className="space-y-3">
+              <span className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#5A685D] block">
+                SMARTER OPERATIONS 🌿
+              </span>
+              <h2 className="font-luxury text-3xl sm:text-4xl text-[#1F2923] tracking-tight leading-tight">
+                A Powerful Dashboard for Better Decisions
+              </h2>
+              <p className="text-[#5A685D] text-sm md:text-base leading-relaxed">
+                Get a real-time overview of your spa's performance and make data-driven decisions with ease.
+              </p>
+            </div>
+
+            {/* 4 Checklist bullets */}
+            <div className="space-y-3 pt-1">
+              {[
+                "Daily overview & key metrics",
+                "Revenue & appointment analytics",
+                "Top services & product performance",
+                "Staff performance tracking"
+              ].map((item, i) => (
+                <div key={i} className="flex items-center gap-3">
+                  <div className="w-5 h-5 rounded-full bg-[#1E3A2B] text-white flex items-center justify-center shrink-0">
+                    <Check className="w-3.5 h-3.5 stroke-[2.5]" />
+                  </div>
+                  <span className="text-xs md:text-sm font-semibold text-[#1F2923]">{item}</span>
+                </div>
+              ))}
+            </div>
+
+            <div className="pt-2">
+              <button
+                onClick={() => openDemoModal()}
+                className="bg-[#1E3A2B] hover:bg-[#15291E] text-white px-7 py-3 rounded-full font-bold text-xs uppercase tracking-wider transition-all shadow-md inline-flex items-center gap-2 group cursor-pointer"
+              >
+                <span>See It in Action</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </button>
+            </div>
+          </div>
+
+          {/* Right Column: Dashboard Mockup */}
+          <div className="lg:col-span-7">
+            <div className="bg-white rounded-3xl border border-[#EDE8E0] shadow-2xl p-6 space-y-5 text-[#1F2923] font-sans">
+              
+              <div className="flex items-center justify-between border-b border-[#F0EBE1] pb-3">
+                <div className="flex items-center gap-2">
+                  <CarevaSpaLogo />
+                </div>
+                <div className="flex items-center gap-3">
+                  <Search className="w-4 h-4 text-slate-400" />
+                  <Bell className="w-4 h-4 text-slate-400" />
+                  <img src="/testimonial_avatar.png" alt="Admin" className="w-7 h-7 rounded-full object-cover border border-slate-200" />
+                </div>
+              </div>
+
+              <div>
+                <h3 className="font-bold text-sm text-[#1F2923]">Welcome back, Admin 👋</h3>
+                <p className="text-[10px] text-slate-400">Here's what's happening at your spa today.</p>
+              </div>
+
+              {/* 4 Stat Cards */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div className="bg-[#FAF8F5] border border-[#F0EBE1] rounded-xl p-3">
+                  <span className="text-[9px] text-slate-500 font-semibold block">Total Revenue</span>
+                  <p className="text-base font-black text-[#1F2923] mt-0.5">₹ 2,45,000</p>
+                  <span className="text-[9px] font-semibold text-emerald-600">+12.5% from last week</span>
+                </div>
+                <div className="bg-[#FAF8F5] border border-[#F0EBE1] rounded-xl p-3">
+                  <span className="text-[9px] text-slate-500 font-semibold block">Appointments</span>
+                  <p className="text-base font-black text-[#1F2923] mt-0.5">128</p>
+                  <span className="text-[9px] font-semibold text-emerald-600">+8.2% from last week</span>
+                </div>
+                <div className="bg-[#FAF8F5] border border-[#F0EBE1] rounded-xl p-3">
+                  <span className="text-[9px] text-slate-500 font-semibold block">New Clients</span>
+                  <p className="text-base font-black text-[#1F2923] mt-0.5">32</p>
+                  <span className="text-[9px] font-semibold text-emerald-600">+11.3% from last week</span>
+                </div>
+                <div className="bg-[#FAF8F5] border border-[#F0EBE1] rounded-xl p-3">
+                  <span className="text-[9px] text-slate-500 font-semibold block">Products Sold</span>
+                  <p className="text-base font-black text-[#1F2923] mt-0.5">356</p>
+                  <span className="text-[9px] font-semibold text-emerald-600">+9.4% from last week</span>
+                </div>
+              </div>
+
+              {/* Revenue & Services Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 pt-1">
+                <div className="sm:col-span-7 bg-[#FAF8F5] border border-[#F0EBE1] rounded-xl p-3 space-y-2">
+                  <div className="flex justify-between items-center text-[11px]">
+                    <span className="font-bold text-[#1F2923]">Revenue Overview</span>
+                    <span className="text-[9px] text-slate-400">This Week ˅</span>
+                  </div>
+                  <div className="h-20 w-full">
+                    <svg className="w-full h-full" viewBox="0 0 300 70" fill="none">
+                      <path d="M 0 55 Q 50 25, 100 45 T 200 25 T 300 15" stroke="#1E3A2B" strokeWidth="2.5" fill="none" />
+                      <path d="M 0 55 Q 50 25, 100 45 T 200 25 T 300 15 L 300 70 L 0 70 Z" fill="#1E3A2B" opacity="0.1" />
+                    </svg>
+                  </div>
+                </div>
+
+                <div className="sm:col-span-5 bg-[#FAF8F5] border border-[#F0EBE1] rounded-xl p-3 space-y-2">
+                  <span className="text-[11px] font-bold text-[#1F2923] block">Top Services</span>
+                  {[
+                    { name: "Aroma Massage", rev: "₹ 78,500" },
+                    { name: "Deep Tissue Massage", rev: "₹ 56,000" },
+                    { name: "Facial Treatment", rev: "₹ 43,200" },
+                    { name: "Body Spa", rev: "₹ 32,100" },
+                    { name: "Hair Spa", rev: "₹ 21,300" }
+                  ].map((item, i) => (
+                    <div key={i} className="flex justify-between items-center text-[9px] font-medium text-slate-700">
+                      <span>{item.name}</span>
+                      <span className="font-bold text-[#1F2923]">{item.rev}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* ─── SECTION 4: EVERYTHING AT YOUR FINGERTIPS (FULL FEATURE BREAKDOWN) ─── */}
+      <section id="features" className="py-20 md:py-24 bg-white border-y border-[#EDE8E0]">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          
+          {/* Left Column */}
+          <div className="lg:col-span-5 space-y-7">
             <div className="space-y-3">
               <span className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#5A685D] block">
                 COMPLETE CONTROL, ALL IN ONE PLACE
               </span>
-
-              <h1 className="font-luxury text-4xl sm:text-5xl text-[#1F2923] tracking-tight leading-[1.15]">
+              <h2 className="font-luxury text-3xl sm:text-4xl text-[#1F2923] tracking-tight leading-[1.15]">
                 Everything at Your Fingertips
-              </h1>
-
+              </h2>
               <p className="text-[#5A685D] text-sm md:text-base leading-relaxed font-normal pt-1">
                 Careva Spa & Salon ERP brings your entire spa and salon operations together in one beautiful, easy-to-use platform.
               </p>
             </div>
 
-            {/* 4 Bullet Points */}
             <div className="space-y-3.5 pt-1">
               {[
                 "Real-time dashboard & insights",
@@ -317,11 +586,10 @@ export default function CarevaLandingPage() {
               ))}
             </div>
 
-            {/* Action Button */}
             <div className="pt-3">
               <button
                 onClick={() => openDemoModal()}
-                className="inline-flex items-center gap-2.5 bg-white hover:bg-[#FAF8F5] border border-[#DDD7CC] text-[#1E3A2B] px-6 py-3 rounded-2xl text-xs font-bold shadow-xs hover:shadow-sm transition-all group"
+                className="inline-flex items-center gap-2.5 bg-white hover:bg-[#FAF8F5] border border-[#DDD7CC] text-[#1E3A2B] px-6 py-3 rounded-2xl text-xs font-bold shadow-xs hover:shadow-sm transition-all group cursor-pointer"
               >
                 <div className="w-5 h-5 rounded-full bg-[#EFF4EE] flex items-center justify-center text-[#1E3A2B] group-hover:scale-110 transition-transform">
                   <Play className="w-2.5 h-2.5 fill-current ml-0.5" />
@@ -329,16 +597,15 @@ export default function CarevaLandingPage() {
                 <span>See How It Works</span>
               </button>
             </div>
-
           </div>
 
-          {/* Right Column: Full Dashboard Mockup Card */}
+          {/* Right Column: Interactive Mockup Card */}
           <div className="lg:col-span-7">
-            <div className="bg-white rounded-3xl border border-[#EDE8E0] shadow-2xl p-6 md:p-7 space-y-5 text-[#1F2923] font-sans">
+            <div className="bg-[#FAF8F5] rounded-3xl border border-[#EDE8E0] shadow-2xl p-6 md:p-7 space-y-5 text-[#1F2923] font-sans">
               
               <div className="flex gap-6">
                 
-                {/* Left Mini Sidebar inside mockup */}
+                {/* Left Mini Sidebar */}
                 <div className="hidden sm:flex flex-col w-36 border-r border-[#F0EBE1] pr-4 space-y-4 shrink-0">
                   <div className="flex items-center gap-2 pb-2 border-b border-[#F0EBE1]">
                     <div className="w-6 h-6 rounded-md bg-[#1E3A2B] flex items-center justify-center text-white text-[10px] font-bold">
@@ -372,17 +639,11 @@ export default function CarevaLandingPage() {
                       <Box className="w-3.5 h-3.5" />
                       <span>Inventory</span>
                     </div>
-                    <div className="px-2.5 py-1.5 rounded-lg hover:bg-slate-50 flex items-center gap-2">
-                      <Receipt className="w-3.5 h-3.5" />
-                      <span>Sales</span>
-                    </div>
                   </div>
                 </div>
 
-                {/* Main Content Pane inside mockup */}
+                {/* Main Content Pane */}
                 <div className="flex-1 space-y-4">
-                  
-                  {/* Top Bar inside mockup */}
                   <div className="flex items-center justify-between">
                     <div>
                       <h3 className="font-bold text-sm text-[#1F2923]">Dashboard</h3>
@@ -390,7 +651,7 @@ export default function CarevaLandingPage() {
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <div className="flex items-center gap-1 px-2.5 py-1 rounded-lg border border-[#EDE8E0] text-[10px] font-medium text-slate-600 bg-[#FAF8F5]">
+                      <div className="flex items-center gap-1 px-2.5 py-1 rounded-lg border border-[#EDE8E0] text-[10px] font-medium text-slate-600 bg-white">
                         <Calendar className="w-3 h-3 text-slate-400" />
                         <span>May 12 - May 18, 2024</span>
                         <ChevronDown className="w-2.5 h-2.5 text-slate-400" />
@@ -399,79 +660,27 @@ export default function CarevaLandingPage() {
                     </div>
                   </div>
 
-                  {/* 4 Stat Cards inside mockup */}
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-                    <div className="bg-[#FAF8F5] border border-[#F0EBE1] rounded-xl p-2.5">
+                    <div className="bg-white border border-[#F0EBE1] rounded-xl p-2.5">
                       <span className="text-[9px] text-slate-500 font-semibold block">Today's Revenue</span>
                       <p className="text-sm font-black text-[#1F2923] mt-0.5">₹ 24,560</p>
                       <span className="text-[9px] font-semibold text-emerald-600">+12.5% vs yesterday</span>
                     </div>
-                    <div className="bg-[#FAF8F5] border border-[#F0EBE1] rounded-xl p-2.5">
+                    <div className="bg-white border border-[#F0EBE1] rounded-xl p-2.5">
                       <span className="text-[9px] text-slate-500 font-semibold block">Appointments</span>
                       <p className="text-sm font-black text-[#1F2923] mt-0.5">28</p>
                       <span className="text-[9px] font-semibold text-emerald-600">+16.7% vs yesterday</span>
                     </div>
-                    <div className="bg-[#FAF8F5] border border-[#F0EBE1] rounded-xl p-2.5">
+                    <div className="bg-white border border-[#F0EBE1] rounded-xl p-2.5">
                       <span className="text-[9px] text-slate-500 font-semibold block">New Clients</span>
                       <p className="text-sm font-black text-[#1F2923] mt-0.5">14</p>
                       <span className="text-[9px] font-semibold text-emerald-600">+7.7% vs yesterday</span>
                     </div>
-                    <div className="bg-[#FAF8F5] border border-[#F0EBE1] rounded-xl p-2.5">
+                    <div className="bg-white border border-[#F0EBE1] rounded-xl p-2.5">
                       <span className="text-[9px] text-slate-500 font-semibold block">Products Sold</span>
                       <p className="text-sm font-black text-[#1F2923] mt-0.5">42</p>
                       <span className="text-[9px] font-semibold text-emerald-600">+9.5% vs yesterday</span>
                     </div>
-                  </div>
-
-                  {/* Revenue Curve & Top Services */}
-                  <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 pt-1">
-                    
-                    {/* Revenue Curve */}
-                    <div className="sm:col-span-7 bg-[#FAF8F5] border border-[#F0EBE1] rounded-xl p-3 space-y-2">
-                      <div className="flex justify-between items-center text-[11px]">
-                        <span className="font-bold text-[#1F2923]">Revenue Overview</span>
-                        <span className="text-[9px] text-slate-400">This Week ˅</span>
-                      </div>
-                      <div className="h-20 w-full">
-                        <svg className="w-full h-full" viewBox="0 0 300 70" fill="none">
-                          <path
-                            d="M 0 55 Q 50 25, 100 45 T 200 25 T 300 15"
-                            stroke="#1E3A2B"
-                            strokeWidth="2.5"
-                            fill="none"
-                          />
-                          <path
-                            d="M 0 55 Q 50 25, 100 45 T 200 25 T 300 15 L 300 70 L 0 70 Z"
-                            fill="#1E3A2B"
-                            opacity="0.1"
-                          />
-                        </svg>
-                      </div>
-                      <div className="flex justify-between text-[8px] text-slate-400 font-mono">
-                        <span>May 12</span>
-                        <span>May 14</span>
-                        <span>May 16</span>
-                        <span>May 18</span>
-                      </div>
-                    </div>
-
-                    {/* Top Services */}
-                    <div className="sm:col-span-5 bg-[#FAF8F5] border border-[#F0EBE1] rounded-xl p-3 space-y-2">
-                      <span className="text-[11px] font-bold text-[#1F2923] block">Top Services</span>
-                      {[
-                        { name: "Aroma Massage", rev: "₹ 12,450" },
-                        { name: "Facial Treatment", rev: "₹ 9,850" },
-                        { name: "Body Spa", rev: "₹ 8,240" },
-                        { name: "Hair Spa", rev: "₹ 6,420" },
-                        { name: "Detox Therapy", rev: "₹ 4,560" }
-                      ].map((item, i) => (
-                        <div key={i} className="flex justify-between items-center text-[9px] font-medium text-slate-700">
-                          <span>{item.name}</span>
-                          <span className="font-bold text-[#1F2923]">{item.rev}</span>
-                        </div>
-                      ))}
-                    </div>
-
                   </div>
 
                 </div>
@@ -483,11 +692,10 @@ export default function CarevaLandingPage() {
         </div>
       </section>
 
-      {/* ─── SECTION 2: TAILORED SOLUTIONS FOR EVERY SPA & SALON ─── */}
-      <section id="solutions" className="py-20 md:py-28 bg-white border-y border-[#EDE8E0]">
+      {/* ─── SECTION 5: TAILORED SOLUTIONS FOR EVERY SPA & SALON (PHOTO CARDS) ─── */}
+      <section id="solutions" className="py-20 md:py-28 bg-[#FAF8F5]">
         <div className="max-w-7xl mx-auto px-6 space-y-16">
           
-          {/* Section Heading */}
           <div className="text-center space-y-3 max-w-2xl mx-auto">
             <span className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#5A685D] block">
               TAILORED SOLUTIONS FOR EVERY SPA & SALON
@@ -497,11 +705,10 @@ export default function CarevaLandingPage() {
             </h2>
           </div>
 
-          {/* 5 Business Cards Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 items-stretch">
             
             {/* Card 1: Day Spas */}
-            <div className="bg-[#FAF8F5] border border-[#EDE8E0] rounded-2xl p-5 flex flex-col justify-between text-center relative group hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+            <div className="bg-white border border-[#EDE8E0] rounded-2xl p-5 flex flex-col justify-between text-center relative group hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
               <div className="w-11 h-11 rounded-full bg-[#1E3A2B] text-white flex items-center justify-center -mt-9 mb-4 mx-auto shadow-md border-2 border-white">
                 <Flower2 className="w-5 h-5" />
               </div>
@@ -521,7 +728,7 @@ export default function CarevaLandingPage() {
             </div>
 
             {/* Card 2: Resort Spas */}
-            <div className="bg-[#FAF8F5] border border-[#EDE8E0] rounded-2xl p-5 flex flex-col justify-between text-center relative group hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+            <div className="bg-white border border-[#EDE8E0] rounded-2xl p-5 flex flex-col justify-between text-center relative group hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
               <div className="w-11 h-11 rounded-full bg-[#1E3A2B] text-white flex items-center justify-center -mt-9 mb-4 mx-auto shadow-md border-2 border-white">
                 <Sparkle className="w-5 h-5" />
               </div>
@@ -541,7 +748,7 @@ export default function CarevaLandingPage() {
             </div>
 
             {/* Card 3: Salons & Beauty Centers */}
-            <div className="bg-[#FAF8F5] border border-[#EDE8E0] rounded-2xl p-5 flex flex-col justify-between text-center relative group hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+            <div className="bg-white border border-[#EDE8E0] rounded-2xl p-5 flex flex-col justify-between text-center relative group hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
               <div className="w-11 h-11 rounded-full bg-[#1E3A2B] text-white flex items-center justify-center -mt-9 mb-4 mx-auto shadow-md border-2 border-white">
                 <Droplets className="w-5 h-5" />
               </div>
@@ -561,7 +768,7 @@ export default function CarevaLandingPage() {
             </div>
 
             {/* Card 4: Wellness Centers */}
-            <div className="bg-[#FAF8F5] border border-[#EDE8E0] rounded-2xl p-5 flex flex-col justify-between text-center relative group hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+            <div className="bg-white border border-[#EDE8E0] rounded-2xl p-5 flex flex-col justify-between text-center relative group hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
               <div className="w-11 h-11 rounded-full bg-[#1E3A2B] text-white flex items-center justify-center -mt-9 mb-4 mx-auto shadow-md border-2 border-white">
                 <Sparkles className="w-5 h-5" />
               </div>
@@ -581,7 +788,7 @@ export default function CarevaLandingPage() {
             </div>
 
             {/* Card 5: Medical Spas */}
-            <div className="bg-[#FAF8F5] border border-[#EDE8E0] rounded-2xl p-5 flex flex-col justify-between text-center relative group hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+            <div className="bg-white border border-[#EDE8E0] rounded-2xl p-5 flex flex-col justify-between text-center relative group hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
               <div className="w-11 h-11 rounded-full bg-[#1E3A2B] text-white flex items-center justify-center -mt-9 mb-4 mx-auto shadow-md border-2 border-white">
                 <Box className="w-5 h-5" />
               </div>
@@ -605,11 +812,10 @@ export default function CarevaLandingPage() {
         </div>
       </section>
 
-      {/* ─── SECTION 3: PRICING (SIMPLE PRICING, POWERFUL VALUE) ─── */}
-      <section id="pricing" className="py-20 md:py-28 bg-[#FAF8F5]">
+      {/* ─── SECTION 6: PRICING ─── */}
+      <section id="pricing" className="py-20 md:py-28 bg-white border-y border-[#EDE8E0]">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
           
-          {/* Left Column: Heading & Leaf */}
           <div className="lg:col-span-4 space-y-6">
             <span className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#5A685D] block">
               SIMPLE PRICING, POWERFUL VALUE
@@ -623,7 +829,6 @@ export default function CarevaLandingPage() {
               No hidden fees. No surprises. Just everything you need to run & grow your spa or salon.
             </p>
 
-            {/* Leaf Graphic */}
             <div className="pt-2">
               <svg className="w-8 h-8 text-[#88B04B]" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                 <path d="M12 3C10.5 6 7 8 4 8C7 11 10.5 13 12 16C13.5 13 17 11 20 8C17 8 13.5 6 12 3Z" fill="currentColor" opacity="0.3" />
@@ -632,11 +837,10 @@ export default function CarevaLandingPage() {
             </div>
           </div>
 
-          {/* Right Column: 3 Pricing Cards Grid */}
           <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
             
             {/* Starter Plan */}
-            <div className="bg-white border border-[#EDE8E0] rounded-3xl p-6 flex flex-col justify-between space-y-6 shadow-sm hover:shadow-md transition-all">
+            <div className="bg-[#FAF8F5] border border-[#EDE8E0] rounded-3xl p-6 flex flex-col justify-between space-y-6 shadow-sm hover:shadow-md transition-all">
               <div className="space-y-4">
                 <div>
                   <h3 className="font-bold text-lg text-[#1F2923]">Starter</h3>
@@ -675,7 +879,7 @@ export default function CarevaLandingPage() {
 
               <button
                 onClick={() => openDemoModal("Starter")}
-                className="w-full py-3 rounded-2xl border border-[#EDE8E0] text-[#1E3A2B] font-bold text-xs hover:bg-[#FAF8F5] transition-colors cursor-pointer"
+                className="w-full py-3 rounded-2xl border border-[#EDE8E0] text-[#1E3A2B] font-bold text-xs bg-white hover:bg-[#FAF8F5] transition-colors cursor-pointer"
               >
                 Get Started
               </button>
@@ -683,8 +887,6 @@ export default function CarevaLandingPage() {
 
             {/* Professional Plan (MOST POPULAR) */}
             <div className="bg-white border-2 border-[#1E3A2B] rounded-3xl p-6 flex flex-col justify-between space-y-6 shadow-xl relative scale-105 z-10">
-              
-              {/* Badge */}
               <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-[#1E3A2B] text-white px-3.5 py-1 rounded-full text-[9px] font-extrabold uppercase tracking-widest shadow-sm">
                 MOST POPULAR
               </div>
@@ -722,7 +924,7 @@ export default function CarevaLandingPage() {
                     <Check className="w-4 h-4 text-[#1E3A2B] shrink-0" />
                     <span>SMS & Email Marketing</span>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 font-semibold">
                     <Check className="w-4 h-4 text-[#1E3A2B] shrink-0" />
                     <span>Priority Support</span>
                   </div>
@@ -738,7 +940,7 @@ export default function CarevaLandingPage() {
             </div>
 
             {/* Enterprise Plan */}
-            <div className="bg-white border border-[#EDE8E0] rounded-3xl p-6 flex flex-col justify-between space-y-6 shadow-sm hover:shadow-md transition-all">
+            <div className="bg-[#FAF8F5] border border-[#EDE8E0] rounded-3xl p-6 flex flex-col justify-between space-y-6 shadow-sm hover:shadow-md transition-all">
               <div className="space-y-4">
                 <div>
                   <h3 className="font-bold text-lg text-[#1F2923]">Enterprise</h3>
@@ -772,7 +974,7 @@ export default function CarevaLandingPage() {
                     <Check className="w-4 h-4 text-[#1E3A2B] shrink-0" />
                     <span>Dedicated Account Manager</span>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 font-semibold">
                     <Check className="w-4 h-4 text-[#1E3A2B] shrink-0" />
                     <span>24/7 Phone Support</span>
                   </div>
@@ -781,7 +983,7 @@ export default function CarevaLandingPage() {
 
               <button
                 onClick={() => openDemoModal("Enterprise")}
-                className="w-full py-3 rounded-2xl border border-[#EDE8E0] text-[#1E3A2B] font-bold text-xs hover:bg-[#FAF8F5] transition-colors cursor-pointer"
+                className="w-full py-3 rounded-2xl border border-[#EDE8E0] text-[#1E3A2B] font-bold text-xs bg-white hover:bg-[#FAF8F5] transition-colors cursor-pointer"
               >
                 Get Started
               </button>
@@ -792,168 +994,143 @@ export default function CarevaLandingPage() {
         </div>
       </section>
 
-      {/* ─── SECTION 4: TESTIMONIAL & DARK GREEN CTA BANNER ─── */}
-      <section id="testimonials" className="py-20 md:py-24 bg-white border-t border-[#EDE8E0]">
+      {/* ─── SECTION 7: TESTIMONIAL & SPA STONES CTA CARD ─── */}
+      <section id="testimonials" className="py-20 md:py-24 bg-[#FAF8F5]">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-10 items-stretch">
           
           {/* Left Column: Testimonial */}
           <div className="lg:col-span-5 flex flex-col justify-between space-y-8 pr-0 lg:pr-4">
-            
             <div className="space-y-4">
               <span className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#5A685D] block">
                 TRUSTED BY SPA OWNERS
               </span>
-
               <h2 className="font-luxury text-3xl sm:text-4xl text-[#1F2923] leading-snug">
                 Loved by Spa Professionals Across the Country
               </h2>
             </div>
 
-            {/* Quote block */}
             <div className="space-y-5 pt-1">
               <span className="font-serif text-5xl text-[#C9D6CC] leading-none block -mb-4">“</span>
               <p className="text-[#4A574E] text-base leading-relaxed font-normal italic">
-                Careva has completely transformed the way we manage our spa. It's easy to use, saves us time and helps us focus on what truly matters — our clients.
+                Careva has transformed the way we manage our spa. It's easy to use, saves us time and helps us focus on what truly matters — our clients.
               </p>
 
-              {/* Author Profile */}
               <div className="flex items-center gap-3.5 pt-2">
                 <img
                   src="/testimonial_avatar.png"
-                  alt="Anjali Mehta"
+                  alt="Priya Mehta"
                   className="w-11 h-11 rounded-full object-cover border border-[#EDE8E0]"
                 />
                 <div>
-                  <h4 className="font-bold text-sm text-[#1F2923]">Anjali Mehta</h4>
-                  <p className="text-xs text-[#6E7A72]">Owner, Aura Day Spa, Bangalore</p>
-                  <div className="flex items-center gap-1 text-[#E5A93C] mt-1">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-3.5 h-3.5 fill-current" />
-                    ))}
-                  </div>
+                  <h4 className="font-bold text-sm text-[#1F2923]">Priya Mehta</h4>
+                  <p className="text-xs text-[#6E7A72]">Serenity Spa, Mumbai</p>
                 </div>
               </div>
             </div>
 
-            {/* Pagination dots */}
             <div className="flex items-center gap-2 pt-2">
               <span className="w-2 h-2 rounded-full border border-[#1E3A2B]" />
               <span className="w-2.5 h-2.5 rounded-full bg-[#1E3A2B]" />
               <span className="w-2 h-2 rounded-full border border-[#1E3A2B]" />
             </div>
-
           </div>
 
-          {/* Right Column: Dark Forest Green CTA Banner */}
-          <div className="lg:col-span-7 bg-[#1E3A2B] text-white rounded-3xl p-8 sm:p-12 relative overflow-hidden flex flex-col justify-between shadow-2xl min-h-[360px]">
-            
-            {/* Background image overlay */}
-            <div className="absolute inset-0 opacity-20 pointer-events-none">
-              <img src="/hero_spa_massage.png" alt="Spa Background" className="w-full h-full object-cover" />
-            </div>
-
-            <div className="space-y-4 z-10 max-w-md">
-              <h3 className="font-luxury text-3xl sm:text-4xl text-white leading-tight">
+          {/* Right Column: Zen Spa Stones CTA Card */}
+          <div className="lg:col-span-7 bg-[#EFEBE4] border border-[#E5E0D5] rounded-3xl p-8 sm:p-12 relative overflow-hidden flex flex-col sm:flex-row justify-between items-center shadow-lg gap-8">
+            <div className="space-y-4 z-10 max-w-sm">
+              <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-[#1E3A2B] shadow-xs">
+                <Flower2 className="w-4 h-4" />
+              </div>
+              <h3 className="font-luxury text-2xl sm:text-3xl text-[#1F2923] leading-snug">
                 Ready to Elevate Your Spa Business?
               </h3>
-              <p className="text-[#C8D6CB] text-sm md:text-base leading-relaxed">
-                Join hundreds of spa owners who are simplifying operations and growing their business with Careva.
+              <p className="text-[#6E7A72] text-xs sm:text-sm leading-relaxed">
+                Join hundreds of spa owners who are growing their business with Careva Spa ERP.
               </p>
+              
+              <div className="pt-2">
+                <button
+                  onClick={() => openDemoModal()}
+                  className="bg-[#1E3A2B] hover:bg-[#15291E] text-white px-6 py-3 rounded-full font-bold text-xs uppercase tracking-wider transition-all shadow-md flex items-center gap-2 group cursor-pointer"
+                >
+                  <span>Book a Demo Now</span>
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </button>
+              </div>
             </div>
 
-            {/* CTA Button & Subtext */}
-            <div className="pt-8 z-10">
-              <button
-                onClick={() => openDemoModal()}
-                className="bg-white hover:bg-slate-100 text-[#1E3A2B] px-7 py-3.5 rounded-full font-bold text-xs uppercase tracking-wider transition-all shadow-lg flex items-center gap-2 group cursor-pointer active:scale-98"
-              >
-                <span>Book a Demo Now</span>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </button>
-              <span className="text-[11px] text-[#A6B8AA] mt-2.5 block">No credit card required</span>
+            {/* Zen Spa Stones Image */}
+            <div className="relative w-48 h-48 sm:w-56 sm:h-56 shrink-0 z-10">
+              <img
+                src="/zen_spa_stones.png"
+                alt="Zen Spa Stones"
+                className="w-full h-full object-contain drop-shadow-xl"
+              />
             </div>
-
           </div>
 
         </div>
       </section>
 
-      {/* ─── SECTION 5: TRUST BADGES ROW ─── */}
-      <section className="py-10 bg-[#FAF8F5] border-t border-[#EDE8E0]">
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-5 gap-6">
+      {/* ─── SECTION 8: TRUST BADGES ROW ─── */}
+      <section className="py-10 bg-white border-t border-[#EDE8E0]">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-6">
           
-          {/* Trust 1 */}
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-white border border-[#E5E0D5] flex items-center justify-center text-[#1E3A2B] shrink-0 shadow-xs">
-              <PenTool className="w-4 h-4 stroke-[2]" />
-            </div>
-            <div>
-              <h5 className="font-bold text-xs text-[#1F2923]">Easy Setup</h5>
-              <p className="text-[10px] text-[#6E7A72]">Get started in minutes</p>
-            </div>
-          </div>
-
-          {/* Trust 2 */}
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-white border border-[#E5E0D5] flex items-center justify-center text-[#1E3A2B] shrink-0 shadow-xs">
+            <div className="w-9 h-9 rounded-full bg-[#FAF8F5] border border-[#E5E0D5] flex items-center justify-center text-[#1E3A2B] shrink-0 shadow-xs">
               <ShieldCheck className="w-4 h-4 stroke-[2]" />
             </div>
             <div>
               <h5 className="font-bold text-xs text-[#1F2923]">Secure & Reliable</h5>
-              <p className="text-[10px] text-[#6E7A72]">Your data is 100% safe</p>
+              <p className="text-[10px] text-[#6E7A72]">Your data is safe with us</p>
             </div>
           </div>
 
-          {/* Trust 3 */}
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-white border border-[#E5E0D5] flex items-center justify-center text-[#1E3A2B] shrink-0 shadow-xs">
-              <RefreshCw className="w-4 h-4 stroke-[2]" />
+            <div className="w-9 h-9 rounded-full bg-[#FAF8F5] border border-[#E5E0D5] flex items-center justify-center text-[#1E3A2B] shrink-0 shadow-xs">
+              <Sparkles className="w-4 h-4 stroke-[2]" />
             </div>
             <div>
-              <h5 className="font-bold text-xs text-[#1F2923]">Regular Updates</h5>
-              <p className="text-[10px] text-[#6E7A72]">Always getting better</p>
+              <h5 className="font-bold text-xs text-[#1F2923]">Easy to Use</h5>
+              <p className="text-[10px] text-[#6E7A72]">Simple. Intuitive. Efficient.</p>
             </div>
           </div>
 
-          {/* Trust 4 */}
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-white border border-[#E5E0D5] flex items-center justify-center text-[#1E3A2B] shrink-0 shadow-xs">
-              <Smartphone className="w-4 h-4 stroke-[2]" />
-            </div>
-            <div>
-              <h5 className="font-bold text-xs text-[#1F2923]">Works Everywhere</h5>
-              <p className="text-[10px] text-[#6E7A72]">Web, Mobile & Tablet</p>
-            </div>
-          </div>
-
-          {/* Trust 5 */}
-          <div className="flex items-center gap-3 col-span-2 md:col-span-1">
-            <div className="w-9 h-9 rounded-full bg-white border border-[#E5E0D5] flex items-center justify-center text-[#1E3A2B] shrink-0 shadow-xs">
+            <div className="w-9 h-9 rounded-full bg-[#FAF8F5] border border-[#E5E0D5] flex items-center justify-center text-[#1E3A2B] shrink-0 shadow-xs">
               <Headphones className="w-4 h-4 stroke-[2]" />
             </div>
             <div>
-              <h5 className="font-bold text-xs text-[#1F2923]">Dedicated Support</h5>
-              <p className="text-[10px] text-[#6E7A72]">We're here for you</p>
+              <h5 className="font-bold text-xs text-[#1F2923]">24/7 Support</h5>
+              <p className="text-[10px] text-[#6E7A72]">We're here when you need us</p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-full bg-[#FAF8F5] border border-[#E5E0D5] flex items-center justify-center text-[#1E3A2B] shrink-0 shadow-xs">
+              <TrendingUp className="w-4 h-4 stroke-[2]" />
+            </div>
+            <div>
+              <h5 className="font-bold text-xs text-[#1F2923]">Scalable</h5>
+              <p className="text-[10px] text-[#6E7A72]">Grow your spa, we'll grow with you</p>
             </div>
           </div>
 
         </div>
       </section>
 
-      {/* ─── SECTION 6: DEEP FOREST GREEN FOOTER ─── */}
+      {/* ─── SECTION 9: DEEP FOREST GREEN FOOTER ─── */}
       <footer id="footer" className="bg-[#15271D] text-[#C0CCC3] pt-16 pb-8 border-t border-[#1E3A2B]">
         <div className="max-w-7xl mx-auto px-6 space-y-12">
           
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
             
-            {/* Col 1: Brand Info */}
             <div className="md:col-span-4 space-y-4">
               <CarevaSpaLogo darkBg={true} />
               <p className="text-xs text-[#9EB0A3] leading-relaxed max-w-sm">
                 The all-in-one ERP software designed exclusively for spa & wellness businesses.
               </p>
 
-              {/* Social icons */}
               <div className="flex items-center gap-3 pt-2">
                 <a href="#" className="w-8 h-8 rounded-full bg-[#1E3A2B] flex items-center justify-center text-[#C0CCC3] hover:text-white transition-colors">
                   <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
@@ -970,7 +1147,6 @@ export default function CarevaLandingPage() {
               </div>
             </div>
 
-            {/* Col 2: Product */}
             <div className="md:col-span-2 space-y-3">
               <h5 className="font-bold text-xs text-white uppercase tracking-wider">Product</h5>
               <ul className="space-y-2 text-xs">
@@ -981,7 +1157,6 @@ export default function CarevaLandingPage() {
               </ul>
             </div>
 
-            {/* Col 3: Company */}
             <div className="md:col-span-2 space-y-3">
               <h5 className="font-bold text-xs text-white uppercase tracking-wider">Company</h5>
               <ul className="space-y-2 text-xs">
@@ -992,7 +1167,6 @@ export default function CarevaLandingPage() {
               </ul>
             </div>
 
-            {/* Col 4: Resources */}
             <div className="md:col-span-2 space-y-3">
               <h5 className="font-bold text-xs text-white uppercase tracking-wider">Resources</h5>
               <ul className="space-y-2 text-xs">
@@ -1003,7 +1177,6 @@ export default function CarevaLandingPage() {
               </ul>
             </div>
 
-            {/* Col 5: Newsletter */}
             <div className="md:col-span-2 space-y-3">
               <h5 className="font-bold text-xs text-white uppercase tracking-wider">Newsletter</h5>
               <p className="text-[11px] text-[#9EB0A3]">Get tips, updates & resources straight to your inbox.</p>
@@ -1030,7 +1203,6 @@ export default function CarevaLandingPage() {
 
           </div>
 
-          {/* Bottom Copyright Bar */}
           <div className="pt-6 border-t border-[#1E3A2B] flex flex-col sm:flex-row items-center justify-between text-[11px] text-[#809486]">
             <p>© 2026 Careva Spa ERP. All rights reserved.</p>
             <div className="flex items-center gap-6 mt-2 sm:mt-0">
